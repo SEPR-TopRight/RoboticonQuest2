@@ -1,4 +1,4 @@
-package io.github.teamfractal.entities;
+package io.github.teamfractal.entity;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,8 @@ public class Player extends Sprite {
 	private int food;
 	private int energy;
 	private int ore;
-	private int gold; // Money
+	
+	private double gold; // Money
 	private ArrayList<LandPlot> lands;
 	private int roboticons;
 	
@@ -40,11 +41,11 @@ public class Player extends Sprite {
 		return plot.installRobotic(amount);
 	}
 
-	public synchronized boolean haveGold(float price) {
+	public synchronized boolean haveGold(double price) {
 		return price > 0 && price <= gold;
 	}
 	
-	public synchronized boolean costGold(float price) {
+	public synchronized boolean costGold(double price) {
 		if (haveGold(price)) {
 			gold -= price;
 			return true;
