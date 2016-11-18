@@ -21,7 +21,7 @@ public class Player extends Sprite {
 		if (amount < 0)
 			return false;
 
-		if (!Market.getInstance().buyRoboticon(amount)) {
+		if (!Market.getInstance().buyRoboticon(this, amount)) {
 			return false;
 		}
 
@@ -38,5 +38,18 @@ public class Player extends Sprite {
 		}
 		
 		return plot.installRobotic(amount);
+	}
+
+	public synchronized boolean haveGold(float price) {
+		return price > 0 && price <= gold;
+	}
+	
+	public synchronized boolean costGold(float price) {
+		if (haveGold(price)) {
+			gold -= price;
+			return true;
+		}
+		
+		return false;
 	}
 }

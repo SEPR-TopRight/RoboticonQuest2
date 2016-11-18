@@ -11,6 +11,10 @@ public class Market {
 	private float foodConstran;
 	private float foodMinPrice;
 	
+	private int robConstran;
+	private int robMinPrice;
+	private int robRate;
+	
 	private static Market instance;
 	static Market getInstance() {
 		if (instance == null)
@@ -32,6 +36,10 @@ public class Market {
 		foodMinPrice = 10;
 		foodConstran = 100;
 		foodRate = 20;
+		
+		robMinPrice = 10;
+		robConstran = 100;
+		robRate = 20;
 	}
 
 	/**
@@ -51,13 +59,34 @@ public class Market {
 		return getFoodBuyPrice() * sellRate;
 	}
 
+	/**
+	 * Robotics buy in price.
+	 * @return The price for the robotic
+	 */
+	float getRobBuyPrice() {
+		if (robotics >= robConstran) {
+			return robMinPrice;
+		}
+		
+		return robMinPrice + (1 - (float)robotics / robConstran) * robRate;
+	}
+	
+	float getRobSellPrice() {
+		return getRobBuyPrice() * sellRate;
+	}
 
-	public synchronized Boolean buyRoboticon(int amount) {
+
+	public synchronized Boolean buyRoboticon(Player player, int amount) {
 		if (amount <= 0 || amount > robotics) {
 			return false;
 		}
 		
-		robotics -= amount;
-		return true;
+		float price = amount * getRobBuyPrice();
+		if (player.costGold(price)) {
+			robotics -= amount;
+			return true;
+		}
+		
+		return false;
 	}
 }
