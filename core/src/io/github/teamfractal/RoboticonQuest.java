@@ -29,5 +29,6 @@ public class RoboticonQuest extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		img.dispose();
+		System.out.print("a");
 	}
 }
