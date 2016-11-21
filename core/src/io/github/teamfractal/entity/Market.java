@@ -1,5 +1,6 @@
 package io.github.teamfractal.entity;
 
+import java.util.ArrayList;
 import java.util.function.Function;
 
 import io.github.teamfractal.entity.resource.Resource;
@@ -15,7 +16,7 @@ public class Market {
 	private int food;
 	private int energy;
 	private int ore;
-	private int robotics;
+	private ArrayList<Robotic> robotics;
 
 	/**
 	 * Resource bounded to a class.
@@ -49,7 +50,10 @@ public class Market {
 		food = 16;
 		energy = 16;
 		ore = 0;
-		robotics = 12;
+		robotics = new ArrayList<>();
+		for(int i = 0; i < 12; i++){
+			robotics.add(new Robotic());
+		}
 		
 		
 		
