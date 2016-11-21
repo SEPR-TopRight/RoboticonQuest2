@@ -1,47 +1,37 @@
 package io.github.teamfractal.entity.resource;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import io.github.teamfractal.entity.Player;
 
 public class Resource {
-	public ResourceType Type;
-	public double Rate;
-	public double Min;
-	public double Constran;
-	public Function<ResourceType, Integer> ResourceGetter;
-	public BiFunction<ResourceType, Integer, Boolean> ResourceSetter;
-	public static double SellRate = 1.2;
+	private static double SellRate = 1.2;
+
+	private ResourceType resourceType;
+	private double rate;
+	private double minUnitPrice;
+	private double constrain;
+	private ITrade market;
 	
-	public Resource(ResourceType type, double rate,
-			double min, double constran,
-			Function<ResourceType, Integer> resGetter,
-			BiFunction<ResourceType, Integer, Boolean> resSetter) {
-		
-		Type = type;
-		Rate = rate;
-		Min = min;
-		Constran = constran;
-		ResourceGetter = resGetter;
-		ResourceSetter = resSetter;
-	}
-	
-	int getCurrAmount() {
-		return ResourceGetter.apply(Type);
+	public Resource(ITrade market, ResourceType resourceType, double rate,
+					double minUnitPrice, double constrain) {
+
+		this.market = market;
+		this.resourceType = resourceType;
+		this.rate = rate;
+		this.minUnitPrice = minUnitPrice;
+		this.constrain = constrain;
 	}
 
-	public double getBuyPrice() {
-		int currAmount = getCurrAmount();
-		if (currAmount >= Constran) {
-			return Min;
+	public double getPurchasePrice() {
+		int currAmount = market.getResource(resourceType);
+		if (currAmount >= constrain) {
+			return minUnitPrice;
 		}
 		
-		return Min + (1 - (double)currAmount / Constran) * Rate;
+		return minUnitPrice + (1 - (double)currAmount / constrain) * rate;
 	}
 	
 	public double getSellPrice() {
-		return getBuyPrice() * SellRate;
+		return getPurchasePrice() * SellRate;
 	}
 	
 	/**
@@ -50,16 +40,16 @@ public class Resource {
 	 * @param amount  The amount of resource.
 	 * @return Boolean: Purchase success or not.
 	 */
-	public synchronized boolean buyFromMarket(Player player, int amount) {
-		int currAmount = getCurrAmount();
+	public synchronized boolean buyFromMarket(ITrade player, int amount) {
+		int currAmount = market.getResource(resourceType);
 		
 		// Check if value is valid.
 		if (amount > 0 && amount <= currAmount) {
-			double price = getBuyPrice() * amount;
+			double price = getPurchasePrice() * amount;
 			
 			// Check if the player can afford
-			if (player.costGold(price)) {
-				ResourceSetter.apply(Type, currAmount - amount);
+			if (player.costMoney(price)) {
+				market.setResource(resourceType, currAmount - amount);
 				return true;
 			}
 		}
