@@ -3,55 +3,122 @@ package io.github.teamfractal.entity;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import io.github.teamfractal.entity.resource.ITrade;
+import io.github.teamfractal.entity.resource.ResourceType;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements ITrade {
 	private String name;
 	private int food;
 	private int energy;
 	private int ore;
 	
-	private double gold; // Money
+	private double money;
 	private ArrayList<LandPlot> lands;
-	private ArrayList<Robotic> roboticons;
+	private ArrayList<Robotic> robotics;
 	
 	public Boolean buyPlot(LandPlot plot) {
 		return false;
 	}
-	
-	public Boolean buyRoboticon(int amount) {
-		if (amount < 0)
-			return false;
 
-		if (!Market.getInstance().buyRoboticon(this, amount)) {
-			return false;
-		}
-
-		for(int i = 0; i < amount; i++) {
-			roboticons.add(new Robotic());
-		}
-		
-		return true;
-	}
-	
 	public synchronized Boolean installRoboticon(LandPlot plot, int amount) {
-		if (plot == null || amount <= 0 || amount > roboticons.size()) {
+		if (plot == null || amount <= 0 || amount > robotics.size()) {
 			return false;
 		}
 
-    	// TODO: Fix this
-		return plot.installRobotic(player, amount);
+		return plot.installRobotic(this, amount);
 	}
 
-	public synchronized boolean haveGold(double price) {
-		return price > 0 && price <= gold;
+	public synchronized boolean haveMoney(double amount) {
+		return amount > 0 && amount <= money;
 	}
-	
-	public synchronized boolean costGold(double price) {
-		if (haveGold(price)) {
-			gold -= price;
+
+	void addRobotic(Robotic robotic) {
+		robotics.add(robotic);
+	}
+
+	@Override
+	public synchronized int getResource(ResourceType type) {
+		switch (type) {
+			case Energy:
+				return energy;
+
+			case Food:
+				return food;
+
+			case Ore:
+				return ore;
+
+			case Robotic:
+				return robotics.size();
+
+			default:
+				return 0;
+		}
+	}
+
+	@Override
+	public void setResource(ResourceType type, int amount) {
+		switch (type) {
+			case Energy:
+				energy = amount;
+				break;
+
+			case Food:
+				food = amount;
+				break;
+
+			case Ore:
+				ore = amount;
+				break;
+
+			// Player can customise their robotics.
+			// To sell specific robotic, use `Player.sellRobotic(index)`.
+			case Robotic:
+				synchronized (this) {
+					int delta = robotics.size() - amount;
+
+					// delta == 0: No change.
+					// delta  < 0: Add new robotics to inventory.
+					// delta  > 0: Remove robotics from inventory.
+
+					if (delta == 0) break;
+
+					if (delta < 0) {
+
+						do {
+							robotics.add(new Robotic());
+							delta ++;
+						} while (delta < 0);
+
+					} else {
+						// delta > 0
+
+						do {
+							robotics.remove(0);
+							delta --;
+						} while (delta > 0);
+					}
+				}
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	@Override
+	public synchronized boolean costMoney(double amount) {
+		if (haveMoney(amount)) {
+			money -= amount;
 			return true;
 		}
-		
+
 		return false;
+	}
+
+	@Override
+	public synchronized boolean addMoney(double amount) {
+		money += amount;
+		return true;
 	}
 }

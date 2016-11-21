@@ -26,13 +26,16 @@ public class LandPlot extends Sprite {
         oreRate = 1f;
     }
     
-    public synchronized Boolean removeRobotic(int amount) {
-    	if (amount < 0 || amount > robotics.size())
+    public synchronized Boolean removeRobotic(int index) {
+    	if (index >= 0 && index < robotics.size())
     		return false;
-    	
-    	// TODO: Fix this
-    	robotics -= amount;
-    	
+
+        Robotic r = robotics.get(index);
+        if (r == null) return false;
+
+        owner.addRobotic(r);
+        robotics.remove(index);
+
     	return true;
     }
     
@@ -41,10 +44,10 @@ public class LandPlot extends Sprite {
     	if (amount < 0)
     		return false;
 
-    	// TODO: Fix this
-    	robotics += amount;
-    	
-    	return true;
+        for(int i = 0; i < amount; i++) {
+            robotics.add(new Robotic());
+        }
+
+        return true;
     }
-    
 }
