@@ -54,7 +54,7 @@ public class Resource {
 		int currAmount = getCurrAmount();
 		
 		// Check if value is valid.
-		if (amount < 0 || amount > currAmount) {
+		if (amount > 0 && amount <= currAmount) {
 			double price = getBuyPrice() * amount;
 			
 			// Check if the player can afford
