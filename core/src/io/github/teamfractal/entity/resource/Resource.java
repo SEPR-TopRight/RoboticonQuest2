@@ -44,12 +44,22 @@ public class Resource {
 		return getBuyPrice() * SellRate;
 	}
 	
-	public synchronized boolean buy(Player player, int amount) {
+	/**
+	 * Purchase resource from a player.
+	 * @param player  The Player
+	 * @param amount  The amount of resource.
+	 * @return Boolean: Purchase success or not.
+	 */
+	public synchronized boolean buyFromMarket(Player player, int amount) {
 		int currAmount = getCurrAmount();
-		if (amount < 0 || currAmount >= amount) {
+		
+		// Check if value is valid.
+		if (amount < 0 || amount > currAmount) {
 			double price = getBuyPrice() * amount;
+			
+			// Check if the player can afford
 			if (player.costGold(price)) {
-				ResourceSetter.apply(Type, currAmount + amount);
+				ResourceSetter.apply(Type, currAmount - amount);
 				return true;
 			}
 		}
