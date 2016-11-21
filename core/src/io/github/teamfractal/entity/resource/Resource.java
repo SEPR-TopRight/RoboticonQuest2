@@ -45,7 +45,7 @@ public class Resource {
 	}
 	
 	/**
-	 * Purchase resource from a player.
+	 * Purchase resource from the market.
 	 * @param player  The Player
 	 * @param amount  The amount of resource.
 	 * @return Boolean: Purchase success or not.
