@@ -117,8 +117,17 @@ public class Player extends Sprite implements ITrade {
 	}
 
 	@Override
-	public synchronized boolean addMoney(double amount) {
+	public synchronized void addMoney(double amount) {
 		money += amount;
-		return true;
+	}
+
+	Robotic getRoboticAndRemove(int index) {
+		if (index >= 0 && index < robotics.size()) {
+			Robotic r = robotics.get(index);
+			robotics.remove(index);
+			return r;
+		}
+
+		return null;
 	}
 }

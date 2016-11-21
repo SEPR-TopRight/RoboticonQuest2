@@ -125,10 +125,9 @@ public class Market implements ITrade {
 	 * Market have infinity amount of money.
 	 * This method has no use.
 	 * @param amount  Amount of money to add.
-	 * @return        Action was success or not.
 	 */
-	public boolean addMoney(double amount) {
-		return true;
+	public void addMoney(double amount) {
+
 	}
 
 	/**

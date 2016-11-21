@@ -21,7 +21,7 @@ public class Resource {
 		this.constrain = constrain;
 	}
 
-	public double getPurchasePrice() {
+	private double getPurchasePrice() {
 		int currAmount = market.getResource(resourceType);
 		if (currAmount >= constrain) {
 			return minUnitPrice;
@@ -30,7 +30,7 @@ public class Resource {
 		return minUnitPrice + (1 - (double)currAmount / constrain) * rate;
 	}
 	
-	public double getSellPrice() {
+	private double getSellPrice() {
 		return getPurchasePrice() * SellRate;
 	}
 	
@@ -49,6 +49,7 @@ public class Resource {
 			
 			// Check if the player can afford
 			if (player.costMoney(price)) {
+				market.addMoney(price);
 				market.setResource(resourceType, currAmount - amount);
 				player.setResource(resourceType, player.getResource(resourceType) + amount);
 				return true;
