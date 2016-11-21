@@ -1,17 +1,17 @@
 package io.github.teamfractal.entity;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class LandPlot extends Sprite {
     private final static Texture landTexture;
-    private int robotics;
+    private ArrayList<Robotic> robotics;
     private float foodRate;
     private float energyRate;
     private float oreRate;
-    // private Point location;
     private Player owner;
-    
 
     static {
         landTexture = new Texture("land.png");
@@ -27,19 +27,21 @@ public class LandPlot extends Sprite {
     }
     
     public synchronized Boolean removeRobotic(int amount) {
-    	if (amount < 0 || amount > robotics)
+    	if (amount < 0 || amount > robotics.size())
     		return false;
     	
+    	// TODO: Fix this
     	robotics -= amount;
     	
     	return true;
     }
     
 
-    public synchronized Boolean installRobotic(int amount) {
+    public synchronized Boolean installRobotic(Player player, int amount) {
     	if (amount < 0)
     		return false;
-    	
+
+    	// TODO: Fix this
     	robotics += amount;
     	
     	return true;

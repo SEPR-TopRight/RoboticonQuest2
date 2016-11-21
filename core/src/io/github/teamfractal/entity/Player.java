@@ -12,7 +12,7 @@ public class Player extends Sprite {
 	
 	private double gold; // Money
 	private ArrayList<LandPlot> lands;
-	private int roboticons;
+	private ArrayList<Robotic> roboticons;
 	
 	public Boolean buyPlot(LandPlot plot) {
 		return false;
@@ -26,19 +26,20 @@ public class Player extends Sprite {
 			return false;
 		}
 
-		synchronized (this) {
-			roboticons += amount;
+		for(int i = 0; i < amount; i++) {
+			roboticons.add(new Robotic());
 		}
 		
 		return true;
 	}
 	
 	public synchronized Boolean installRoboticon(LandPlot plot, int amount) {
-		if (plot == null || amount <= 0 || amount > roboticons) {
+		if (plot == null || amount <= 0 || amount > roboticons.size()) {
 			return false;
 		}
-		
-		return plot.installRobotic(amount);
+
+    	// TODO: Fix this
+		return plot.installRobotic(player, amount);
 	}
 
 	public synchronized boolean haveGold(double price) {

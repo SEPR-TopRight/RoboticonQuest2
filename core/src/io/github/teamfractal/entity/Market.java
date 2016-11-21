@@ -24,7 +24,6 @@ public class Market {
 	private Resource foodResource;
 	private Resource energyResource;
 	private Resource oreResource;
-	private Resource roboticResource;
 	
 	/**
 	 * Private instance of Market
@@ -64,9 +63,6 @@ public class Market {
 				this::getResource, this::setResource);
 		
 		oreResource = new Resource(ResourceType.Ore, 20, 10, 100,
-				this::getResource, this::setResource);
-		
-		roboticResource = new Resource(ResourceType.Robotic, 20, 10, 100,
 				this::getResource, this::setResource);
 	}
 
@@ -124,7 +120,8 @@ public class Market {
 	 * @return Boolean, purchase success or not.
 	 */
 	public synchronized boolean buyRoboticon(Player player, int amount) {
-		return roboticResource.buyFromMarket(player, amount);
+
+    	// TODO: Fix this
 	}
 	
 	/**
