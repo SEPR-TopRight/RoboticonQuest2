@@ -50,6 +50,7 @@ public class Resource {
 			// Check if the player can afford
 			if (player.costMoney(price)) {
 				market.setResource(resourceType, currAmount - amount);
+				player.setResource(resourceType, player.getResource(resourceType) + amount);
 				return true;
 			}
 		}
