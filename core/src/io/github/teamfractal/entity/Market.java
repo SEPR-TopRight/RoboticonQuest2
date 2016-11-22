@@ -1,8 +1,5 @@
 package io.github.teamfractal.entity;
 
-import java.util.ArrayList;
-import java.util.function.Function;
-
 import io.github.teamfractal.entity.resource.ITrade;
 import io.github.teamfractal.entity.resource.Resource;
 import io.github.teamfractal.entity.resource.ResourceType;
