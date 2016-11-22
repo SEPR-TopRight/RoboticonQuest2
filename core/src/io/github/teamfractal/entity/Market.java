@@ -172,8 +172,7 @@ public class Market implements ITrade {
 	}
 	
 	public synchronized boolean sellRoboticon(Player player, int amount) {
-
-    	// TODO: Fix this
+		return roboticResource.sellToMarket(player, amount);
 	}
 	
 	public synchronized boolean sellFood(Player player, int amount) {
