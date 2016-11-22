@@ -170,4 +170,22 @@ public class Market implements ITrade {
 	public synchronized boolean buyOre(Player player, int amount) {
 		return oreResource.buyFromMarket(player, amount);
 	}
+	
+	public synchronized boolean sellRoboticon(Player player, int amount) {
+
+    	// TODO: Fix this
+	}
+	
+	public synchronized boolean sellFood(Player player, int amount) {
+		return foodResource.sellToMarket(player, amount);
+	}
+	
+	public synchronized boolean sellEnergy(Player player, int amount) {
+		return energyResource.sellToMarket(player, amount);
+	}
+	
+	public synchronized boolean sellOre(Player player, int amount) {
+		return oreResource.sellToMarket(player, amount);
+	}
+	
 }

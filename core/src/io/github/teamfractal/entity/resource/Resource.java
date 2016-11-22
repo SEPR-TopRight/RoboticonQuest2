@@ -57,4 +57,22 @@ public class Resource {
 		}
 		return false;
 	}
+	
+	public synchronized boolean sellToMarket(ITrade player, int amount) {
+		int playercurrAmount = player.getResource(resourceType);
+		int currAmount = market.getResource(resourceType);
+
+		// Check if value is valid.
+		if (amount > 0 && amount <= playercurrAmount) {
+			double price = getSellPrice() * amount;
+			
+			// Check if the player can afford
+			if (player.addMoney(price)) {
+				market.setResource(resourceType, currAmount + amount);
+				player.setResource(resourceType, player.getResource(resourceType) - amount);
+				return true;
+			}
+		}
+		return false;
+	}
 }
