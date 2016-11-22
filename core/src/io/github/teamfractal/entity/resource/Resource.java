@@ -67,7 +67,8 @@ public class Resource {
 			double price = getSellPrice() * amount;
 			
 			// Check if the player can afford
-			if (player.addMoney(price)) {
+			if (market.costMoney(price)) {
+				player.addMoney(price);
 				market.setResource(resourceType, currAmount + amount);
 				player.setResource(resourceType, player.getResource(resourceType) - amount);
 				return true;
