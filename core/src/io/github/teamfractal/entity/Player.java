@@ -20,14 +20,6 @@ public class Player extends Sprite implements ITrade {
 		return false;
 	}
 
-	public synchronized Boolean installRoboticon(LandPlot plot, int amount) {
-		if (plot == null || amount <= 0 || amount > robotics.size()) {
-			return false;
-		}
-
-		return plot.installRobotic(this, amount);
-	}
-
 	public synchronized boolean haveMoney(double amount) {
 		return amount > 0 && amount <= money;
 	}
@@ -117,8 +109,17 @@ public class Player extends Sprite implements ITrade {
 	}
 
 	@Override
-	public synchronized boolean addMoney(double amount) {
+	public synchronized void addMoney(double amount) {
 		money += amount;
-		return true;
+	}
+
+	Robotic getRoboticAndRemove(int index) {
+		if (index >= 0 && index < robotics.size()) {
+			Robotic r = robotics.get(index);
+			robotics.remove(index);
+			return r;
+		}
+
+		return null;
 	}
 }

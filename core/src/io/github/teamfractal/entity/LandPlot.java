@@ -14,8 +14,8 @@ public class LandPlot extends Sprite {
     private Player owner;
 
     static {
+	    // TODO: Create land image.
         landTexture = new Texture("land.png");
-        // TODO: Create land image.
     }
 
     public LandPlot() {
@@ -40,14 +40,13 @@ public class LandPlot extends Sprite {
     }
     
 
-    public synchronized Boolean installRobotic(Player player, int amount) {
-    	if (amount < 0)
-    		return false;
+    public synchronized Boolean installRobotic(Player player, int index) {
+	    Robotic robotic = player.getRoboticAndRemove(index);
+	    if (robotic != null) {
+		    robotics.add(robotic);
+		    return true;
+	    }
 
-        for(int i = 0; i < amount; i++) {
-            robotics.add(new Robotic());
-        }
-
-        return true;
+	    return false;
     }
 }
