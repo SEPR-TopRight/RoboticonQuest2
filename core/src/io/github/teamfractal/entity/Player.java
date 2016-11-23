@@ -16,7 +16,7 @@ public class Player extends Sprite implements ITrade {
 	private ArrayList<LandPlot> lands;
 	private ArrayList<Robotic> robotics;
 	
-	public Boolean buyPlot(LandPlot plot) {
+	public boolean buyPlot(LandPlot plot) {
 		return false;
 	}
 
