@@ -39,15 +39,6 @@ class MarketTest {
 
     @org.junit.jupiter.api.Test
     void buyFood() {
-	    Market market = new Market();
-	    Player player = new Player();
-	    player.addMoney(100000);
-
-	    int roboticBefore = player.getResource(ResourceType.Robotic);
-	    market.buyRoboticon(player,3);
-	    int roboticAfter = player.getResource(ResourceType.Robotic);
-
-	    assertEquals(3, roboticAfter - roboticBefore);
     }
 
 
