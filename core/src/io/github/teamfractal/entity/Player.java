@@ -135,4 +135,8 @@ public class Player extends Sprite implements ITrade {
 	public int getOre() {
 		return ore;
 	}
+
+	public double getMoney() {
+		return money;
+	}
 }
