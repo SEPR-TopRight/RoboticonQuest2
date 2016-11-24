@@ -1,8 +1,5 @@
 package io.github.teamfractal.entity;
 
-import java.util.ArrayList;
-import java.util.function.Function;
-
 import io.github.teamfractal.entity.resource.ITrade;
 import io.github.teamfractal.entity.resource.Resource;
 import io.github.teamfractal.entity.resource.ResourceType;
@@ -172,8 +169,7 @@ public class Market implements ITrade {
 	}
 	
 	public synchronized boolean sellRoboticon(Player player, int amount) {
-
-    	// TODO: Fix this
+		return roboticResource.sellToMarket(player, amount);
 	}
 	
 	public synchronized boolean sellFood(Player player, int amount) {
