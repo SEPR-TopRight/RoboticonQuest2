@@ -198,4 +198,12 @@ public class Market implements ITrade {
 	public int getRobotic() {
 		return robotics;
 	}
+
+	/**
+	 * Get ore purchase price
+	 * @return
+	 */
+	public double getOrePrice() {
+		return oreResource.getPurchasePrice();
+	}
 }

@@ -139,4 +139,9 @@ public class Player implements ITrade {
 	public double getMoney() {
 		return money;
 	}
+
+	public void customiseRoboticon(Robotic roboticon, String type) {
+		// TODO Auto-generated method stub
+		
+	}
 }
