@@ -79,5 +79,4 @@ class MarketTest {
 		assertEquals(0, energyAfter);
 
 	}
-
 }
