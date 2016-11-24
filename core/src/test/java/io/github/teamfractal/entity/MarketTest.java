@@ -50,14 +50,39 @@ class MarketTest {
 	    assertEquals(3, roboticAfter - roboticBefore);
     }
 
-    @org.junit.jupiter.api.Test
-    void buyEnergy() {
 
-    }
 
     @org.junit.jupiter.api.Test
     void buyOre() {
 
     }
+
+	@org.junit.jupiter.api.Test
+	void buyEnergy() {
+		Market market = new Market();
+		Player player = new Player();
+		player.addMoney(100000);
+
+		int energyBefore = player.getResource(ResourceType.Energy);
+		market.buyEnergy(player,3);
+		int energyAfter = player.getResource(ResourceType.Energy);
+
+		assertEquals(3, energyAfter - energyBefore);
+
+	}
+
+	@org.junit.jupiter.api.Test
+	void sellEnergy() {
+		Market market = new Market();
+		Player player = new Player();
+		player.setResource(ResourceType.Energy, 3);
+
+		int energyBefore = player.getResource(ResourceType.Energy);
+		market.sellEnergy(player,3);
+		int energyAfter = player.getResource(ResourceType.Energy);
+
+		assertEquals(0, energyAfter - energyBefore);
+
+	}
 
 }
