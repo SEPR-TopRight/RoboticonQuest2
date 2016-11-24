@@ -11,6 +11,7 @@ public class MarketTests {
 	
 	@Test
 	public void testRoboticonProduction() {
+		Market market = new Market();
 		int oreBefore = market.getOre();
 		int roboticonBefore = market.getRoboticons();
 		market.generateRoboticon();
