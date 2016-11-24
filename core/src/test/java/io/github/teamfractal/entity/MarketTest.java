@@ -28,7 +28,7 @@ class MarketTest {
 
 	@org.junit.jupiter.api.Test
     void buyRoboticon() {
-		reset();
+		resetBuy();
 
         int roboticBefore = player.getResource(ResourceType.Robotic);
         market.buyRoboticon(player,3);
@@ -61,13 +61,17 @@ class MarketTest {
 	void buyEnergy() {
 		Market market = new Market();
 		Player player = new Player();
+		player.setResource(ResourceType.Energy, 0);
+
 		player.addMoney(100000);
 
-		int energyBefore = player.getResource(ResourceType.Energy);
 		market.buyEnergy(player,3);
 		int energyAfter = player.getResource(ResourceType.Energy);
 
-		assertEquals(3, energyAfter - energyBefore);
+		// check if player energy increase,
+		// this should increase 3 since there is 0 energy in the beginning
+		assertEquals(3, energyAfter);
+
 
 	}
 
@@ -77,11 +81,11 @@ class MarketTest {
 		Player player = new Player();
 		player.setResource(ResourceType.Energy, 3);
 
-		int energyBefore = player.getResource(ResourceType.Energy);
 		market.sellEnergy(player,3);
 		int energyAfter = player.getResource(ResourceType.Energy);
 
-		assertEquals(0, energyAfter - energyBefore);
+
+		assertEquals(0, energyAfter);
 
 	}
 
