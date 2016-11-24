@@ -25,6 +25,8 @@ public class PlayerTest {
 		// Setup
 		Player player = new Player();
 		Market market = new Market();
+		player.addMoney(100000);
+		market.setOre(10);
 		int playerStartingOre = player.getOre();
 		double playerStartingMoney = player.getMoney();
 		int marketStartingOre = market.getOre();
@@ -32,7 +34,7 @@ public class PlayerTest {
 		// Action
 		market.buyOre(player, 5);
 		// Tests
-		assertEquals(5, player.getOre());
+		assertEquals(5, player.getOre() - playerStartingOre);
 		assertEquals(playerStartingMoney - (5 * orePrice), player.getMoney(), 0);
 		
 		assertEquals(marketStartingOre - 5, market.getOre());

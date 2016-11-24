@@ -206,4 +206,8 @@ public class Market implements ITrade {
 	public double getOrePrice() {
 		return oreResource.getPurchasePrice();
 	}
+
+	public void setOre(int ore) {
+		this.ore = ore;
+	}
 }
