@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.teamfractal.entity.resource.ITrade;
 import io.github.teamfractal.entity.resource.ResourceType;
 
-public class Player extends Sprite implements ITrade {
+public class Player implements ITrade {
 	private String name;
 	private int food;
 	private int energy;

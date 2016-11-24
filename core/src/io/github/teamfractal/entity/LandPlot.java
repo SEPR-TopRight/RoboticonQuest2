@@ -2,21 +2,12 @@ package io.github.teamfractal.entity;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-
-public class LandPlot extends Sprite {
-    private final static Texture landTexture;
+public class LandPlot {
     private ArrayList<Robotic> robotics;
     private float foodRate;
     private float energyRate;
     private float oreRate;
     private Player owner;
-
-    static {
-	    // TODO: Create land image.
-        landTexture = new Texture("land.png");
-    }
 
     public LandPlot() {
         super();

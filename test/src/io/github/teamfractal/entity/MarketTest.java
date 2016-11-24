@@ -1,18 +1,18 @@
 package io.github.teamfractal.entity;
 
 import io.github.teamfractal.entity.resource.ResourceType;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class MarketTest {
+public class MarketTest {
 	Market market;
 	Player player;
 
 	/**
 	 * Reset variables.
 	 */
-	void reset () {
+	public void reset () {
 		market = new Market();
 		player = new Player();
 
@@ -20,9 +20,9 @@ class MarketTest {
 		player.addMoney(100000);
 	}
 
-	@org.junit.jupiter.api.Test
-    void buyRoboticon() {
-		resetBuy();
+	@Test
+	public void buyRoboticon() {
+		reset();
 
         int roboticBefore = player.getResource(ResourceType.Robotic);
         market.buyRoboticon(player,3);
@@ -32,7 +32,7 @@ class MarketTest {
     }
 	
 	@Test
-	void initResources(){
+	public void initResources(){
 		reset();
 
 		assertEquals(market.getOre(), 0);
@@ -41,8 +41,8 @@ class MarketTest {
 		assertEquals(market.getRobotic(), 12);
 	}
 
-	@org.junit.jupiter.api.Test
-	void buyEnergy() {
+	@Test
+	public void buyEnergy() {
 		Market market = new Market();
 		Player player = new Player();
 		player.setResource(ResourceType.Energy, 0);
@@ -59,8 +59,8 @@ class MarketTest {
 
 	}
 
-	@org.junit.jupiter.api.Test
-	void sellEnergy() {
+	@Test
+	public void sellEnergy() {
 		Market market = new Market();
 		Player player = new Player();
 		player.setResource(ResourceType.Energy, 3);
@@ -73,7 +73,7 @@ class MarketTest {
 	}
 	
 	@Test
-	void sellOre () {
+	public void sellOre () {
 		reset();
 
 
