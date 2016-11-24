@@ -54,7 +54,7 @@ public class Market implements ITrade {
 		foodResource = new Resource(this, ResourceType.Food, 20, 10, 100);
 		energyResource = new Resource(this, ResourceType.Energy, 20, 10, 100);
 		oreResource = new Resource(this, ResourceType.Ore, 20, 10, 100);
-		oreResource = new Resource(this, ResourceType.Robotic, 20, 10, 100);
+		roboticResource = new Resource(this, ResourceType.Robotic, 20, 10, 100);
 	}
 
 	/**
@@ -134,8 +134,7 @@ public class Market implements ITrade {
 	 * @return Boolean, purchase success or not.
 	 */
 	public synchronized boolean buyRoboticon(Player player, int amount) {
-
-		return true;
+		return roboticResource.buyFromMarket(player, amount);
 	}
 
 	/**
@@ -183,5 +182,8 @@ public class Market implements ITrade {
 	public synchronized boolean sellOre(Player player, int amount) {
 		return oreResource.sellToMarket(player, amount);
 	}
-	
+
+	public int getOre() {
+		return ore;
+	}
 }
