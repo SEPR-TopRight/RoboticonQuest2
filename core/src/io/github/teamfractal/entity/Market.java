@@ -186,4 +186,16 @@ public class Market implements ITrade {
 	public int getOre() {
 		return ore;
 	}
+
+	public int getEnergy() {
+		return energy;
+	}
+
+	public int getFood() {
+		return food;
+	}
+
+	public int getRobotic() {
+		return robotics;
+	}
 }
