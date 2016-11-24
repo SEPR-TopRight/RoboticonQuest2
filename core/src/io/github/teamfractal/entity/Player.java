@@ -1,6 +1,7 @@
 package io.github.teamfractal.entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.teamfractal.entity.resource.ITrade;
@@ -11,10 +12,14 @@ public class Player extends Sprite implements ITrade {
 	private int food;
 	private int energy;
 	private int ore;
-	
+
+	public Player() {
+		robotics = new ArrayList<Robotic>();
+	}
+
 	private double money;
-	private ArrayList<LandPlot> lands;
-	private ArrayList<Robotic> robotics;
+	private List<LandPlot> lands;
+	private List<Robotic> robotics;
 	
 	public boolean buyPlot(LandPlot plot) {
 		return false;
