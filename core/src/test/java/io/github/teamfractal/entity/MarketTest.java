@@ -44,4 +44,19 @@ class MarketTest {
 
     }
 
+	@org.junit.jupiter.api.Test
+	void sellOre () {
+		reset();
+
+		int playerOreBefore = 100;
+		int oreToSell = 10;
+		player.setOre(playerOreBefore);
+		int marketOreBefore = market.getOre();
+		market.sellOre(player, oreToSell);
+		int playerOreAfter = player.getOre();
+
+		// Check if 10 ores were sold to market.
+		assertEquals(playerOreBefore - playerOreAfter, oreToSell);
+
+	}
 }

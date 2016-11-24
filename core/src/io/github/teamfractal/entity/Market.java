@@ -182,5 +182,8 @@ public class Market implements ITrade {
 	public synchronized boolean sellOre(Player player, int amount) {
 		return oreResource.sellToMarket(player, amount);
 	}
-	
+
+	public int getOre() {
+		return ore;
+	}
 }

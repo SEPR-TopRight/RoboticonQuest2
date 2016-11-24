@@ -127,4 +127,12 @@ public class Player extends Sprite implements ITrade {
 
 		return null;
 	}
+
+	public void setOre(int ore) {
+		this.ore = ore;
+	}
+
+	public int getOre() {
+		return ore;
+	}
 }
