@@ -114,4 +114,18 @@ public class MarketTest {
 		// Check if player's money increased.
 		assertTrue(moneyAfter > moneyBefore);
 	}
+
+
+	@Test
+	public void testRoboticonProduction() {
+		// setup
+		Market market = new Market();
+		int oreBefore = market.getOre();
+		int roboticonBefore = market.getRoboticons();
+		// Action
+		market.generateRoboticon();
+		// Tests
+		assertEquals(oreBefore - 2, market.getOre());
+		assertEquals(roboticonBefore + 1, market.getRoboticons());
+	}
 }

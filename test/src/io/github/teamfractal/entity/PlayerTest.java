@@ -7,6 +7,8 @@ import org.junit.Test;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Robotic;
 
+import java.util.ArrayList;
+
 public class PlayerTest {
 	@Test
 	public void testPlayerCanCustomiseRoboticon() {
@@ -38,5 +40,22 @@ public class PlayerTest {
 		assertEquals(playerStartingMoney - (5 * orePrice), player.getMoney(), 0);
 		
 		assertEquals(marketStartingOre - 5, market.getOre());
+	}
+
+	@Test
+	public void testPlayerCanBuyRoboticon() {
+		// Setup
+		Player player = new Player();
+		Market market = new Market();
+		int playerMoneyBefore = player.getMoney();
+		int roboticonPrice = market.getRoboticonPrice();
+		int marketRoboticonsBefore = market.getNumberRoboticons();
+		ArrayList<Roboticon> roboticonList = player.getRoboticonList();
+		// Action
+		Roboticon newRoboticon = player.buyRoboticon();
+		// Tests
+		assertEquals(playerMoneyBefore - roboticonPrice, player.getMoney());
+		assertEquals(marketRoboticonsBefore - 1, market.getNumberRoboticons);
+		assertArrayEquals(roboticonList.append(newRoboticon), player.getRoboticonList()); // I'm not sure about this test
 	}
 }
