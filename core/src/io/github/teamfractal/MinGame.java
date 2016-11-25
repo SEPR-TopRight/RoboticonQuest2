@@ -26,6 +26,17 @@ public class MinGame {
 		else{
 			return false;
 		}
+
+	}
+
+	public int WinGameGift(boolean WinOrLost){
+		if (WinOrLost == true){
+			return 1000;
+		}
+		else {
+			return 0;
+		}
+
 	}
 	
 }
