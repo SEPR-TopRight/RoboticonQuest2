@@ -1,24 +1,23 @@
-package io.github.teamfractal.entity.tests;
+package io.github.teamfractal.entity;
 
 import static org.junit.Assert.*;
-
-import java.util.ArrayList;
 
 import org.junit.Test;
 
 import io.github.teamfractal.entity.Market;
-import io.github.teamfractal.entity.Player;
+import io.github.teamfractal.entity.Robotic;
 
-public class PlayerTests {
+import java.util.ArrayList;
 
+public class PlayerTest {
 	@Test
 	public void testPlayerCanCustomiseRoboticon() {
 		// Setup
 		Player player = new Player();
-		Roboticon roboticon = new Roboticon();
+		Robotic roboticon = new Robotic();
 		String type = "Ore";
 		// Action
-		Player.customiseRoboticon(roboticon, type);
+		player.customiseRoboticon(roboticon, type);
 		// Test
 		assertEquals("Ore", roboticon.getType());
 	}
@@ -28,19 +27,21 @@ public class PlayerTests {
 		// Setup
 		Player player = new Player();
 		Market market = new Market();
+		player.addMoney(100000);
+		market.setOre(10);
 		int playerStartingOre = player.getOre();
-		float playerStartingMoney = player.getMoney();
-		int marketStartingOre = market.getOreStock();
-		float orePrice = market.getOrePrice();
+		double playerStartingMoney = player.getMoney();
+		int marketStartingOre = market.getOre();
+		double orePrice = market.getOrePrice();
 		// Action
-		player.buyOreFromMarket(5);
+		market.buyOre(player, 5);
 		// Tests
-		assertEquals(5, player.getOre());
-		assertEquals(playerStartingMoney - (5 * orePrice), player.getMoney());
+		assertEquals(5, player.getOre() - playerStartingOre);
+		assertEquals(playerStartingMoney - (5 * orePrice), player.getMoney(), 0);
 		
-		assertEquals(marketStartingOre - 5, market.getOreStock());
+		assertEquals(marketStartingOre - 5, market.getOre());
 	}
-	
+
 	@Test
 	public void testPlayerCanBuyRoboticon() {
 		// Setup
@@ -57,5 +58,4 @@ public class PlayerTests {
 		assertEquals(marketRoboticonsBefore - 1, market.getNumberRoboticons);
 		assertArrayEquals(roboticonList.append(newRoboticon), player.getRoboticonList()); // I'm not sure about this test
 	}
-	
 }

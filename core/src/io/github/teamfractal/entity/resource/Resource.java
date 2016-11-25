@@ -21,7 +21,7 @@ public class Resource {
 		this.constrain = constrain;
 	}
 
-	private double getPurchasePrice() {
+	public double getPurchasePrice() {
 		int currAmount = market.getResource(resourceType);
 		if (currAmount >= constrain) {
 			return minUnitPrice;
@@ -30,7 +30,7 @@ public class Resource {
 		return minUnitPrice + (1 - (double)currAmount / constrain) * rate;
 	}
 	
-	private double getSellPrice() {
+	public double getSellPrice() {
 		return getPurchasePrice() * SellRate;
 	}
 	
