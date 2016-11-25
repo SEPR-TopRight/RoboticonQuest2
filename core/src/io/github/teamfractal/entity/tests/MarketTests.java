@@ -11,12 +11,15 @@ public class MarketTests {
 	
 	@Test
 	public void testRoboticonProduction() {
+		// setup
 		Market market = new Market();
 		int oreBefore = market.getOre();
 		int roboticonBefore = market.getRoboticons();
+		// Action
 		market.generateRoboticon();
 		int oreAfter = market.getOre();
 		int roboticonAfter = market.getRoboticons();
+		// Tests
 		assertEquals(oreBefore - 2, oreAfter);
 		assertEquals(roboticonBefore + 1, roboticonAfter);
 	}
