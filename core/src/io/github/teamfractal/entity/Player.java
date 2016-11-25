@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import io.github.teamfractal.entity.resource.ITrade;
 import io.github.teamfractal.entity.resource.ResourceType;
 
-public class Player extends Sprite implements ITrade {
+public class Player implements ITrade {
 	private String name;
 	private int food;
 	private int energy;
@@ -126,5 +126,22 @@ public class Player extends Sprite implements ITrade {
 		}
 
 		return null;
+	}
+
+	public void setOre(int ore) {
+		this.ore = ore;
+	}
+
+	public int getOre() {
+		return ore;
+	}
+
+	public double getMoney() {
+		return money;
+	}
+
+	public void customiseRoboticon(Robotic roboticon, String type) {
+		// TODO Auto-generated method stub
+		
 	}
 }
