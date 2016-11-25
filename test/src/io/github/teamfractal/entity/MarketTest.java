@@ -20,6 +20,9 @@ public class MarketTest {
 		player.addMoney(100000);
 	}
 
+	/**
+	 * Player should be able to purchase robotics from market.
+	 */
 	@Test
 	public void buyRoboticon() {
 		reset();
@@ -30,7 +33,10 @@ public class MarketTest {
 
         assertEquals(3, roboticAfter - roboticBefore);
     }
-	
+
+	/**
+	 * Market upon initialize should have expected number of resources.
+	 */
 	@Test
 	public void initResources(){
 		reset();
@@ -41,6 +47,9 @@ public class MarketTest {
 		assertEquals(market.getRobotic(), 12);
 	}
 
+	/**
+	 * Player should be able to purchase energy from market.
+	 */
 	@Test
 	public void buyEnergy() {
 		Market market = new Market();
@@ -59,6 +68,9 @@ public class MarketTest {
 
 	}
 
+	/**
+	 * Player should be able to sell energy to market.
+	 */
 	@Test
 	public void sellEnergy() {
 		Market market = new Market();
@@ -71,7 +83,10 @@ public class MarketTest {
 
 		assertEquals(0, energyAfter);
 	}
-	
+
+	/**
+	 * Player should be able to sell ore to market.
+	 */
 	@Test
 	public void sellOre () {
 		reset();
