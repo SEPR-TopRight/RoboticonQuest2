@@ -17,11 +17,9 @@ public class MarketTests {
 		int roboticonBefore = market.getRoboticons();
 		// Action
 		market.generateRoboticon();
-		int oreAfter = market.getOre();
-		int roboticonAfter = market.getRoboticons();
 		// Tests
-		assertEquals(oreBefore - 2, oreAfter);
-		assertEquals(roboticonBefore + 1, roboticonAfter);
+		assertEquals(oreBefore - 2, market.getOre());
+		assertEquals(roboticonBefore + 1, market.getRoboticons());
 	}
 	
 }
