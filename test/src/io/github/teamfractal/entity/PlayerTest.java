@@ -58,4 +58,19 @@ public class PlayerTest {
 		assertEquals(marketRoboticonsBefore - 1, market.getNumberRoboticons);
 		assertArrayEquals(roboticonList.append(newRoboticon), player.getRoboticonList()); // I'm not sure about this test
 	}
+	/**
+	 * The Player should be able to buy modifications from the market
+	 */
+		@Test
+		public void modificationTest() {
+			//setup
+			Market market = new Market();
+			Player player = new Player();
+			int oldMoney = player.getMoney()
+			//action
+			player.buyModification(Ore);
+			//Tests
+			assertEqual(1, player.getModifications().size());
+			assertTrue(player.getMoney() < oldMoney);
+		}
 }

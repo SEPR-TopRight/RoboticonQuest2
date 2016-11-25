@@ -128,4 +128,19 @@ public class MarketTest {
 		assertEquals(oreBefore - 2, market.getOre());
 		assertEquals(roboticonBefore + 1, market.getRoboticons());
 	}
+/**
+ * The market should be change the price of resources based on abundance
+ */
+
+	@Test
+	public void priceTest() {
+		//setup
+		Market market = new Market();
+		Player player = new Player();
+		int oldValue = market.getPrice(Ore);
+		//action
+		market.sellOre(player, 10);
+		//test
+		assertTrue(oldValue > market.getPrice(Ore));
+	}
 }
