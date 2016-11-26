@@ -24,7 +24,24 @@ public class MarketTest {
 		assertEquals(16, market.getFood());
 		assertEquals(16, market.getEnergy());
 		assertEquals(0, market.getOre());
-		assertEquals(12, market.getRobotics());
+		assertEquals(12, market.getRoboticon());
+	}
+
+	/**
+	 * The market should start with correct price for player to buy.
+	 * Prices listed here are subjected for change in later development.
+	 *
+	 * Ore: $10
+	 * Food: $10
+	 * Energy: $10
+	 * Roboticon: $10
+	 */
+	@Test
+	public void marketShouldHaveCorrectPricesForResources() {
+		assertEquals(10, market.getBuyPrice(ResourceType.Ore));
+		assertEquals(10, market.getBuyPrice(ResourceType.Energy));
+		assertEquals(10, market.getBuyPrice(ResourceType.Food));
+		assertEquals(10, market.getBuyPrice(ResourceType.Roboticon));
 	}
 
 	/**
