@@ -14,7 +14,11 @@ public class Market {
 		return 0;
 	}
 
-	public int getRobotics() {
+	public int getRoboticon() {
 		return 12;
+	}
+
+	public int getBuyPrice(ResourceType ore) {
+		return 10;
 	}
 }
