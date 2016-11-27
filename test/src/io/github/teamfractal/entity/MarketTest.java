@@ -38,10 +38,10 @@ public class MarketTest {
 	 */
 	@Test
 	public void marketShouldHaveCorrectPricesForResources() {
-		assertEquals(10, market.getBuyPrice(ResourceType.Ore));
-		assertEquals(10, market.getBuyPrice(ResourceType.Energy));
-		assertEquals(10, market.getBuyPrice(ResourceType.Food));
-		assertEquals(10, market.getBuyPrice(ResourceType.Roboticon));
+		assertEquals(10, market.getBuyPrice(ResourceType.ORE));
+		assertEquals(10, market.getBuyPrice(ResourceType.ENERGY));
+		assertEquals(10, market.getBuyPrice(ResourceType.FOOD));
+		assertEquals(10, market.getBuyPrice(ResourceType.ROBOTICON));
 	}
 
 	/**
