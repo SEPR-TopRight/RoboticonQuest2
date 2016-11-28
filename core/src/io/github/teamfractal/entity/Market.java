@@ -23,27 +23,34 @@ public class Market {
 	}
 
 
+
 	/**
-	buy resource start here
-    */
-
-
-	public boolean buyFood(player, int amount) {
-		int foodPrice = 20;	// this 20 need to be change when write the method setFoodPrice
-		double price = amount *  foodPrice;
-		int playerMoney = player.getMoney();
-		int playerFood = player.getFood();
-
-		if (playerMoney >= price ){
-			player.setMoney(playerMoney-price);
-			player.setFood(playerFood+amount);
-			return true;
+	 * 	buy resource start here
+	 *
+	 * @param amount   the number of resource you want to buy
+	 */
+	public void checkResourcesMoreThanAmount(ResourceType type, int amount) throws Exception{
+		int resource;
+		switch (type) {
+			case ORE:
+				 resource = getOre();
+				break;
+			case ENERGY:
+				 resource = getEnergy();
+				break;
+			case ROBOTICON:
+				 resource = getRoboticon();
+				break;
+			default:
+				throw new Exception("Error: Resource type is incorrect.");
 		}
-		else{
-			return false;
+
+		if (resource <= amount ){
+			throw new Exception("Error: the resources in market is less than the amount you want to buy.");
 		}
+
 	}
-
+/*      //buy resource
 	public boolean buyEnergy(player, int amount) {
 		int EnergyPrice = 20;	// this 20 need to be change when write the method setEnergyPrice
 		double price = amount *  EnergyPrice;
@@ -59,48 +66,11 @@ public class Market {
 			return false;
 		}
 	}
-
-	public boolean buyOre(player, int amount) {
-		int OrePrice = 20;	// this 20 need to be change when write the method setOrePrice
-		double price = amount *  OrePrice;
-		int playerMoney = player.getMoney();
-		int playerOre = player.getOre();
-
-		if (playerMoney >= price ){
-			player.setMoney(playerMoney-price);
-			player.setOre(playerOre+amount);
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
+*/
 
 
 
-	public boolean buyRobotics(player, int amount) {
-		int RoboticsPrice = 20;	// this 20 need to be change when write the method setRoboticsPrice
-		double price = amount *  RoboticsPrice;
-		int playerMoney = player.getMoney();
-		int playerRobotics = player.getRobotics();
-
-		if (playerMoney >= price ){
-			player.setMoney(playerMoney-price);
-			player.setRobotics(playerRobotics+amount);
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
-
-
-
-	/**
-	sell resource start here
-    */
-
+/*		//sell resource
 
 	public boolean sellFood(player, int amount) {
 		int foodPrice = 20;	// this 20 need to be change when write the method setFoodPrice
@@ -117,73 +87,55 @@ public class Market {
 			return false;
 		}
 	}
+*/
 
-	public boolean sellEnergy(player, int amount) {
-		int EnergyPrice = 20;	// this 20 need to be change when write the method setEnergyPrice
-		double price = amount *  EnergyPrice;
-		int playerMoney = player.getMoney();
-		int playerEnergy = player.getEnergy();
 
-		if (playerEnergy >= amount ){
-			player.setMoney(playerMoney+price);
-			player.setEnergy(playerEnergy-amount);
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
 
-	public boolean sellOre(player, int amount) {
-		int OrePrice = 20;	// this 20 need to be change when write the method setOrePrice
-		double price = amount *  OrePrice;
-		int playerMoney = player.getMoney();
-		int playerOre = player.getOre();
 
-		if (playerOre >= amount ){
-			player.setMoney(playerMoney+price);
-			player.setOre(playerOre-amount);
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	public boolean sellRobotics(player, int amount) {
-		int RoboticsPrice = 20;    // this 20 need to be change when write the method setRoboticsPrice
-		double price = amount * RoboticsPrice;
-		int playerMoney = player.getMoney();
-		int playerRobotics = player.getRobotics();
 
-		if (playerRobotics >= amount) {
-			player.setMoney(playerMoney + price);
-			player.setRobotics(playerRobotics - amount);
-			return true;
-		} else {
-			return false;
+	public int getBuyPrice(ResourceType type) throws Exception {
+		int price;
+		switch (type) {
+			case ORE:
+				price = 20;
+				return price;
+			case ENERGY:
+				price = 30;
+				return price;
+			case FOOD:
+				price = 40;
+				return price;
+			case ROBOTICON:
+				price = 100;
+				return price;
+			default:
+				throw new Exception("Error: Resource type is incorrect.");
+
 		}
 	}
 
 
-	/**	public synchronized boolean sellToMarket(ITrade player, int amount) {
-	 int playercurrAmount = player.getResource(resourceType);
-	 int currAmount = market.getResource(resourceType);
+	public int getSellPrice(ResourceType type) throws Exception {
+		int price;
+		switch (type) {
+			case ORE:
+				price = 20;
+				return price;
+			case ENERGY:
+				price = 30;
+				return price;
+			case FOOD:
+				price = 40;
+				return price;
+			case ROBOTICON:
+				price = 100;
+				return price;
+			default:
+				throw new Exception("Error: Resource type is incorrect.");
 
-	 // Check if value is valid.
-	 if (amount > 0 && amount <= playercurrAmount) {
-	 double price = getSellPrice() * amount;
+		}
+	}
 
-	 // Check if the player can afford
-	 if (player.addMoney(price)) {
-	 market.setResource(resourceType, currAmount + amount);
-	 player.setResource(resourceType, player.getResource(resourceType) - amount);
-	 return true;
-	 }
-	 }
-	 return false;
-	 }
-	 }
-	 */
 
 
 
@@ -191,6 +143,8 @@ public class Market {
 		return 10;
 	}
 }
+
+
 
 
 
