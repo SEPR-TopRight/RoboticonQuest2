@@ -2,7 +2,11 @@ package io.github.teamfractal.entity;
 
 public class LandPlot {
 	int[] productionModifiers = {0, 0, 0};
-	int[] productionAmounts = {3, 0, 0};
+	int[] productionAmounts;
+	
+	public LandPlot(int ore, int energy, int food) {
+		this.productionAmounts = new int[] {ore, energy, food};
+	}
 	
 	public void installRoboticon(ResourceType type) {
 		switch(type) {

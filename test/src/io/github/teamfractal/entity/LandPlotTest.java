@@ -9,7 +9,7 @@ public class LandPlotTest {
 	
 	@Before
 	public void setup() {
-		plot = new LandPlot();
+		plot = new LandPlot(3, 0, 0);
 	}
 	
 	@Test
