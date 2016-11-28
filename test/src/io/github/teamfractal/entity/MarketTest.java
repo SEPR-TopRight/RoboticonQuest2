@@ -53,6 +53,40 @@ public class MarketTest {
 	 */
 	@Test
 	public void marketShouldAllowPlayerToBuyResources() {
+		player.setMoney(10000);
+		player.setEnergy(0);
+		player.setFood(0);
+		player.setOre(0);
+		player.setRobotics(0);
+
+		assertEquals(true, market.buyEnergy(player,3));
+		assertEquals(true, market.buyFood(player,3));
+		assertEquals(true, market.buyOre(player,3));
+		assertEquals(true, market.buyRobotics(player,3));
+
+		assertEquals(false, market.buyEnergy(player,3));
+		assertEquals(false, market.buyFood(player,3));
+		assertEquals(false, market.buyOre(player,3));
+		assertEquals(false, market.buyRobotics(player,3));
+	}
+
+
+	public void marketShouldAllowPlayerToBuyResources() {
+		player.setMoney(10000);
+		player.setEnergy(10);
+		player.setFood(10);
+		player.setOre(10);
+		player.setRobotics(10);
+
+		assertEquals(true, market.sellEnergy(player,3));
+		assertEquals(true, market.sellFood(player,3));
+		assertEquals(true, market.sellOre(player,3));
+		assertEquals(true, market.sellRobotics(player,3));
+
+		assertEquals(false, market.sellEnergy(player,11));
+		assertEquals(false, market.sellFood(player,11));
+		assertEquals(false, market.sellOre(player,11));
+		assertEquals(false, market.sellRobotics(player,11));
 
 	}
 }
