@@ -100,21 +100,25 @@ public class Market {
 		int price;
 		switch (type) {
 			case ORE:
-				price = 20;
+				price = 10;
 				return price;
 			case ENERGY:
-				price = 30;
+				price = 10;
 				return price;
 			case FOOD:
-				price = 40;
+				price = 10;
 				return price;
 			case ROBOTICON:
-				price = 100;
+				price = 10;
 				return price;
 			default:
 				throw new IllegalArgumentException("Error: Resource type is incorrect.");
 
 		}
+	}
+
+	public int newPrice(){
+
 	}
 }
 
@@ -124,36 +128,4 @@ public class Market {
 
 
 
-/**
- *
- * This is for player class
 
-	int money;
-	int ore;
-	int robotics;
-	int food;
-	int energy;
-
-	public int getMoney(){
-		return money;
-	}
-
-	public int getFood(){
-		return food;
-	}
-
-	public int getOre(){
-		return ore;
-	}
-
-	public int getEnergy(){
-		return energy;
-	}
-
-	public int getRobotics(){
-		return robotics;
-	}
-
-
-
- */
