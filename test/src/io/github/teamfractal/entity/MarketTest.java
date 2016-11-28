@@ -1,12 +1,16 @@
 package io.github.teamfractal.entity;
 
 import org.junit.*;
+import org.junit.rules.ExpectedException;
 
 import java.util.Random;
 
 import static org.junit.Assert.*;
 
 public class MarketTest {
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
+
 	private Market market;
 
 	/**
