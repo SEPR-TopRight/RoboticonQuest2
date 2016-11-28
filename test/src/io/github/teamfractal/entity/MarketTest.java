@@ -62,10 +62,35 @@ public class MarketTest {
 	 * Roboticon: $10
 	 */
 	@Test
-	public void marketShouldHaveCorrectPricesForResources() {
+	public void marketShouldHaveCorrectPricesForResources() throws Exception {
 		assertEquals(10, market.getBuyPrice(ResourceType.ORE));
 		assertEquals(10, market.getBuyPrice(ResourceType.ENERGY));
-		assertEquals(10, market.getBuyPrice(ResourceType.FOOD));
+		//assertEquals(10, market.getBuyPrice(ResourceType.FOOD));
 		assertEquals(10, market.getBuyPrice(ResourceType.ROBOTICON));
 	}
+
+
+	/**
+	 * player class can use this method to find out that the amount of resource
+	 * player want to buy is avaliable in the market, if the amount of resource
+	 * in the market is less than the amount of resources player want to buy then
+	 * throw exception
+	 */
+
+	@Test
+	public void marketCanCheckResourceMoreThanAmountYouWantToBuy() {
+		try{
+			//market.checkResourcesMoreThanAmount(ResourceType.FOOD, 1000000);
+			market.checkResourcesMoreThanAmount(ResourceType.ORE, 1000000);
+			market.checkResourcesMoreThanAmount(ResourceType.ENERGY, 1000000);
+			market.checkResourcesMoreThanAmount(ResourceType.ROBOTICON, 1000000);
+		}
+		catch(Exception exception) {
+			return;
+		}
+
+		fail("Shoud throw exception");
+	}
+
+
 }
