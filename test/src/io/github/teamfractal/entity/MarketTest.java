@@ -2,6 +2,8 @@ package io.github.teamfractal.entity;
 
 import org.junit.*;
 
+import java.util.Random;
+
 import static org.junit.Assert.*;
 
 public class MarketTest {
@@ -25,6 +27,25 @@ public class MarketTest {
 		assertEquals(16, market.getEnergy());
 		assertEquals(0, market.getOre());
 		assertEquals(12, market.getRoboticon());
+	}
+
+	/**
+	 * The market should be able to set and get resources.
+	 */
+	@Test
+	public void marketShouldAbleToGetAndSetResources() {
+		Random rnd = new Random();
+		int valueToTest = rnd.nextInt(100);
+		market.setEnergy(valueToTest);
+		market.setOre(valueToTest);
+		market.setFood(valueToTest);
+		market.setRoboticon(valueToTest);
+
+
+		assertEquals(valueToTest, market.getEnergy());
+		assertEquals(valueToTest, market.getOre());
+		assertEquals(valueToTest, market.getFood());
+		assertEquals(valueToTest, market.getRoboticon());
 	}
 
 	/**
