@@ -6,24 +6,43 @@ public class Market {
 	public int getResourcePrice(ResourceType resource) {
 		return 1;
 	}
-	
 
-	public int getFood() {
-		return 16;
+	private int food;
+	private int energy;
+	private int ore;
+	private int roboticon;
+
+	int getFood() {
+		return food;
 	}
 
-	public int getEnergy() {
-		return 16;
+	int getEnergy() {
+		return energy;
 	}
 
-	public int getOre() {
-		return 0;
+	int getOre() {
+		return ore;
 	}
 
-	public int getRoboticon() {
-		return 12;
+	int getRoboticon() {
+		return roboticon;
 	}
 
+	void setFood(int amount) {
+		food = amount;
+	}
+
+	void setEnergy(int amount) {
+		energy = amount;
+	}
+
+	void setOre(int amount) {
+		ore = amount;
+	}
+
+	void setRoboticon(int amount) {
+		roboticon = amount;
+	}
 
 	public int getResource(ResourceType type) throws IllegalArgumentException {
 		switch (type) {
@@ -56,50 +75,8 @@ public class Market {
 			throw new ValueException("Error: not enough resources in the market.");
 		}
 	}
-/*      //buy resource
-	public boolean buyEnergy(player, int amount) {
-		int EnergyPrice = 20;	// this 20 need to be change when write the method setEnergyPrice
-		double price = amount *  EnergyPrice;
-		int playerMoney = player.getMoney();
-		int playerEnergy = player.getEnergy();
 
-		if (playerMoney >= price ){
-			player.setMoney(playerMoney-price);
-			player.setEnergy(playerEnergy+amount);
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-*/
-
-
-
-/*		//sell resource
-
-	public boolean sellFood(player, int amount) {
-		int foodPrice = 20;	// this 20 need to be change when write the method setFoodPrice
-		double price = amount *  foodPrice;
-		int playerMoney = player.getMoney();
-		int playerFood = player.getFood();
-
-		if (playerFood >= amount ){
-			player.setMoney(playerMoney+price);
-			player.setFood(playerFood-amount);
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-*/
-
-
-
-
-
-	public int getBuyPrice(ResourceType type) throws Exception {
+	int getBuyPrice(ResourceType type) throws IllegalArgumentException {
 		int price;
 		switch (type) {
 			case ORE:
@@ -115,13 +92,11 @@ public class Market {
 				price = 100;
 				return price;
 			default:
-				throw new Exception("Error: Resource type is incorrect.");
-
+				throw new IllegalArgumentException("Error: Resource type is incorrect.");
 		}
 	}
 
-
-	public int getSellPrice(ResourceType type) throws Exception {
+	int getSellPrice(ResourceType type) throws IllegalArgumentException {
 		int price;
 		switch (type) {
 			case ORE:
@@ -137,7 +112,7 @@ public class Market {
 				price = 100;
 				return price;
 			default:
-				throw new Exception("Error: Resource type is incorrect.");
+				throw new IllegalArgumentException("Error: Resource type is incorrect.");
 
 		}
 	}
