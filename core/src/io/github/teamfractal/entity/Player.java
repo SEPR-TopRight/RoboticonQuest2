@@ -1,9 +1,9 @@
 package io.github.teamfractal.entity;
 
 public class Player {
-	int money = 100;
-	int ore = 0;
-	int energy = 0;
+	private int money = 100;
+	private int ore = 0;
+	private int energy = 0;
 	
 	public int getMoney(){
 		return money;
@@ -30,13 +30,13 @@ public class Player {
 					 		
 			}
 		}
-		else{
+		else {
 			throw new Exception("Error: Not enough money");
 		}
 		
 	}
 
-	public void sellResourceToMarket(int amount, Market market, ResourceType resource) throws Exception{
+	public void sellResourceToMarket(int amount, Market market, ResourceType resource) throws Exception {
 		
 		int resourcePrice = market.getResourcePrice(resource);
 		

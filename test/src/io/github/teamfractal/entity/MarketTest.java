@@ -1,10 +1,16 @@
 package io.github.teamfractal.entity;
 
 import org.junit.*;
+import org.junit.rules.ExpectedException;
+
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
 public class MarketTest {
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
+
 	private Market market;
 
 	/**
@@ -28,6 +34,25 @@ public class MarketTest {
 	}
 
 	/**
+	 * The market should be able to set and get resources.
+	 */
+	@Test
+	public void marketShouldAbleToGetAndSetResources() {
+		Random rnd = new Random();
+		int valueToTest = rnd.nextInt(100);
+		market.setEnergy(valueToTest);
+		market.setOre(valueToTest);
+		market.setFood(valueToTest);
+		market.setRoboticon(valueToTest);
+
+
+		assertEquals(valueToTest, market.getEnergy());
+		assertEquals(valueToTest, market.getOre());
+		assertEquals(valueToTest, market.getFood());
+		assertEquals(valueToTest, market.getRoboticon());
+	}
+
+	/**
 	 * The market should start with correct price for player to buy.
 	 * Prices listed here are subjected for change in later development.
 	 *
@@ -42,51 +67,5 @@ public class MarketTest {
 		assertEquals(10, market.getBuyPrice(ResourceType.ENERGY));
 		assertEquals(10, market.getBuyPrice(ResourceType.FOOD));
 		assertEquals(10, market.getBuyPrice(ResourceType.ROBOTICON));
-	}
-
-	/**
-	 * The market should provide a way that allows the player
-	 * to purchase Resources from the market.
-	 *
-	 * After purchase, corresponding amount of resources should
-	 * be reduced from the market resources listing.
-	 */
-	@Test
-	public void marketShouldAllowPlayerToBuyResources() {
-		player.setMoney(10000);
-		player.setEnergy(0);
-		player.setFood(0);
-		player.setOre(0);
-		player.setRobotics(0);
-
-		assertEquals(true, market.buyEnergy(player,3));
-		assertEquals(true, market.buyFood(player,3));
-		assertEquals(true, market.buyOre(player,3));
-		assertEquals(true, market.buyRobotics(player,3));
-
-		assertEquals(false, market.buyEnergy(player,3));
-		assertEquals(false, market.buyFood(player,3));
-		assertEquals(false, market.buyOre(player,3));
-		assertEquals(false, market.buyRobotics(player,3));
-	}
-
-
-	public void marketShouldAllowPlayerToBuyResources() {
-		player.setMoney(10000);
-		player.setEnergy(10);
-		player.setFood(10);
-		player.setOre(10);
-		player.setRobotics(10);
-
-		assertEquals(true, market.sellEnergy(player,3));
-		assertEquals(true, market.sellFood(player,3));
-		assertEquals(true, market.sellOre(player,3));
-		assertEquals(true, market.sellRobotics(player,3));
-
-		assertEquals(false, market.sellEnergy(player,11));
-		assertEquals(false, market.sellFood(player,11));
-		assertEquals(false, market.sellOre(player,11));
-		assertEquals(false, market.sellRobotics(player,11));
-
 	}
 }

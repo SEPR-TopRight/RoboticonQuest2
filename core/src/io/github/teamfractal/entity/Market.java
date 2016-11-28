@@ -1,5 +1,7 @@
 package io.github.teamfractal.entity;
 
+import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
+
 public class Market {
 	public int getResourcePrice(ResourceType resource) {
 		return 1;
@@ -23,32 +25,36 @@ public class Market {
 	}
 
 
-
-	/**
-	 * 	buy resource start here
-	 *
-	 * @param amount   the number of resource you want to buy
-	 */
-	public void checkResourcesMoreThanAmount(ResourceType type, int amount) throws Exception{
-		int resource;
+	public int getResource(ResourceType type) throws IllegalArgumentException {
 		switch (type) {
 			case ORE:
-				 resource = getOre();
-				break;
+				return getOre();
+
 			case ENERGY:
-				 resource = getEnergy();
-				break;
+				return getEnergy();
+
 			case ROBOTICON:
-				 resource = getRoboticon();
-				break;
+				return getRoboticon();
+
 			default:
-				throw new Exception("Error: Resource type is incorrect.");
+				throw new IllegalArgumentException("Unknown Resource type used.");
 		}
+	}
 
-		if (resource <= amount ){
-			throw new Exception("Error: the resources in market is less than the amount you want to buy.");
+
+	/**
+	 * Method to ensure the market have enough resources for user to purchase.
+	 *
+	 * @param amount   the amount of resource you want to buy
+	 */
+	public void checkResourcesMoreThanAmount(ResourceType type, int amount)
+			throws IllegalArgumentException, ValueException {
+
+		int resource = getResource(type);
+
+		if (amount > resource){
+			throw new ValueException("Error: not enough resources in the market.");
 		}
-
 	}
 /*      //buy resource
 	public boolean buyEnergy(player, int amount) {
@@ -135,9 +141,6 @@ public class Market {
 
 		}
 	}
-
-
-
 }
 
 
