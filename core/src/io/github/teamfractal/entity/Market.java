@@ -1,6 +1,10 @@
 package io.github.teamfractal.entity;
 
 public class Market {
+	public int getResourcePrice(ResourceType resource) {
+		return 1;
+	}
+	
 
 	public int getFood() {
 		return 16;
@@ -14,7 +18,7 @@ public class Market {
 		return 0;
 	}
 
-	public int getRobotics() {
+	public int getRoboticon() {
 		return 12;
 	}
 
@@ -182,6 +186,10 @@ public class Market {
 	 */
 
 
+
+	public int getBuyPrice(ResourceType ore) {
+		return 10;
+	}
 }
 
 
