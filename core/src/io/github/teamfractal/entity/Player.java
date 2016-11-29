@@ -18,8 +18,8 @@ public class Player {
 	}
 	
 	public void purchaseResourceFromMarket(int amount, Market market, ResourceType resource) throws Exception {
-		if (money >= amount * market.getResourcePrice(resource)) {
-			money -= amount * market.getResourcePrice(resource);
+		if (money >= amount * market.getResourceBuyPrice(resource)) {
+			money -= amount * market.getResourceBuyPrice(resource);
 			
 			switch(resource) {
 			case ORE: 		ore += amount;
@@ -38,7 +38,7 @@ public class Player {
 
 	public void sellResourceToMarket(int amount, Market market, ResourceType resource) throws Exception {
 		
-		int resourcePrice = market.getResourcePrice(resource);
+		int resourcePrice = market.getResourceSellPrice(resource);
 		
 		switch(resource) {
 		case ORE: 
