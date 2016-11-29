@@ -1,9 +1,12 @@
 package io.github.teamfractal.entity;
 
+import java.util.ArrayList;
+
 public class Player {
 	private int money = 100;
 	private int ore = 0;
 	private int energy = 0;
+	ArrayList<Roboticon> roboticonList;
 	
 	public int getMoney(){
 		return money;
@@ -64,6 +67,11 @@ public class Player {
 		
 		}
 		
-	} 
+	}
+	
+	public Roboticon customiseRoboticon(Roboticon roboticon, ResourceType type) {
+		roboticon.setCustomisation(type);
+		return roboticon;
+	}
 	
 }

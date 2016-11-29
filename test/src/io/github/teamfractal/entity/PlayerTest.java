@@ -2,6 +2,9 @@ package io.github.teamfractal.entity;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.junit.*;
 
 public class PlayerTest {
@@ -96,8 +99,21 @@ public class PlayerTest {
 		// Setup
 		Roboticon roboticon = new Roboticon();
 		player.customiseRoboticon(roboticon, ResourceType.ORE);
-		assertEquals(ResourceType.ORE, roboticon.getType());
+		assertEquals(ResourceType.ORE, roboticon.getCustomisation());
+		
+		Roboticon roboticon2 = new Roboticon();
+		player.customiseRoboticon(roboticon2, ResourceType.ENERGY);
+		assertEquals(ResourceType.ENERGY, roboticon2.getCustomisation());
 	}
 	
+	@Test
+	public void testPlayerCanCustomiseOwnedRoboticons() {
+		Roboticon[] array = {new Roboticon(), new Roboticon()};
+		player.roboticonList = new ArrayList<Roboticon>(Arrays.asList(array));
+		player.customiseRoboticon(player.roboticonList.get(0), ResourceType.ORE);
+		player.customiseRoboticon(player.roboticonList.get(1), ResourceType.ENERGY);
+		assertEquals(ResourceType.ORE, player.roboticonList.get(0).getCustomisation());
+		assertEquals(ResourceType.ENERGY, player.roboticonList.get(1).getCustomisation());
+	}
 	
 }

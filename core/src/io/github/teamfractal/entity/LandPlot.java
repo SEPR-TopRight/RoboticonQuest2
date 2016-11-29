@@ -8,8 +8,8 @@ public class LandPlot {
 		this.productionAmounts = new int[] {ore, energy, food};
 	}
 	
-	public void installRoboticon(ResourceType type) {
-		switch(type) {
+	public void installRoboticon(Roboticon roboticon) {
+		switch(roboticon.getCustomisation()) {
 		case ORE:    productionModifiers[0] += 1;
 		             break;
 		case ENERGY: productionModifiers[1] += 1;

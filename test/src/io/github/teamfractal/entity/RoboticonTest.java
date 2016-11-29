@@ -5,10 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 public class RoboticonTest {
-
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+	private Roboticon roboticon;
+	
+	@Before
+	public void setup() {
+		roboticon = new Roboticon();
 	}
+
+	
 
 }
