@@ -15,19 +15,19 @@ public class LandPlotTest {
 	@Test
 	public void testInstallRobiticon() {
 		plot.installRoboticon(ResourceType.ORE);
-		assertArrayEquals(plot.productionModifiers, new int[] {1, 0, 0});
+		assertArrayEquals(new int[] {1, 0, 0}, plot.productionModifiers);
 		plot.installRoboticon(ResourceType.ENERGY);
-		assertArrayEquals(plot.productionModifiers, new int[] {1, 1, 0});
+		assertArrayEquals(new int[] {1, 1, 0}, plot.productionModifiers);
 		plot.installRoboticon(ResourceType.ORE);
-		assertArrayEquals(plot.productionModifiers, new int[] {2, 1, 0});
+		assertArrayEquals(new int[] {2, 1, 0}, plot.productionModifiers);
 	}
 	
 	@Test
 	public void testProduceResources() {
 		plot.installRoboticon(ResourceType.ORE);
-		assertArrayEquals(plot.produceResources(), new int[] {3, 0, 0});
+		assertArrayEquals(new int[] {3, 0, 0}, plot.produceResources());
 		plot.installRoboticon(ResourceType.ORE);
-		assertArrayEquals(plot.produceResources(), new int[] {6, 0, 0});
+		assertArrayEquals(new int[] {6, 0, 0}, plot.produceResources());
 	}
 
 }
