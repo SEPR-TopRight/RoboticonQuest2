@@ -22,6 +22,7 @@ public class MarketTest {
 	}
 
 	/**
+	 * test start mo
 	 * The market should start with correct amount of resources.
 	 * 16 Food & Energy, 0 Ore, 12 Robotics
 	 */
@@ -34,6 +35,7 @@ public class MarketTest {
 	}
 
 	/**
+	 * test setEnergy(), setOre(), setFood(), setRoboticon()
 	 * The market should be able to set and get resources.
 	 */
 	@Test
@@ -53,6 +55,7 @@ public class MarketTest {
 	}
 
 	/**
+	 * test: getBuyPrice()
 	 * The market should start with correct price for player to buy.
 	 * Prices listed here are subjected for change in later development.
 	 *
@@ -71,6 +74,7 @@ public class MarketTest {
 
 
 	/**
+	 * test: checkResourcesMoreThanAmount
 	 * player class can use this method to find out that the amount of resource
 	 * player want to buy is avaliable in the market, if the amount of resource
 	 * in the market is less than the amount of resources player want to buy then
@@ -92,5 +96,25 @@ public class MarketTest {
 		fail("Shoud throw exception");
 	}
 
+
+	/**
+	 * test: getSellPrice()
+	 */
+
+	@Test
+	public void marketShouldReturnCorrectSellPrice(){
+		int valueToTest1 = 20;
+		market.setEnergy(valueToTest1);
+		market.setOre(valueToTest1);
+		market.setFood(valueToTest1);
+		market.setRoboticon(valueToTest1);
+
+		assertEquals(20,market.getSellPrice(ResourceType.FOOD));
+		assertEquals(20,market.getSellPrice(ResourceType.ORE));
+		assertEquals(20,market.getSellPrice(ResourceType.ROBOTICON));
+		assertEquals(20,market.getSellPrice(ResourceType.ENERGY));
+
+
+	}
 
 }
