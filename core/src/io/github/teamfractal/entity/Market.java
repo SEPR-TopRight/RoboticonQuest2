@@ -3,7 +3,19 @@ package io.github.teamfractal.entity;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 public class Market {
-	public int getResourcePrice(ResourceType resource) {
+	Market() {
+		setFood(16);
+		setEnergy(16);
+		setOre(0);
+		setRoboticon(12);
+	}
+
+
+	int getResourceBuyPrice(ResourceType resource) {
+		return 1;
+	}
+	
+	int getResourceSellPrice(ResourceType resource) {
 		return 1;
 	}
 
@@ -44,7 +56,7 @@ public class Market {
 		roboticon = amount;
 	}
 
-	public int getResource(ResourceType type) throws IllegalArgumentException {
+	public int getResource(ResourceType type) {
 		switch (type) {
 			case ORE:
 				return getOre();
@@ -60,15 +72,12 @@ public class Market {
 		}
 	}
 
-
 	/**
 	 * Method to ensure the market have enough resources for user to purchase.
-	 *
-	 * @param amount   the amount of resource you want to buy
+	 * @param type    the resource type.
+	 * @param amount  the amount of resource to check.
 	 */
-	public void checkResourcesMoreThanAmount(ResourceType type, int amount)
-			throws IllegalArgumentException, ValueException {
-
+	void checkResourcesMoreThanAmount (ResourceType type, int amount) {
 		int resource = getResource(type);
 
 		if (amount > resource){
@@ -76,41 +85,49 @@ public class Market {
 		}
 	}
 
-	int getBuyPrice(ResourceType type) throws IllegalArgumentException {
+	int getBuyPrice(ResourceType type) {
 		int price;
 		switch (type) {
 			case ORE:
 				price = 20;
 				return price;
+
 			case ENERGY:
 				price = 30;
 				return price;
+
 			case FOOD:
 				price = 40;
 				return price;
+
 			case ROBOTICON:
 				price = 100;
 				return price;
+
 			default:
 				throw new IllegalArgumentException("Error: Resource type is incorrect.");
 		}
 	}
 
-	int getSellPrice(ResourceType type) throws IllegalArgumentException {
+	int getSellPrice(ResourceType type) {
 		int price;
 		switch (type) {
 			case ORE:
 				price = 10;
 				return price;
+
 			case ENERGY:
 				price = 10;
 				return price;
+
 			case FOOD:
 				price = 10;
 				return price;
+
 			case ROBOTICON:
 				price = 10;
 				return price;
+
 			default:
 				throw new IllegalArgumentException("Error: Resource type is incorrect.");
 
@@ -118,7 +135,7 @@ public class Market {
 	}
 
 	public int newPrice(){
-
+		return 0;
 	}
 }
 
