@@ -60,16 +60,24 @@ public class PlayerTest {
 	@Test
 	public void testPlayerSellResource() throws Exception {
 		Market market = new Market();
-		player.purchaseResourceFromMarket(15, market, ResourceType.ORE);
-		player.purchaseResourceFromMarket(15, market, ResourceType.ENERGY);
+
+		player.setMoney(1000);
+		player.setResource(ResourceType.ORE, 15);
+		player.setResource(ResourceType.ENERGY, 15);
+
+
+		int orePrice = market.getBuyPrice(ResourceType.ORE);
 		//sell 5 ore
 		player.sellResourceToMarket(5, market, ResourceType.ORE);
-		assertEquals(70 + 5 * market.getBuyPrice(ResourceType.ORE), player.getMoney());
+		assertEquals(1000 + 5 * orePrice, player.getMoney());
 		assertEquals(10, player.getOre());
 		assertEquals(5, market.getOre());
+
+		int energyPrice = market.getBuyPrice(ResourceType.ENERGY);
+		player.setMoney(1000);
 		//sell 5 energy
 		player.sellResourceToMarket(5, market, ResourceType.ENERGY);
-		assertEquals(75 + 5 * market.getBuyPrice(ResourceType.ENERGY), player.getMoney());
+		assertEquals(1000 + 5 * energyPrice, player.getMoney());
 		assertEquals(10, player.getEnergy());
 		assertEquals(21, market.getEnergy());
 	}

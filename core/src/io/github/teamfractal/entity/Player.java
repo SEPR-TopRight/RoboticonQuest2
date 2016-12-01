@@ -3,7 +3,6 @@ package io.github.teamfractal.entity;
 import io.github.teamfractal.exception.InvalidResourceTypeException;
 import io.github.teamfractal.exception.NotEnoughMoneyException;
 import io.github.teamfractal.exception.NotEnoughResourceException;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 import java.util.ArrayList;
 
@@ -98,9 +97,9 @@ public class Player {
 		int cost = amount * market.getSellPrice(resource);
 		int money = getMoney();
 		if (money >= cost) {
+			market.sellResource(resource, amount);
 			setMoney(money - cost);
 			setResource(resource, getResource(resource) + amount);
-			market.sellResource(resource, amount);
 		}
 		else {
 			throw new NotEnoughMoneyException("Player.purchaseResourceFromMarket", cost, money);
@@ -112,6 +111,7 @@ public class Player {
 		int resourcePrice = market.getBuyPrice(resource);
 
 		if (getResource(resource) >= amount) {
+			market.buyResource(resource, amount);
 			setResource(resource, getResource(resource) - amount);
 			setMoney(getMoney() + amount * resourcePrice);
 		} else {

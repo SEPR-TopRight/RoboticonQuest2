@@ -198,23 +198,8 @@ public class Market {
 		}
 	}
 
-	public void buyResourses(int amount, ResourceType type){
-
-		switch (type) {
-			case ORE:
-				ore += amount;
-				break;
-			case ENERGY:
-				energy += amount;
-				break;
-			case FOOD:
-				food += amount;
-				break;
-			case ROBOTICON:
-				roboticon += amount;
-				break;
-
-		}
+	public void buyResource(ResourceType type, int amount){
+		setResource(type, getResource(type) + amount);
 	}
 
 	public void sellResource(ResourceType resource, int amount) {
