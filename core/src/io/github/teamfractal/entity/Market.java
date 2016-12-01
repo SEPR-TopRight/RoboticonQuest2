@@ -181,7 +181,7 @@ public class Market {
 				food += amount;
 				break;
 			case ROBOTICON:
-				roboticon += roboticon;
+				roboticon += amount;
 				break;
 
 		}
