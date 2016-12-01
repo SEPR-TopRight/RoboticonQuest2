@@ -27,25 +27,18 @@ public class PlayerTest {
 	@Test
 	public void testPlayerBuyResource() {
 		Market market = new Market();
-
-		int playerOreBefore = player.getOre();
-		int marketOreBefore = market.getOre();
-
-		// Purchase 5 ore
+		market.setOre(16);
+		//Purchase 5 ore
 		player.purchaseResourceFromMarket(5, market, ResourceType.ORE);
 		// Player should now have 5 more ores, and the market have 5 less ores.
 		assertEquals(100 - 5 * market.getResourceSellPrice(ResourceType.ORE), player.getMoney());
-		assertEquals(5, player.getOre() - playerOreBefore);
-		assertEquals(5, market.getOre() - marketOreBefore);
-
-		int playerEnergyBefore = player.getEnergy();
-		int marketEnergyBefore = market.getEnergy();
-
+		assertEquals(5, player.getOre()); 
+		assertEquals(11, market.getOre());
 		//purchase 10 energy
 		player.purchaseResourceFromMarket(10, market, ResourceType.ENERGY);
 		assertEquals(95 - 10 * market.getResourceSellPrice(ResourceType.ENERGY), player.getMoney());
-		assertEquals(10, player.getEnergy() - playerEnergyBefore);
-		assertEquals(10, market.getEnergy() - marketEnergyBefore);
+		assertEquals(10, player.getEnergy());
+		assertEquals(6, market.getEnergy());
 	}
 
 	@Test
@@ -57,10 +50,12 @@ public class PlayerTest {
 		player.sellResourceToMarket(5, market, ResourceType.ORE);
 		assertEquals(70 + 5 * market.getResourceBuyPrice(ResourceType.ORE), player.getMoney());
 		assertEquals(10, player.getOre());
+		assertEquals(5, market.getOre());
 		//sell 5 energy
 		player.sellResourceToMarket(5, market, ResourceType.ENERGY);
 		assertEquals(75 + 5 * market.getResourceBuyPrice(ResourceType.ENERGY), player.getMoney());
 		assertEquals(10, player.getEnergy());
+		assertEquals(21, market.getEnergy());
 	} 
 	
 	@Test

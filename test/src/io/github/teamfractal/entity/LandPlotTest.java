@@ -13,7 +13,7 @@ public class LandPlotTest {
 	}
 	
 	@Test
-	public void testInstallRobiticon() {
+	public void testInstallRobiticon() throws Exception {
 		Roboticon roboticon = new Roboticon();
 		roboticon.setCustomisation(ResourceType.ORE);
 		plot.installRoboticon(roboticon);
@@ -28,12 +28,16 @@ public class LandPlotTest {
 		assertArrayEquals(new int[] {2, 1, 0}, plot.productionModifiers);
 	}
 	
-	/*@Test
-	public void testProduceResources() {
-		plot.installRoboticon(ResourceType.ORE);
+	@Test
+	public void testProduceResources() throws Exception {
+		Roboticon roboticon = new Roboticon();
+		roboticon.setCustomisation(ResourceType.ORE);
+		plot.installRoboticon(roboticon);
 		assertArrayEquals(new int[] {3, 0, 0}, plot.produceResources());
-		plot.installRoboticon(ResourceType.ORE);
+		Roboticon roboticon2 = new Roboticon();
+		roboticon2.setCustomisation(ResourceType.ORE);
+		plot.installRoboticon(roboticon2);
 		assertArrayEquals(new int[] {6, 0, 0}, plot.produceResources());
-	}*/
+	}
 
 }
