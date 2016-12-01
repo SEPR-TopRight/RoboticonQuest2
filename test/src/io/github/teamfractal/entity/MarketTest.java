@@ -122,10 +122,10 @@ public class MarketTest {
 		market.setOre(10);
 		market.setFood(10);
 		market.setRoboticon(10);
-		market.sellReduceResourses(5,ResourceType.FOOD);
-		market.sellReduceResourses(5,ResourceType.ORE);
-		market.sellReduceResourses(5,ResourceType.ENERGY);
-		market.sellReduceResourses(5,ResourceType.ROBOTICON);
+		market.buyResourses(5,ResourceType.FOOD);
+		market.buyResourses(5,ResourceType.ORE);
+		market.buyResourses(5,ResourceType.ENERGY);
+		market.buyResourses(5,ResourceType.ROBOTICON);
 		assertEquals(5,ResourceType.FOOD );
 		assertEquals(5,ResourceType.ORE );
 		assertEquals(5,ResourceType.ENERGY );
