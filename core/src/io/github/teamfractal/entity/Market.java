@@ -216,6 +216,9 @@ public class Market {
 		}
 	}
 
+	public void sellResource(ResourceType resource, int amount) {
+		setResource(resource, getResource(resource) - amount);
+	}
 }
 
 

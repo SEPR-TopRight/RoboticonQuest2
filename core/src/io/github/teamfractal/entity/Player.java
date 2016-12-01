@@ -1,6 +1,5 @@
 package io.github.teamfractal.entity;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 import java.util.ArrayList;
@@ -91,12 +90,14 @@ public class Player {
 	 * @param resource   The resource type.
 	 */
 	public void purchaseResourceFromMarket(int amount, Market market, ResourceType resource) {
-		int cost = amount * market.getResourceBuyPrice(resource);
+		market.checkResourcesMoreThanAmount(resource, amount);
+
+		int cost = amount * market.getBuyPrice(resource);
 		int money = getMoney();
 		if (money >= cost) {
 			setMoney(money - cost);
 			setResource(resource, getResource(resource) + amount);
-			market.setResource(resource, market.getResource(resource) - amount);
+			market.sellResource(resource, amount);
 		}
 		else {
 			throw new ValueException("Error: Not enough money");
@@ -105,7 +106,7 @@ public class Player {
 	}
 
 	public void sellResourceToMarket(int amount, Market market, ResourceType resource) throws Exception {
-		int resourcePrice = market.getResourceSellPrice(resource);
+		int resourcePrice = market.getSellPrice(resource);
 		
 		switch(resource) {
 		case ORE: 

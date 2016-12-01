@@ -31,12 +31,12 @@ public class PlayerTest {
 		//Purchase 5 ore
 		player.purchaseResourceFromMarket(5, market, ResourceType.ORE);
 		// Player should now have 5 more ores, and the market have 5 less ores.
-		assertEquals(100 - 5 * market.getResourceSellPrice(ResourceType.ORE), player.getMoney());
+		assertEquals(100 - 5 * market.getSellPrice(ResourceType.ORE), player.getMoney());
 		assertEquals(5, player.getOre()); 
 		assertEquals(11, market.getOre());
 		//purchase 10 energy
 		player.purchaseResourceFromMarket(10, market, ResourceType.ENERGY);
-		assertEquals(95 - 10 * market.getResourceSellPrice(ResourceType.ENERGY), player.getMoney());
+		assertEquals(95 - 10 * market.getSellPrice(ResourceType.ENERGY), player.getMoney());
 		assertEquals(10, player.getEnergy());
 		assertEquals(6, market.getEnergy());
 	}
@@ -48,12 +48,12 @@ public class PlayerTest {
 		player.purchaseResourceFromMarket(15, market, ResourceType.ENERGY);
 		//sell 5 ore
 		player.sellResourceToMarket(5, market, ResourceType.ORE);
-		assertEquals(70 + 5 * market.getResourceBuyPrice(ResourceType.ORE), player.getMoney());
+		assertEquals(70 + 5 * market.getBuyPrice(ResourceType.ORE), player.getMoney());
 		assertEquals(10, player.getOre());
 		assertEquals(5, market.getOre());
 		//sell 5 energy
 		player.sellResourceToMarket(5, market, ResourceType.ENERGY);
-		assertEquals(75 + 5 * market.getResourceBuyPrice(ResourceType.ENERGY), player.getMoney());
+		assertEquals(75 + 5 * market.getBuyPrice(ResourceType.ENERGY), player.getMoney());
 		assertEquals(10, player.getEnergy());
 		assertEquals(21, market.getEnergy());
 	} 
@@ -89,14 +89,14 @@ public class PlayerTest {
 		player.sellResourceToMarket(10, market, ResourceType.ORE);
 		}
 		catch(Exception exception1) { 
-		assertEquals(100 + 10 * market.getResourceBuyPrice(ResourceType.ORE), player.getMoney());
+		assertEquals(100 + 10 * market.getBuyPrice(ResourceType.ORE), player.getMoney());
 		assertEquals(5, player.getEnergy());
 		// Attempt to sell more energy than allowed
 		try {
 			player.sellResourceToMarket(10, market, ResourceType.ENERGY);
 		}
 			catch(Exception exception2) { 
-				assertEquals(100 + 10 * market.getResourceBuyPrice(ResourceType.ENERGY), player.getMoney());
+				assertEquals(100 + 10 * market.getBuyPrice(ResourceType.ENERGY), player.getMoney());
 				assertEquals(5, player.getEnergy());
 			}
 		}
