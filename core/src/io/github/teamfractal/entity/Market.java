@@ -168,7 +168,7 @@ public class Market {
 		}
 	}
 
-	public void sellReduceResourses(int amount, ResourceType type){
+	public void buyResourses(int amount, ResourceType type){
 
 		switch (type) {
 			case ORE:
