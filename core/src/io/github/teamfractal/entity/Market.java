@@ -11,13 +11,6 @@ public class Market {
 	}
 
 
-	int getResourceBuyPrice(ResourceType resource) {
-		return 1;
-	}
-	
-	int getResourceSellPrice(ResourceType resource) {
-		return 1;
-	}
 
 	private int food;
 	private int energy;
@@ -66,7 +59,9 @@ public class Market {
 		roboticon = amount;
 	}
 
-	int getResource(ResourceType type) {
+
+
+	public int getResource(ResourceType type) {
 		switch (type) {
 			case ORE:
 				return getOre();
@@ -114,6 +109,11 @@ public class Market {
 		}
 	}
 
+	/**
+	 * Method to return the buy price
+	 * @param type the resource
+	 * @return the amount for the buy price
+	 */
 	int getBuyPrice(ResourceType type) {
 		int price;
 		switch (type) {
@@ -139,23 +139,57 @@ public class Market {
 	}
 
 	int getSellPrice(ResourceType type) {
-		int price;
+		int price = 1;
+		int food2 = getFood();
+		int ore2 = getOre();
+		int energy2 = getEnergy();
+		int roboticon2 = getRoboticon();
+
+		int total = food2+ore2+energy2+roboticon2;
+		int minprice = 10;
+		int maxprice = 50;
+
 		switch (type) {
 			case ORE:
-				price = 10;
-				return price;
+				int oreNew = price * (1-ore2/total);
+				if (oreNew >= 50){
+					oreNew = 50;
+				}
+				else if (oreNew <= 10){
+					oreNew = 10;
+				}
+				return oreNew;
 
 			case ENERGY:
-				price = 10;
-				return price;
+				int energyNew = price * (1-energy2/total);
+				if (energyNew >= 50){
+					energyNew = 50;
+				}
+				else if (energyNew <= 10){
+					energyNew = 10;
+				}
+				return energyNew;
 
 			case FOOD:
-				price = 10;
-				return price;
+				int foodNew = price * (1-food2/total);
+				if (foodNew >= 50){
+					foodNew = 50;
+				}
+				else if (foodNew <= 10){
+					foodNew = 10;
+				}
+				return foodNew;
+
 
 			case ROBOTICON:
-				price = 10;
-				return price;
+				int roboticonNew = price * (1-roboticon2/total);
+				if (roboticonNew >= 50){
+					roboticonNew = 50;
+				}
+				else if (roboticonNew <= 10){
+					roboticonNew = 10;
+				}
+				return roboticonNew;
 
 			default:
 				throw new IllegalArgumentException("Error: Resource type is incorrect.");
@@ -163,9 +197,25 @@ public class Market {
 		}
 	}
 
-	public int newPrice(){
-		return 0;
+	public void sellReduceResourses(int amount, ResourceType type){
+
+		switch (type) {
+			case ORE:
+				ore += amount;
+				break;
+			case ENERGY:
+				energy += amount;
+				break;
+			case FOOD:
+				food += amount;
+				break;
+			case ROBOTICON:
+				roboticon += amount;
+				break;
+
+		}
 	}
+
 }
 
 
