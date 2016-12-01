@@ -21,17 +21,11 @@ public class MinGame {
 		//int number = input.nextInt();
 		
 		//if win got gifts (can change)
-		if (number == value){
-			return true;
-		}
-		else{
-			return false;
-		}
-
+		return number == value;
 	}
 
-	public int WinGameGift(boolean WinOrLost){
-		if (WinOrLost == true){
+	public int WinGameGift(boolean bIsWin){
+		if (bIsWin){
 			return 1000;
 		}
 		else {

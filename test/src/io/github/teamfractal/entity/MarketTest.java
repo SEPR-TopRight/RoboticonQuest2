@@ -63,10 +63,10 @@ public class MarketTest {
 	 */
 	@Test
 	public void marketShouldHaveCorrectPricesForResources() throws Exception {
-		assertEquals(10, market.getBuyPrice(ResourceType.ORE));
-		assertEquals(10, market.getBuyPrice(ResourceType.ENERGY));
-		//assertEquals(10, market.getBuyPrice(ResourceType.FOOD));
-		assertEquals(10, market.getBuyPrice(ResourceType.ROBOTICON));
+		assertEquals(20, market.getBuyPrice(ResourceType.ORE));
+		assertEquals(30, market.getBuyPrice(ResourceType.ENERGY));
+		assertEquals(40, market.getBuyPrice(ResourceType.FOOD));
+		assertEquals(100, market.getBuyPrice(ResourceType.ROBOTICON));
 	}
 
 
