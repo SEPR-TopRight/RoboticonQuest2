@@ -35,15 +35,24 @@ public class PlayerTest {
 	public void testPlayerBuyResource() {
 		Market market = new Market();
 		market.setOre(16);
+		player.setMoney(1000);
+
+
+		int playerMoney = player.getMoney();
+		int orePrice = market.getSellPrice(ResourceType.ORE);
 		//Purchase 5 ore
 		player.purchaseResourceFromMarket(5, market, ResourceType.ORE);
 		// Player should now have 5 more ores, and the market have 5 less ores.
-		assertEquals(100 - 5 * market.getSellPrice(ResourceType.ORE), player.getMoney());
+		assertEquals(playerMoney - 5 * orePrice, player.getMoney());
 		assertEquals(5, player.getOre());
 		assertEquals(11, market.getOre());
+
+
+		playerMoney = player.getMoney();
+		int energyPrice = market.getSellPrice(ResourceType.ORE);
 		//purchase 10 energy
 		player.purchaseResourceFromMarket(10, market, ResourceType.ENERGY);
-		assertEquals(95 - 10 * market.getSellPrice(ResourceType.ENERGY), player.getMoney());
+		assertEquals(playerMoney - 10 * energyPrice, player.getMoney());
 		assertEquals(10, player.getEnergy());
 		assertEquals(6, market.getEnergy());
 	}

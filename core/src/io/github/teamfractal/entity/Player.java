@@ -95,7 +95,7 @@ public class Player {
 	public void purchaseResourceFromMarket(int amount, Market market, ResourceType resource) {
 		market.checkResourcesMoreThanAmount(resource, amount);
 
-		int cost = amount * market.getBuyPrice(resource);
+		int cost = amount * market.getSellPrice(resource);
 		int money = getMoney();
 		if (money >= cost) {
 			setMoney(money - cost);
@@ -109,7 +109,7 @@ public class Player {
 	}
 
 	public void sellResourceToMarket(int amount, Market market, ResourceType resource) {
-		int resourcePrice = market.getSellPrice(resource);
+		int resourcePrice = market.getBuyPrice(resource);
 
 		if (getResource(resource) >= amount) {
 			setResource(resource, getResource(resource) - amount);
