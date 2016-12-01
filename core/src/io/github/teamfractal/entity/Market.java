@@ -40,23 +40,33 @@ public class Market {
 		return roboticon;
 	}
 
-	void setFood(int amount) {
-		food = amount;
-	}
+	synchronized void setOre(int ore) {
+		if (ore < 0) {
+			throw new IllegalArgumentException("Error: Ore can't be negative.");
+		}
 
-	void setEnergy(int amount) {
-		energy = amount;
+		this.ore = ore;
 	}
+	synchronized void setEnergy(int energy) {
+		if (energy < 0) {
+			throw new IllegalArgumentException("Error: Energy can't be negative.");
+		}
 
-	void setOre(int amount) {
-		ore = amount;
+		this.energy = energy;
+	}
+	synchronized void setFood(int food) {
+		if (food < 0) {
+			throw new IllegalArgumentException("Error: Food can't be negative.");
+		}
+
+		this.food = food;
 	}
 
 	void setRoboticon(int amount) {
 		roboticon = amount;
 	}
 
-	public int getResource(ResourceType type) {
+	int getResource(ResourceType type) {
 		switch (type) {
 			case ORE:
 				return getOre();
@@ -66,6 +76,25 @@ public class Market {
 
 			case ROBOTICON:
 				return getRoboticon();
+
+			default:
+				throw new IllegalArgumentException("Unknown Resource type used.");
+		}
+	}
+
+	void setResource(ResourceType type, int amount) {
+		switch (type) {
+			case ORE:
+				setOre(amount);
+				break;
+
+			case ENERGY:
+				setEnergy(amount);
+				break;
+
+			case ROBOTICON:
+				setRoboticon(amount);
+				break;
 
 			default:
 				throw new IllegalArgumentException("Unknown Resource type used.");

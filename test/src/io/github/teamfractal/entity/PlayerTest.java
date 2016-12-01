@@ -20,23 +20,36 @@ public class PlayerTest {
 	public void testPlayerInitialMoney(){
 		assertEquals(100, player.getMoney());
 	}
-	
-	// Buy & Sell Resource Tests
+
+	/**
+	 * Test to purchase and sell resource from the market.
+	 */
 	@Test
-	public void testPlayerBuyResource() throws Exception{
+	public void testPlayerBuyResource() {
 		Market market = new Market();
-		//Purchase 5 ore
+
+		int playerOreBefore = player.getOre();
+		int marketOreBefore = market.getOre();
+
+		// Purchase 5 ore
 		player.purchaseResourceFromMarket(5, market, ResourceType.ORE);
+		// Player should now have 5 more ores, and the market have 5 less ores.
 		assertEquals(100 - 5 * market.getResourceSellPrice(ResourceType.ORE), player.getMoney());
-		assertEquals(5, player.getOre()); 
+		assertEquals(5, player.getOre() - playerOreBefore);
+		assertEquals(5, market.getOre() - marketOreBefore);
+
+		int playerEnergyBefore = player.getEnergy();
+		int marketEnergyBefore = market.getEnergy();
+
 		//purchase 10 energy
 		player.purchaseResourceFromMarket(10, market, ResourceType.ENERGY);
 		assertEquals(95 - 10 * market.getResourceSellPrice(ResourceType.ENERGY), player.getMoney());
-		assertEquals(10, player.getEnergy()); 
+		assertEquals(10, player.getEnergy() - playerEnergyBefore);
+		assertEquals(10, market.getEnergy() - marketEnergyBefore);
 	}
 
 	@Test
-	public void testPlayerSellResource() throws Exception{
+	public void testPlayerSellResource() throws Exception {
 		Market market = new Market();
 		player.purchaseResourceFromMarket(15, market, ResourceType.ORE);
 		player.purchaseResourceFromMarket(15, market, ResourceType.ENERGY);
