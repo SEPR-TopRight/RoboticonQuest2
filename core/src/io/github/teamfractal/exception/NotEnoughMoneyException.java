@@ -18,7 +18,7 @@ public class NotEnoughMoneyException extends RuntimeException {
 	}
 
 	public NotEnoughMoneyException(String details, int required, int actual) {
-		super("Not enough resource (String). \n" +
+		super("Not enough money (Player). \n" +
 				"Required: " + String.valueOf(required) + ", \n" +
 				"Actual  : " + String.valueOf(actual) + " \n" +
 				"Details : " + details);
