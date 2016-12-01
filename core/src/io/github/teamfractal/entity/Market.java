@@ -11,13 +11,6 @@ public class Market {
 	}
 
 
-	int getResourceBuyPrice(ResourceType resource) {
-		return 1;
-	}
-	
-	int getResourceSellPrice(ResourceType resource) {
-		return 1;
-	}
 
 	private int food;
 	private int energy;
@@ -56,6 +49,8 @@ public class Market {
 		roboticon = amount;
 	}
 
+
+
 	public int getResource(ResourceType type) {
 		switch (type) {
 			case ORE:
@@ -85,6 +80,11 @@ public class Market {
 		}
 	}
 
+	/**
+	 * Method to return the buy price
+	 * @param type the resource
+	 * @return the amount for the buy price
+	 */
 	int getBuyPrice(ResourceType type) {
 		int price;
 		switch (type) {
@@ -122,7 +122,7 @@ public class Market {
 
 		switch (type) {
 			case ORE:
-				int oreNew = price * (ore2/total);
+				int oreNew = price * (1-ore2/total);
 				if (oreNew >= 50){
 					oreNew = 50;
 				}
@@ -132,7 +132,7 @@ public class Market {
 				return oreNew;
 
 			case ENERGY:
-				int energyNew = price * (energy2/total);
+				int energyNew = price * (1-energy2/total);
 				if (energyNew >= 50){
 					energyNew = 50;
 				}
@@ -142,7 +142,7 @@ public class Market {
 				return energyNew;
 
 			case FOOD:
-				int foodNew = price * (food2/total);
+				int foodNew = price * (1-food2/total);
 				if (foodNew >= 50){
 					foodNew = 50;
 				}
@@ -153,7 +153,7 @@ public class Market {
 
 
 			case ROBOTICON:
-				int roboticonNew = price * (roboticon2/total);
+				int roboticonNew = price * (1-roboticon2/total);
 				if (roboticonNew >= 50){
 					roboticonNew = 50;
 				}
@@ -168,6 +168,24 @@ public class Market {
 		}
 	}
 
+	public void sellReduceResourses(int amount, ResourceType type){
+
+		switch (type) {
+			case ORE:
+				ore += amount;
+				break;
+			case ENERGY:
+				energy += amount;
+				break;
+			case FOOD:
+				food += amount;
+				break;
+			case ROBOTICON:
+				roboticon += roboticon;
+				break;
+
+		}
+	}
 
 }
 
