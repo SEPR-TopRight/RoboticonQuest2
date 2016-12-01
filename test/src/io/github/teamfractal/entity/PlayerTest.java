@@ -1,7 +1,10 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.exception.NotEnoughResourceException;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +12,9 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 
 public class PlayerTest {
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
+
 	private Player player;
 
 	@Before
@@ -77,26 +83,25 @@ public class PlayerTest {
 			}
 		}
 	}
-	
+
 	@Test
-	public void testPlayerCannotSellMoreThanAllowed() throws Exception {
+	public void testPlayerCannotSellMoreEnergyThanAllowed() throws Exception {
 		Market market = new Market();
-		player.purchaseResourceFromMarket(15, market, ResourceType.ORE);
-		player.purchaseResourceFromMarket(15, market, ResourceType.ENERGY);
-		// Attempt to sell more ore than allowed
-		try {
-			player.sellResourceToMarket(10, market, ResourceType.ORE);
-		} catch (Exception exception1) {
-			assertEquals(100 + 10 * market.getBuyPrice(ResourceType.ORE), player.getMoney());
-			assertEquals(5, player.getEnergy());
-			// Attempt to sell more energy than allowed
-			try {
-				player.sellResourceToMarket(10, market, ResourceType.ENERGY);
-			} catch (Exception exception2) {
-				assertEquals(100 + 10 * market.getBuyPrice(ResourceType.ENERGY), player.getMoney());
-				assertEquals(5, player.getEnergy());
-			}
-		}
+
+		player.setEnergy(15);
+
+		exception.expect(NotEnoughResourceException.class);
+		player.sellResourceToMarket(20, market, ResourceType.ENERGY);
+	}
+
+	@Test
+	public void testPlayerCannotSellMoreOreThanAllowed() throws Exception {
+		Market market = new Market();
+
+		player.setOre(15);
+
+		exception.expect(NotEnoughResourceException.class);
+		player.sellResourceToMarket(20, market, ResourceType.ORE);
 	}
 
 	@Test

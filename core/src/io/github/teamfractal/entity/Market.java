@@ -1,5 +1,6 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.exception.NotEnoughResourceException;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 public class Market {
@@ -105,7 +106,7 @@ public class Market {
 		int resource = getResource(type);
 
 		if (amount > resource){
-			throw new ValueException("Error: not enough resources in the market.");
+			throw new NotEnoughResourceException(type, amount, resource);
 		}
 	}
 

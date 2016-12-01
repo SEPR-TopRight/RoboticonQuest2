@@ -1,5 +1,8 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.exception.InvalidResourceTypeException;
+import io.github.teamfractal.exception.NotEnoughMoneyException;
+import io.github.teamfractal.exception.NotEnoughResourceException;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 import java.util.ArrayList;
@@ -61,7 +64,7 @@ public class Player {
 				break;
 
 			default:
-				throw new IllegalArgumentException("Invalid resource type.");
+				throw new InvalidResourceTypeException(type);
 		}
 	}
 
@@ -78,7 +81,7 @@ public class Player {
 
 
 			default:
-				throw new IllegalArgumentException("Invalid resource type.");
+				throw new InvalidResourceTypeException(type);
 		}
 	}
 
@@ -100,38 +103,20 @@ public class Player {
 			market.sellResource(resource, amount);
 		}
 		else {
-			throw new ValueException("Error: Not enough money");
+			throw new NotEnoughMoneyException("Player.purchaseResourceFromMarket", cost, money);
 		}
 		
 	}
 
-	public void sellResourceToMarket(int amount, Market market, ResourceType resource) throws Exception {
+	public void sellResourceToMarket(int amount, Market market, ResourceType resource) {
 		int resourcePrice = market.getSellPrice(resource);
-		
-		switch(resource) {
-		case ORE: 
-			if (ore >= amount) {
-				money += amount * resourcePrice;
-				ore -= amount;
-			} 
-			else {
-				throw new Exception("Error: Not enough ore available for sale");
-			}
-			break;
-			
-		case ENERGY:
-			if (energy >= amount) {
-				money += amount * resourcePrice;
-				energy -= amount;
-			}
-			else {
-				throw new Exception("Error: Not enough energy available for sale");
-			}
-			break;
-		default: throw new Exception("Error: Resource specified is not a resource");
-		
+
+		if (getResource(resource) >= amount) {
+			setResource(resource, getResource(resource) - amount);
+			setMoney(getMoney() + amount * resourcePrice);
+		} else {
+			throw new NotEnoughResourceException("Player.sellResourceToMarket", resource, amount, getResource(resource));
 		}
-		
 	}
 	
 	public Roboticon customiseRoboticon(Roboticon roboticon, ResourceType type) {
