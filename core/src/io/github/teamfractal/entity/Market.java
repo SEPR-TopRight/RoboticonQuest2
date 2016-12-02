@@ -1,5 +1,6 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.exception.NotEnoughResourceException;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 public class Market {
@@ -33,16 +34,26 @@ public class Market {
 		return roboticon;
 	}
 
-	void setFood(int amount) {
-		food = amount;
-	}
+	synchronized void setOre(int ore) {
+		if (ore < 0) {
+			throw new IllegalArgumentException("Error: Ore can't be negative.");
+		}
 
-	void setEnergy(int amount) {
-		energy = amount;
+		this.ore = ore;
 	}
+	synchronized void setEnergy(int energy) {
+		if (energy < 0) {
+			throw new IllegalArgumentException("Error: Energy can't be negative.");
+		}
 
-	void setOre(int amount) {
-		ore = amount;
+		this.energy = energy;
+	}
+	synchronized void setFood(int food) {
+		if (food < 0) {
+			throw new IllegalArgumentException("Error: Food can't be negative.");
+		}
+
+		this.food = food;
 	}
 
 	void setRoboticon(int amount) {
@@ -67,6 +78,25 @@ public class Market {
 		}
 	}
 
+	void setResource(ResourceType type, int amount) {
+		switch (type) {
+			case ORE:
+				setOre(amount);
+				break;
+
+			case ENERGY:
+				setEnergy(amount);
+				break;
+
+			case ROBOTICON:
+				setRoboticon(amount);
+				break;
+
+			default:
+				throw new IllegalArgumentException("Unknown Resource type used.");
+		}
+	}
+
 	/**
 	 * Method to ensure the market have enough resources for user to purchase.
 	 * @param type    the resource type.
@@ -76,7 +106,7 @@ public class Market {
 		int resource = getResource(type);
 
 		if (amount > resource){
-			throw new ValueException("Error: not enough resources in the market.");
+			throw new NotEnoughResourceException(type, amount, resource);
 		}
 	}
 
@@ -168,25 +198,13 @@ public class Market {
 		}
 	}
 
-	public void buyResourses(int amount, ResourceType type){
-
-		switch (type) {
-			case ORE:
-				ore += amount;
-				break;
-			case ENERGY:
-				energy += amount;
-				break;
-			case FOOD:
-				food += amount;
-				break;
-			case ROBOTICON:
-				roboticon += amount;
-				break;
-
-		}
+	public void buyResource(ResourceType type, int amount){
+		setResource(type, getResource(type) + amount);
 	}
 
+	public void sellResource(ResourceType resource, int amount) {
+		setResource(resource, getResource(resource) - amount);
+	}
 }
 
 

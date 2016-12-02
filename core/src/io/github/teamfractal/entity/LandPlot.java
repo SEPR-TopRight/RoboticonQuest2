@@ -8,12 +8,13 @@ public class LandPlot {
 		this.productionAmounts = new int[] {ore, energy, food};
 	}
 	
-	public void installRoboticon(Roboticon roboticon) {
+	public void installRoboticon(Roboticon roboticon) throws Exception {
 		switch(roboticon.getCustomisation()) {
 		case ORE:    productionModifiers[0] += 1;
 		             break;
 		case ENERGY: productionModifiers[1] += 1;
 		             break;
+		default:     throw new Exception("Unknown resource type");
 		}
 	}
 
