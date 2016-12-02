@@ -1,7 +1,6 @@
 package io.github.teamfractal.entity;
 
 import io.github.teamfractal.exception.NotEnoughResourceException;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 public class Market {
 	Market() {
