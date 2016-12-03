@@ -1,20 +1,20 @@
-package io.github.teamfractal.screen;
+package io.github.teamfractal.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.actors.HomeMainMenu;
 
 public class MainMenuScreen implements Screen {
 	final RoboticonQuest game;
 	final Stage stage;
 	final Table table;
-
-	OrthographicCamera camera;
+	private final HomeMainMenu homeMainMenu;
 
 	public MainMenuScreen(final RoboticonQuest game) {
 		// TODO: Add main menu items.
@@ -22,16 +22,17 @@ public class MainMenuScreen implements Screen {
 		this.game = game;
 		this.stage = new Stage(new ScreenViewport());
 		this.table = new Table();
+		table.setFillParent(true);
+
+		homeMainMenu = new HomeMainMenu(game);
+		table.left().top().add(homeMainMenu);
 
 		stage.addActor(table);
-
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 1280, 720);
 	}
 
 	@Override
 	public void show() {
-
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
