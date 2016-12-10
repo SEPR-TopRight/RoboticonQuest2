@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
+import io.github.teamfractal.screens.MapScreen;
 
 public class RoboticonQuest extends Game {
 	SpriteBatch batch;
 	public Skin skin;
 	public MainMenuScreen mainMenuScreen;
+	public MapScreen mapScreen;
 
 	@Override
 	public void create () {
@@ -22,6 +24,11 @@ public class RoboticonQuest extends Game {
 		mainMenuScreen = new MainMenuScreen(this);
 
 		setScreen(mainMenuScreen);
+		
+		mapScreen = new MapScreen(this);
+		
+		
+		
 	}
 
 	private void setupSkin() {
