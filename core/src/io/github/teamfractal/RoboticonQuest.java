@@ -22,13 +22,9 @@ public class RoboticonQuest extends Game {
 
 		// Setup other screens.
 		mainMenuScreen = new MainMenuScreen(this);
+		mapScreen = new MapScreen(this);
 
 		setScreen(mainMenuScreen);
-		
-		mapScreen = new MapScreen(this);
-		
-		
-		
 	}
 
 	private void setupSkin() {
@@ -40,8 +36,9 @@ public class RoboticonQuest extends Game {
 
 	@Override
 	public void dispose () {
-		batch.dispose();
 		mainMenuScreen.dispose();
+		mapScreen.dispose();
 		skin.dispose();
+		batch.dispose();
 	}
 }

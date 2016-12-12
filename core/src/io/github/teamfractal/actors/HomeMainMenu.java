@@ -1,8 +1,7 @@
 package io.github.teamfractal.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -15,27 +14,31 @@ public class HomeMainMenu extends Table {
 	public HomeMainMenu(final RoboticonQuest game) {
 		this.game = game;
 
-		center();
 
-		final TextButton buttonTest = new TextButton("A button", game.skin);
-		buttonTest.addListener(new ChangeListener() {
+
+		final TextButton btnNewGame = new TextButton("New game!", game.skin);
+		btnNewGame.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				buttonTest.setText("Button clicked.");
 				game.setScreen(game.mapScreen);
 			}
 		});
 		
-		final TextButton buttonTest2 = new TextButton(" button 2", game.skin);
-		buttonTest.addListener(new ChangeListener() {
+		final TextButton btnExit = new TextButton("Exit", game.skin);
+		btnExit.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				buttonTest2.removeActor(buttonTest2);
+				Gdx.app.exit();
 			}
 		});
-		buttonTest.pad(10, 10, 0, 10);
-		add(buttonTest).pad(10);
-		buttonTest2.pad(10);
-		add(buttonTest2);
+
+
+		btnNewGame.pad(10);
+		btnExit.pad(10);
+
+		row();
+		add(btnNewGame).pad(5);
+		row();
+		add(btnExit).pad(5);
 	}
 }

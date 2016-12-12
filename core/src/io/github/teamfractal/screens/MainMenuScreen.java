@@ -25,7 +25,7 @@ public class MainMenuScreen implements Screen {
 		table.setFillParent(true);
 
 		homeMainMenu = new HomeMainMenu(game);
-		table.left().top().add(homeMainMenu);
+		table.center().center().add(homeMainMenu);
 
 		stage.addActor(table);
 	}
