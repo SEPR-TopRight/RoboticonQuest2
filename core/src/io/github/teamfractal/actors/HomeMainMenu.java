@@ -20,7 +20,8 @@ public class HomeMainMenu extends Table {
 		btnNewGame.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(game.mapScreen);
+				game.setScreen(game.gameScreen);
+				game.gameScreen.newGame();
 			}
 		});
 		
