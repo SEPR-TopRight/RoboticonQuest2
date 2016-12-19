@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
-import io.github.teamfractal.screens.MapScreen;
+import io.github.teamfractal.screens.GameScreen;
 
 public class RoboticonQuest extends Game {
 	SpriteBatch batch;
 	public Skin skin;
 	public MainMenuScreen mainMenuScreen;
-	public MapScreen mapScreen;
+	public GameScreen gameScreen;
 
 	@Override
 	public void create () {
@@ -22,13 +22,9 @@ public class RoboticonQuest extends Game {
 
 		// Setup other screens.
 		mainMenuScreen = new MainMenuScreen(this);
+		gameScreen = new GameScreen(this);
 
 		setScreen(mainMenuScreen);
-		
-		mapScreen = new MapScreen(this);
-		
-		
-		
 	}
 
 	private void setupSkin() {
@@ -40,8 +36,9 @@ public class RoboticonQuest extends Game {
 
 	@Override
 	public void dispose () {
-		batch.dispose();
 		mainMenuScreen.dispose();
+		gameScreen.dispose();
 		skin.dispose();
+		batch.dispose();
 	}
 }
