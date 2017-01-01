@@ -15,17 +15,37 @@ public class LandPlotTest {
 	@Test
 	public void testInstallRobiticon() throws Exception {
 		Roboticon roboticon = new Roboticon();
+
 		roboticon.setCustomisation(ResourceType.ORE);
-		plot.installRoboticon(roboticon);
+		assertTrue(plot.installRoboticon(roboticon));
 		assertArrayEquals(new int[] {1, 0, 0}, plot.productionModifiers);
+
 		Roboticon roboticon2 = new Roboticon();
 		roboticon2.setCustomisation(ResourceType.ENERGY);
-		plot.installRoboticon(roboticon2);
+		assertTrue(plot.installRoboticon(roboticon2));
 		assertArrayEquals(new int[] {1, 1, 0}, plot.productionModifiers);
+
 		Roboticon roboticon3= new Roboticon();
 		roboticon3.setCustomisation(ResourceType.ORE);
-		plot.installRoboticon(roboticon3);
+		assertTrue(plot.installRoboticon(roboticon3));
 		assertArrayEquals(new int[] {2, 1, 0}, plot.productionModifiers);
+
+		Roboticon roboticon4= new Roboticon();
+		roboticon4.setCustomisation(ResourceType.FOOD);
+		assertTrue(plot.installRoboticon(roboticon4));
+		assertArrayEquals(new int[] {2, 1, 1}, plot.productionModifiers);
+	}
+
+	@Test
+	public void landPlotShouldNotReinstallRoboticon () {
+		Roboticon roboticon = new Roboticon();
+
+		roboticon.setCustomisation(ResourceType.ORE);
+		assertTrue(plot.installRoboticon(roboticon));
+		assertArrayEquals(new int[] {1, 0, 0}, plot.productionModifiers);
+
+		assertFalse(plot.installRoboticon(roboticon));
+		assertArrayEquals(new int[] {1, 0, 0}, plot.productionModifiers);
 	}
 	
 	@Test

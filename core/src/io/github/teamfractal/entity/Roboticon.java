@@ -1,7 +1,10 @@
 package io.github.teamfractal.entity;
 
+import com.sun.org.apache.bcel.internal.generic.LAND;
+
 public class Roboticon {
 	private ResourceType customisation;
+	private LandPlot installedLandplot;
 	
 	public Roboticon() {
 		
@@ -15,4 +18,13 @@ public class Roboticon {
 		this.customisation = type;
 	}
 
+	public boolean isInstalled() {
+		return installedLandplot != null;
+	}
+
+	public void setInstalled(LandPlot landplot) {
+		if (!isInstalled()) {
+			installedLandplot = landplot;
+		}
+	}
 }

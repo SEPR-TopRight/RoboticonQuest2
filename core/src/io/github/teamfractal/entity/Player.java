@@ -85,9 +85,9 @@ public class Player {
 	}
 
 	/**
-	 * Action for player to purchase resource from the market.
+	 * Action for player to purchase resources from the market.
 	 *
-	 * @param amount     Amount of resource to purchase.
+	 * @param amount     Amount of resources to purchase.
 	 * @param market     The market instance.
 	 * @param resource   The resource type.
 	 */
@@ -107,6 +107,13 @@ public class Player {
 		
 	}
 
+	/**
+	 * Action for player to sell resources to the market.
+	 *
+	 * @param amount    Amount of resources to sell.
+	 * @param market    The market instance.
+	 * @param resource  The resource type.
+	 */
 	public void sellResourceToMarket(int amount, Market market, ResourceType resource) {
 		int resourcePrice = market.getBuyPrice(resource);
 
@@ -118,7 +125,13 @@ public class Player {
 			throw new NotEnoughResourceException("Player.sellResourceToMarket", resource, amount, getResource(resource));
 		}
 	}
-	
+
+	/**
+	 * Apply roboticon customisation
+	 * @param roboticon  The roboticon to be customised
+	 * @param type       The roboticon customisation type.
+	 * @return           The roboticon
+	 */
 	public Roboticon customiseRoboticon(Roboticon roboticon, ResourceType type) {
 		roboticon.setCustomisation(type);
 		return roboticon;

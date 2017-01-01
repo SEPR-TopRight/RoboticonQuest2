@@ -113,8 +113,6 @@ public class MarketTest {
 		assertEquals(20,market.getSellPrice(ResourceType.ORE));
 		assertEquals(20,market.getSellPrice(ResourceType.ROBOTICON));
 		assertEquals(20,market.getSellPrice(ResourceType.ENERGY));
-
-
 	}
 
 	public void marketShouldReduceResoursesWhenSells(){
