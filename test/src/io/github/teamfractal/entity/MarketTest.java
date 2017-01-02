@@ -1,5 +1,6 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.entity.enums.ResourceType;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
@@ -74,7 +75,7 @@ public class MarketTest {
 
 
 	/**
-	 * test: checkResourcesMoreThanAmount
+	 * test: hasEnoughResources
 	 * player class can use this method to find out that the amount of resource
 	 * player want to buy is avaliable in the market, if the amount of resource
 	 * in the market is less than the amount of resources player want to buy then
@@ -83,17 +84,10 @@ public class MarketTest {
 
 	@Test
 	public void marketCanCheckResourceMoreThanAmountYouWantToBuy() {
-		try{
-			//market.checkResourcesMoreThanAmount(ResourceType.FOOD, 1000000);
-			market.checkResourcesMoreThanAmount(ResourceType.ORE, 1000000);
-			market.checkResourcesMoreThanAmount(ResourceType.ENERGY, 1000000);
-			market.checkResourcesMoreThanAmount(ResourceType.ROBOTICON, 1000000);
-		}
-		catch(Exception exception) {
-			return;
-		}
-
-		fail("Shoud throw exception");
+		assertFalse(market.hasEnoughResources(ResourceType.ORE, 1000000));
+		assertFalse(market.hasEnoughResources(ResourceType.ENERGY, 1000000));
+		assertFalse(market.hasEnoughResources(ResourceType.ROBOTICON, 1000000));
+		assertFalse(market.hasEnoughResources(ResourceType.FOOD, 1000000));
 	}
 
 
@@ -115,19 +109,22 @@ public class MarketTest {
 		assertEquals(20,market.getSellPrice(ResourceType.ENERGY));
 	}
 
-	public void marketShouldReduceResoursesWhenSells(){
+	@Test
+	public void marketShouldReduceResourcesWhenSells(){
 		market.setEnergy(10);
 		market.setOre(10);
 		market.setFood(10);
 		market.setRoboticon(10);
-		market.buyResource(ResourceType.FOOD, 5);
-		market.buyResource(ResourceType.ORE, 5);
-		market.buyResource(ResourceType.ENERGY, 5);
-		market.buyResource(ResourceType.ROBOTICON, 5);
-		assertEquals(5,ResourceType.FOOD );
-		assertEquals(5,ResourceType.ORE );
-		assertEquals(5,ResourceType.ENERGY );
-		assertEquals(5,ResourceType.ROBOTICON );
+
+		market.sellResource(ResourceType.FOOD, 5);
+		market.sellResource(ResourceType.ORE, 5);
+		market.sellResource(ResourceType.ENERGY, 5);
+		market.sellResource(ResourceType.ROBOTICON, 5);
+
+		assertEquals(5, market.getFood() );
+		assertEquals(5, market.getOre() );
+		assertEquals(5, market.getEnergy() );
+		assertEquals(5, market.getRoboticon() );
 
 	}
 

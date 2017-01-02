@@ -1,7 +1,5 @@
 package io.github.teamfractal.exception;
 
-import io.github.teamfractal.entity.ResourceType;
-
 public class NotEnoughMoneyException extends RuntimeException {
 	/**
 	 * Constructs an <code>NotEnoughMoneyException</code> with no

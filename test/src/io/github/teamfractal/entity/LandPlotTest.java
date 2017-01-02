@@ -2,6 +2,7 @@ package io.github.teamfractal.entity;
 
 import static org.junit.Assert.*;
 
+import io.github.teamfractal.entity.enums.ResourceType;
 import org.junit.*;
 
 public class LandPlotTest {

@@ -1,6 +1,6 @@
 package io.github.teamfractal.entity;
 
-import com.sun.org.apache.bcel.internal.generic.LAND;
+import io.github.teamfractal.entity.enums.ResourceType;
 
 public class Roboticon {
 	private ResourceType customisation;

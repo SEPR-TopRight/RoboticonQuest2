@@ -1,7 +1,8 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.entity.enums.PurchaseStatus;
+import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.InvalidResourceTypeException;
-import io.github.teamfractal.exception.NotEnoughMoneyException;
 import io.github.teamfractal.exception.NotEnoughResourceException;
 
 import java.util.ArrayList;
@@ -90,21 +91,23 @@ public class Player {
 	 * @param amount     Amount of resources to purchase.
 	 * @param market     The market instance.
 	 * @param resource   The resource type.
+	 * @return           If the purchase was success or not.
 	 */
-	public void purchaseResourceFromMarket(int amount, Market market, ResourceType resource) {
-		market.checkResourcesMoreThanAmount(resource, amount);
+	public PurchaseStatus purchaseResourceFromMarket(int amount, Market market, ResourceType resource) {
+		if (!market.hasEnoughResources(resource, amount)) {
+			return PurchaseStatus.FailMarketNotEnoughResource;
+		}
 
 		int cost = amount * market.getSellPrice(resource);
 		int money = getMoney();
-		if (money >= cost) {
-			market.sellResource(resource, amount);
-			setMoney(money - cost);
-			setResource(resource, getResource(resource) + amount);
+		if (cost > money) {
+			return PurchaseStatus.FailPlayerNotEnoughMoney;
 		}
-		else {
-			throw new NotEnoughMoneyException("Player.purchaseResourceFromMarket", cost, money);
-		}
-		
+
+		market.sellResource(resource, amount);
+		setMoney(money - cost);
+		setResource(resource, getResource(resource) + amount);
+		return PurchaseStatus.Success;
 	}
 
 	/**

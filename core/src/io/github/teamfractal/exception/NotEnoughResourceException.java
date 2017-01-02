@@ -1,6 +1,6 @@
 package io.github.teamfractal.exception;
 
-import io.github.teamfractal.entity.ResourceType;
+import io.github.teamfractal.entity.enums.ResourceType;
 
 public class NotEnoughResourceException extends RuntimeException {
 	/**

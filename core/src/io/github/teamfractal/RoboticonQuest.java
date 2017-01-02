@@ -27,6 +27,9 @@ public class RoboticonQuest extends Game {
 		setScreen(mainMenuScreen);
 	}
 
+	/**
+	 * Setup the default skin for GUI components.
+	 */
 	private void setupSkin() {
 		skin = new Skin(
 				Gdx.files.internal("skin/skin.json"),

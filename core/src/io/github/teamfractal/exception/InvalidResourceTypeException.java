@@ -1,6 +1,6 @@
 package io.github.teamfractal.exception;
 
-import io.github.teamfractal.entity.ResourceType;
+import io.github.teamfractal.entity.enums.ResourceType;
 
 public class InvalidResourceTypeException extends RuntimeException {
 	/**
@@ -16,13 +16,13 @@ public class InvalidResourceTypeException extends RuntimeException {
 	}
 
 	public InvalidResourceTypeException(ResourceType requiredType, ResourceType actualType) {
-		super("Invalid Resource Type: " +
+		super("Invalid Resource Type: \n" +
 				"Required: " + requiredType.toString() + "\n" +
 				"Actual  : " + actualType.toString());
 	}
 
 	public InvalidResourceTypeException(String details, ResourceType requiredType, ResourceType actualType) {
-		super("Invalid Resource Type: " +
+		super("Invalid Resource Type: \n" +
 				"Required: " + requiredType.toString() + "\n" +
 				"Actual  : " + actualType.toString() + "\n" +
 				"Details : " + details);
