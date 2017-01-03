@@ -1,5 +1,8 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.entity.enums.ResourceType;
+import io.github.teamfractal.exception.InvalidResourceTypeException;
+
 public class LandPlot {
 	private final int IndexOre = 0;
 	private final int IndexEnergy = 1;
@@ -7,11 +10,13 @@ public class LandPlot {
 
 	/**
 	 * Saved modifiers for LandPlot.
+	 * [ Ore, Energy, Food ]
 	 */
 	int[] productionModifiers = {0, 0, 0};
 
 	/**
 	 * The base production amounts.
+	 * [ Ore, Energy, Food ]
 	 */
 	int[] productionAmounts = {0, 0, 0};
 
@@ -27,6 +32,23 @@ public class LandPlot {
 	}
 
 	/**
+	 * Get the type index from the {@link ResourceType}
+	 * @param resource   The {@link ResourceType}
+	 * @return           The index.
+	 * @throws InvalidResourceTypeException Exception is thrown if the resource index is invalid.
+	 */
+	private int resourceTypeToIndex(ResourceType resource) {
+		switch (resource) {
+			case ORE:    return IndexOre;
+			case FOOD:   return IndexFood;
+			case ENERGY: return IndexEnergy;
+		}
+
+		throw new InvalidResourceTypeException("LandPlot::resourceTypeToIndex",
+				ResourceType.BasicResource, resource);
+	}
+
+	/**
 	 * Install a roboticon to this LandPlot.
 	 *
 	 * @param roboticon    The roboticon to be installed.
@@ -37,26 +59,13 @@ public class LandPlot {
 			return false;
 		}
 
-		switch (roboticon.getCustomisation()) {
-			case ORE:
-				productionModifiers[IndexOre] += 1;
-				break;
-
-			case ENERGY:
-				productionModifiers[IndexEnergy] += 1;
-				break;
-
-			case FOOD:
-				productionModifiers[IndexFood] += 1;
-				break;
-
-			default:
-				throw new IllegalArgumentException("Unknown resource type");
+		int index = resourceTypeToIndex(roboticon.getCustomisation());
+		if (roboticon.setInstalledLandplot(this)) {
+			productionModifiers[index] += 1;
+			return true;
 		}
 
-		roboticon.setInstalled(this);
-
-		return true;
+		return false;
 	}
 
 	/**

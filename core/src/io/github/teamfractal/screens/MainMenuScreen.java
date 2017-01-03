@@ -17,8 +17,6 @@ public class MainMenuScreen implements Screen {
 	private final HomeMainMenu homeMainMenu;
 
 	public MainMenuScreen(final RoboticonQuest game) {
-		// TODO: Add main menu items.
-
 		this.game = game;
 		this.stage = new Stage(new ScreenViewport());
 		this.table = new Table();

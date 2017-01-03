@@ -14,10 +14,17 @@ public enum ResourceType {
 	/**
 	 *  Energy or Ore or Food or Roboticon.
 	 *
-	 *  Mainly for {@link io.github.teamfractal.exception.InvalidResourceTypeException},
-	 *  not actual game flow.
+	 *  Mainly for exception with {@link io.github.teamfractal.exception.InvalidResourceTypeException},
+	 *  Should <i>not</i> be used for other purposes.
 	 */
 	CommonResource,
+	/**
+	 *  Energy or Ore or Food.
+	 *
+	 *  Mainly for exception with {@link io.github.teamfractal.exception.InvalidResourceTypeException},
+	 *  Should <i>not</i> be used for other purposes.
+	 */
+	BasicResource,
 	Unknown;
 
 	public boolean isValidResource() {
@@ -33,6 +40,9 @@ public enum ResourceType {
 			case ROBOTICON:
 				return StringUtil.Capitalise(super.toString().toLowerCase());
 
+			case BasicResource:
+				return "<Common Resource: Energy | Ore | Food>";
+
 			case CommonResource:
 				return "<Common Resource: Energy | Ore | Food | Roboticon>";
 
@@ -43,3 +53,5 @@ public enum ResourceType {
 		return "<Unknown type: " + super.toString() + ">";
 	}
 }
+
+

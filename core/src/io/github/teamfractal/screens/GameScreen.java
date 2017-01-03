@@ -30,6 +30,10 @@ public class GameScreen implements Screen {
 	private float oldW;
 	private float oldH;
 
+	/**
+	 * Initialise the class
+	 * @param game  The game object
+	 */
 	public GameScreen(final RoboticonQuest game) {
 		oldW = Gdx.graphics.getWidth();
 		oldH = Gdx.graphics.getHeight();
@@ -42,7 +46,6 @@ public class GameScreen implements Screen {
 		this.game = game;
 
 		// TODO: Add some HUD gui stuff (buttons, mini-map etc...)
-		// TODO: I forgot what was needed to do
 		this.stage = new Stage(new ScreenViewport());
 
 		// Drag the map within the screen.
@@ -57,7 +60,6 @@ public class GameScreen implements Screen {
 			public void drag(InputEvent event, float x, float y, int pointer) {float deltaX = x - oldX;
 				float deltaY = y - oldY;
 
-				// TODO: Restrict the min/max camera offset from origin
 				// The camera translates in a different direction...
 				camera.translate(-deltaX, -deltaY);
 				if (camera.position.x < 20) camera.position.x = 20;
@@ -80,11 +82,12 @@ public class GameScreen implements Screen {
 				// The Y from screen starts from bottom left.
 				Vector3 cord = new Vector3(x, oldH - y, 0);
 				camera.unproject(cord);
+
+				// Padding offset
 				cord.y -= 20;  // Padding from tile
 				cord.x += 50;
-				//  System.out.println(cord.x + ", " + cord.y);
 
-				// Convert to vector
+				// Convert to grid index
 				// http://2dengine.com/doc/gs_isometric.html
 				TiledMapTileLayer layer = (TiledMapTileLayer)tmx.getLayers().get(0);
 				float tile_height = layer.getTileHeight();
@@ -98,16 +101,16 @@ public class GameScreen implements Screen {
 				int cordY = -(int)(ty - tx);
 
 
+				// TODO: Remove those magic numbers and fix it properly
 				// The magic numbers based on observation of number patterns
 				cordX -= 1;
 				if (cordY % 2 == 0) {
 					cordX --;
 				}
-				// System.out.println(cordX + ", " + cordY);
+
 				TiledMapTileLayer.Cell c = layer.getCell(cordX, cordY);
 				if (c != null) {
-					// Todo: Call method with the TileCell and the position
-					layer.getCell(cordX, cordY).setTile(tmx.getTileSets().getTile(0));
+					GameScreen.this.tileClicked(c, cordX, cordY);
 				}
 			}
 		});
@@ -115,6 +118,20 @@ public class GameScreen implements Screen {
 		newGame();
 	}
 
+	/**
+	 * TileCell been clicked
+	 * @param cell  The cell clicked
+	 * @param x     The x index
+	 * @param y     The y index
+	 */
+	private void tileClicked(TiledMapTileLayer.Cell cell, int x, int y) {
+		// TODO: Need proper event callback
+		cell.setTile(tmx.getTileSets().getTile(0));
+	}
+
+	/**
+	 * Reset to new game status.
+	 */
 	public void newGame() {
 		// Setup the game board.
 		if (tmx != null) tmx.dispose();
@@ -173,6 +190,4 @@ public class GameScreen implements Screen {
 		renderer.dispose();
 		stage.dispose();
 	}
-
-
 }

@@ -8,18 +8,24 @@ import io.github.teamfractal.exception.NotEnoughResourceException;
 import java.util.ArrayList;
 
 public class Player {
+	//<editor-fold desc="Resource getter and setter">
 	private int money = 100;
 	private int ore = 0;
 	private int energy = 0;
 	private int food = 0;
 	ArrayList<Roboticon> roboticonList;
-	
+
 	int getMoney() { return money; }
 	int getOre() { return ore; }
 	int getEnergy() { return energy; }
 	int getFood() { return food; }
 
-	synchronized void setMoney(int money) {
+	/**
+	 * Set the amount of money player has
+	 * @param money                      The amount of new money.
+	 * @throws IllegalArgumentException  If the new money if negative, this exception will be thrown.
+	 */
+	synchronized void setMoney(int money) throws IllegalArgumentException {
 		if (money < 0) {
 			throw new IllegalArgumentException("Error: Money can't be negative.");
 		}
@@ -27,28 +33,52 @@ public class Player {
 		this.money = money;
 	}
 
-	synchronized void setOre(int ore) {
-		if (ore < 0) {
+	/**
+	 * Set the amount of ore player has
+	 * @param amount                     The new amount for ore.
+	 * @throws IllegalArgumentException  If the new ore amount if negative, this exception will be thrown.
+	 */
+	synchronized void setOre(int amount) {
+		if (amount < 0) {
 			throw new IllegalArgumentException("Error: Ore can't be negative.");
 		}
 
-		this.ore = ore;
+		this.ore = amount;
 	}
-	synchronized void setEnergy(int energy) {
-		if (energy < 0) {
+
+	/**
+	 * Set the amount of energy player has
+	 * @param amount                     The new amount for energy.
+	 * @throws IllegalArgumentException  If the new energy amount if negative, this exception will be thrown.
+	 */
+
+	synchronized void setEnergy(int amount) {
+		if (amount < 0) {
 			throw new IllegalArgumentException("Error: Energy can't be negative.");
 		}
 
-		this.energy = energy;
+		this.energy = amount;
 	}
-	synchronized void setFood(int food) {
-		if (food < 0) {
+
+	/**
+	 * Set the amount of food player has
+	 * @param amount                     The new amount for food.
+	 * @throws IllegalArgumentException  If the new food amount if negative, this exception will be thrown.
+	 */
+
+	synchronized void setFood(int amount) {
+		if (amount < 0) {
 			throw new IllegalArgumentException("Error: Food can't be negative.");
 		}
 
-		this.food = food;
+		this.food = amount;
 	}
 
+	/**
+	 * Set the resource amount current player have.
+	 * @param type   The {@link ResourceType}
+	 * @param amount The new amount.
+	 */
 	void setResource(ResourceType type, int amount) {
 		switch (type) {
 			case ENERGY:
@@ -68,6 +98,11 @@ public class Player {
 		}
 	}
 
+	/**
+	 * Get the resource amount current player have.
+	 * @param type   The {@link ResourceType}
+	 * @return       The amount of specified resource.
+	 */
 	int getResource(ResourceType type) {
 		switch (type) {
 			case ENERGY:
@@ -84,6 +119,7 @@ public class Player {
 				throw new InvalidResourceTypeException(type);
 		}
 	}
+	//</editor-fold>
 
 	/**
 	 * Action for player to purchase resources from the market.
@@ -139,5 +175,4 @@ public class Player {
 		roboticon.setCustomisation(type);
 		return roboticon;
 	}
-	
 }

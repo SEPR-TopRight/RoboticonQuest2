@@ -6,25 +6,28 @@ public class Roboticon {
 	private ResourceType customisation;
 	private LandPlot installedLandplot;
 	
-	public Roboticon() {
+	Roboticon() {
 		
 	}
 
-	public ResourceType getCustomisation() {
+	ResourceType getCustomisation() {
 		return this.customisation;
 	}
 	
-	public void setCustomisation(ResourceType type) {
+	void setCustomisation(ResourceType type) {
 		this.customisation = type;
 	}
 
-	public boolean isInstalled() {
+	synchronized boolean isInstalled() {
 		return installedLandplot != null;
 	}
 
-	public void setInstalled(LandPlot landplot) {
+	synchronized boolean setInstalledLandplot(LandPlot landplot) {
 		if (!isInstalled()) {
 			installedLandplot = landplot;
+			return true;
 		}
+
+		return false;
 	}
 }
