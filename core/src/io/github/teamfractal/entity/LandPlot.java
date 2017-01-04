@@ -2,6 +2,7 @@ package io.github.teamfractal.entity;
 
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.InvalidResourceTypeException;
+import io.github.teamfractal.exception.NotCommonResourceException;
 
 public class LandPlot {
 	private final int IndexOre = 0;
@@ -44,8 +45,7 @@ public class LandPlot {
 			case ENERGY: return IndexEnergy;
 		}
 
-		throw new InvalidResourceTypeException("LandPlot::resourceTypeToIndex",
-				ResourceType.BasicResource, resource);
+		throw new NotCommonResourceException(resource);
 	}
 
 	/**

@@ -8,6 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
 import io.github.teamfractal.screens.GameScreen;
 
+/**
+ * This is the main game boot up class.
+ * It will set up all the necessary classes.
+ */
 public class RoboticonQuest extends Game {
 	SpriteBatch batch;
 	public Skin skin;
@@ -37,6 +41,9 @@ public class RoboticonQuest extends Game {
 		);
 	}
 
+	/**
+	 * Clean up
+	 */
 	@Override
 	public void dispose () {
 		mainMenuScreen.dispose();

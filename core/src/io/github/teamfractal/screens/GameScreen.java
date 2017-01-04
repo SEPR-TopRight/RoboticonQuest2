@@ -50,14 +50,32 @@ public class GameScreen implements Screen {
 
 		// Drag the map within the screen.
 		stage.addListener(new DragListener() {
+			/**
+			 * On start of the drag event, record current position.
+			 * @param event    The event object
+			 * @param x        X position of mouse (on screen)
+			 * @param y        Y position of mouse (on screen)
+			 * @param pointer  unknown argument, not used.
+			 */
 			@Override
 			public void dragStart(InputEvent event, float x, float y, int pointer) {
 				oldX = x;
 				oldY = y;
 			}
 
+			/**
+			 * During the drag event, check against last recorded
+			 * mouse positions, apply the offset in an opposite
+			 * direction to the camera to create the drag effect.
+			 *
+			 * @param event    The event object.
+			 * @param x        X position of mouse (on screen)
+			 * @param y        Y position of mouse (on screen)
+			 * @param pointer  unknown argument, not used.
+			 */
 			@Override
-			public void drag(InputEvent event, float x, float y, int pointer) {float deltaX = x - oldX;
+			public void drag(InputEvent event, float x, float y, int pointer) {
+				float deltaX = x - oldX;
 				float deltaY = y - oldY;
 
 				// The camera translates in a different direction...
@@ -73,9 +91,12 @@ public class GameScreen implements Screen {
 			}
 		});
 
+		// Set initial camera position.
 		camera.position.x = 20;
 		camera.position.y = 20;
 
+		//<editor-fold desc="Click event handler. Check `tileClicked` for how to handle tile click.">
+		// Bind click event.
 		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -114,7 +135,9 @@ public class GameScreen implements Screen {
 				}
 			}
 		});
+		//</editor-fold>
 
+		// Finally, start a new game and initialise variables.
 		newGame();
 	}
 
@@ -158,8 +181,14 @@ public class GameScreen implements Screen {
 		stage.draw();
 	}
 
+	/**
+	 * Resize the viewport as the render window's size change.
+	 * @param width   The new width
+	 * @param height  The new height
+	 */
 	@Override
 	public void resize(int width, int height) {
+		// Avoid the viewport update if they are not changed.
 		if (width != oldW && height != oldH) {
 			stage.getViewport().update(width, height, true);
 			camera.setToOrtho(false, width, height);

@@ -2,7 +2,7 @@ package io.github.teamfractal.entity;
 
 import io.github.teamfractal.entity.enums.PurchaseStatus;
 import io.github.teamfractal.entity.enums.ResourceType;
-import io.github.teamfractal.exception.InvalidResourceTypeException;
+import io.github.teamfractal.exception.NotCommonResourceException;
 import io.github.teamfractal.exception.NotEnoughResourceException;
 
 import java.util.ArrayList;
@@ -76,11 +76,11 @@ public class Player {
 
 	/**
 	 * Set the resource amount current player have.
-	 * @param type   The {@link ResourceType}
-	 * @param amount The new amount.
+	 * @param resource  The {@link ResourceType}
+	 * @param amount    The new amount.
 	 */
-	void setResource(ResourceType type, int amount) {
-		switch (type) {
+	void setResource(ResourceType resource, int amount) {
+		switch (resource) {
 			case ENERGY:
 				setEnergy(amount);
 				break;
@@ -94,7 +94,7 @@ public class Player {
 				break;
 
 			default:
-				throw new InvalidResourceTypeException(type);
+				throw new NotCommonResourceException(resource);
 		}
 	}
 
@@ -116,7 +116,7 @@ public class Player {
 
 
 			default:
-				throw new InvalidResourceTypeException(type);
+				throw new NotCommonResourceException(type);
 		}
 	}
 	//</editor-fold>

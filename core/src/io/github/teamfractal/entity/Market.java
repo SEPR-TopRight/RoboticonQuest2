@@ -3,6 +3,7 @@ package io.github.teamfractal.entity;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.InvalidResourceTypeException;
+import io.github.teamfractal.exception.NotCommonResourceException;
 
 public class Market {
 	/**
@@ -134,7 +135,7 @@ public class Market {
 				return getFood();
 
 			default:
-				throw new InvalidResourceTypeException("Market::setResource", ResourceType.CommonResource, type);
+				throw new NotCommonResourceException(type);
 		}
 	}
 
@@ -168,7 +169,7 @@ public class Market {
 				break;
 
 			default:
-				throw new InvalidResourceTypeException("Market::setResource", ResourceType.CommonResource, type);
+				throw new NotCommonResourceException(type);
 		}
 
 	}
