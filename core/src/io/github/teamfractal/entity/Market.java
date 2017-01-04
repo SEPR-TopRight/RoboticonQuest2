@@ -1,13 +1,12 @@
 package io.github.teamfractal.entity;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.InvalidResourceTypeException;
 import io.github.teamfractal.exception.NotCommonResourceException;
 
 public class Market {
 	/**
-	 * Init. the market
+	 * Initialise the market
 	 */
 	Market() {
 		setFood(16);
