@@ -93,7 +93,7 @@ public class GameScreen implements Screen {
 
 		// Set initial camera position.
 		camera.position.x = 20;
-		camera.position.y = 20;
+		camera.position.y = 50;
 
 		//<editor-fold desc="Click event handler. Check `tileClicked` for how to handle tile click.">
 		// Bind click event.
