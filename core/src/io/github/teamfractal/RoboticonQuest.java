@@ -1,11 +1,15 @@
 package io.github.teamfractal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
+import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.screens.GameScreen;
 
 /**
@@ -18,12 +22,25 @@ public class RoboticonQuest extends Game {
 	public MainMenuScreen mainMenuScreen;
 	public GameScreen gameScreen;
 	private int phase;
-
+	private int currentPlayer;
+	private ArrayList<Player> playerList;
+	
+	public RoboticonQuest(){
+		this.phase = 1;
+		Player player1 = new Player();
+		Player player2 = new Player();
+		this.playerList = new ArrayList<Player>();
+		this.playerList.add(player1);
+		this.playerList.add(player2);
+		this.currentPlayer = 0;
+	}
+	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		setupSkin();
-		this.phase = 1;
+		
+		
 
 		// Setup other screens.
 		mainMenuScreen = new MainMenuScreen(this);
@@ -63,6 +80,18 @@ public class RoboticonQuest extends Game {
 		}
 		else{
 			this.phase = 1;
+			this.nextPlayer();
+		}
+	}
+	public int getPlayer(){
+		return this.currentPlayer;
+	}
+	public void nextPlayer(){
+		if (playerList.size() -1 == this.currentPlayer){
+			this.currentPlayer = 0; 
+		}
+		else{
+			this.currentPlayer += 1;
 		}
 	}
 }

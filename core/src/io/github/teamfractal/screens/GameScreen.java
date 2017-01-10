@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
@@ -31,6 +32,7 @@ public class GameScreen implements Screen {
 	private TiledMap tmx;
 	private TextButton currentButton;
 	private TextButton nextButton;
+	private TextField topText;
 	private float oldX;
 	private float oldY;
 
@@ -60,11 +62,15 @@ public class GameScreen implements Screen {
 		nextButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				if (currentButton != null) currentButton.remove();
 				game.nextPhase();
+				topTextUpdate();
 			}
 		});
 		nextButton.setPosition(560, 0);
 		stage.addActor(nextButton);
+		topTextUpdate();
+		
 
 		// Drag the map within the screen.
 		stage.addListener(new DragListener() {
@@ -178,10 +184,17 @@ public class GameScreen implements Screen {
 			currentButton = new TextButton("buy landplot", game.skin);
 			currentButton.setPosition(x, y);
 			stage.addActor(currentButton);
+			
 		}
 		
 	}
-
+	public void topTextUpdate(){
+		if (this.topText != null) this.topText.remove();
+		String text = "    Player " + (game.getPlayer() + 1) + "; Phase " + game.getPhase();
+		this.topText = new TextField(text, game.skin);
+		topText.setPosition(270, 460);
+		stage.addActor(topText);
+	}
 	/**
 	 * Reset to new game status.
 	 */
