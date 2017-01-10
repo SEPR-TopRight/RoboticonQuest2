@@ -10,10 +10,15 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricStaggeredTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
 
@@ -21,9 +26,11 @@ public class GameScreen implements Screen {
 	private final RoboticonQuest game;
 	private final OrthographicCamera camera;
 	private final Stage stage;
+	private final Table table;
 	private IsometricStaggeredTiledMapRenderer renderer;
 	private TiledMap tmx;
-
+	private TextButton currentButton;
+	private TextButton nextButton;
 	private float oldX;
 	private float oldY;
 
@@ -47,6 +54,17 @@ public class GameScreen implements Screen {
 
 		// TODO: Add some HUD gui stuff (buttons, mini-map etc...)
 		this.stage = new Stage(new ScreenViewport());
+		this.table = new Table();
+		stage.addActor(table);
+		nextButton = new TextButton("Next Phase", game.skin);
+		nextButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.nextPhase();
+			}
+		});
+		nextButton.setPosition(560, 0);
+		stage.addActor(nextButton);
 
 		// Drag the map within the screen.
 		stage.addListener(new DragListener() {
@@ -84,6 +102,12 @@ public class GameScreen implements Screen {
 				if (camera.position.y < 20) camera.position.y = 20;
 				if (camera.position.x > 10000) camera.position.x = 10000;
 				if (camera.position.y > 10000) camera.position.y = 10000;
+				if (currentButton != null){
+					currentButton.remove();
+					currentButton.setPosition(currentButton.getX() + deltaX,currentButton.getY() + deltaY);
+					stage.addActor(currentButton);
+				}
+				
 
 				// Record cords
 				oldX = x;
@@ -131,7 +155,7 @@ public class GameScreen implements Screen {
 
 				TiledMapTileLayer.Cell c = layer.getCell(cordX, cordY);
 				if (c != null) {
-					GameScreen.this.tileClicked(c, cordX, cordY);
+					GameScreen.this.tileClicked(c, x, y);
 				}
 			}
 		});
@@ -147,9 +171,15 @@ public class GameScreen implements Screen {
 	 * @param x     The x index
 	 * @param y     The y index
 	 */
-	private void tileClicked(TiledMapTileLayer.Cell cell, int x, int y) {
+	private void tileClicked(TiledMapTileLayer.Cell cell, float x, float y) {
 		// TODO: Need proper event callback
-		cell.setTile(tmx.getTileSets().getTile(0));
+		if (game.getPhase() == 1){
+			if (currentButton != null) currentButton.remove();
+			currentButton = new TextButton("buy landplot", game.skin);
+			currentButton.setPosition(x, y);
+			stage.addActor(currentButton);
+		}
+		
 	}
 
 	/**

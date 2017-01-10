@@ -17,12 +17,13 @@ public class RoboticonQuest extends Game {
 	public Skin skin;
 	public MainMenuScreen mainMenuScreen;
 	public GameScreen gameScreen;
+	private int phase;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		setupSkin();
-
+		this.phase = 1;
 
 		// Setup other screens.
 		mainMenuScreen = new MainMenuScreen(this);
@@ -50,5 +51,18 @@ public class RoboticonQuest extends Game {
 		gameScreen.dispose();
 		skin.dispose();
 		batch.dispose();
+	}
+	
+	public int getPhase(){
+		return this.phase;
+	}
+	
+	public void nextPhase(){
+		if(this.phase!= 5){
+			this.phase += 1;
+		}
+		else{
+			this.phase = 1;
+		}
 	}
 }
