@@ -23,7 +23,7 @@ public class RoboticonQuest extends Game {
 	public GameScreen gameScreen;
 	private int phase;
 	private int currentPlayer;
-	private ArrayList<Player> playerList;
+	public ArrayList<Player> playerList;
 	
 	public RoboticonQuest(){
 		this.phase = 1;
@@ -83,7 +83,11 @@ public class RoboticonQuest extends Game {
 			this.nextPlayer();
 		}
 	}
-	public int getPlayer(){
+	public Player getPlayer(){
+		return this.playerList.get(this.currentPlayer);
+	}
+	
+	public int getPlayerInt(){
 		return this.currentPlayer;
 	}
 	public void nextPlayer(){

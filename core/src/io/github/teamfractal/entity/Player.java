@@ -7,6 +7,8 @@ import io.github.teamfractal.exception.NotEnoughResourceException;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+
 public class Player {
 	//<editor-fold desc="Resource getter and setter">
 	private int money = 100;
@@ -14,6 +16,7 @@ public class Player {
 	private int energy = 0;
 	private int food = 0;
 	ArrayList<Roboticon> roboticonList;
+	ArrayList<LandPlot> landList = new ArrayList<LandPlot>();
 
 	int getMoney() { return money; }
 	int getOre() { return ore; }
@@ -164,7 +167,18 @@ public class Player {
 			throw new NotEnoughResourceException("Player.sellResourceToMarket", resource, amount, getResource(resource));
 		}
 	}
-
+	public void purchaseLandPlot(){
+		landList.add(new LandPlot(1,1,1));
+		
+	}
+	
+	public void produceResources(){
+		for (int i = 0; i < landList.size(); i++){
+			ore += landList.get(i).produceResources()[0];
+			energy += landList.get(i).produceResources()[1];
+			food += landList.get(i).produceResources()[2];
+		}
+	}
 	/**
 	 * Apply roboticon customisation
 	 * @param roboticon  The roboticon to be customised

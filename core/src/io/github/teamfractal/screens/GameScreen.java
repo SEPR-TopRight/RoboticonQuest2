@@ -141,6 +141,8 @@ public class GameScreen implements Screen {
 				// Convert to grid index
 				// http://2dengine.com/doc/gs_isometric.html
 				TiledMapTileLayer layer = (TiledMapTileLayer)tmx.getLayers().get(0);
+				TiledMapTileLayer layer2 = (TiledMapTileLayer)tmx.getLayers().get(2);
+				
 				float tile_height = layer.getTileHeight();
 				float tile_width = layer.getTileWidth();
 
@@ -160,8 +162,9 @@ public class GameScreen implements Screen {
 				}
 
 				TiledMapTileLayer.Cell c = layer.getCell(cordX, cordY);
+				TiledMapTileLayer.Cell c2 = layer2.getCell(cordX, cordY);
 				if (c != null) {
-					GameScreen.this.tileClicked(c, x, y);
+					GameScreen.this.tileClicked(c, c2, x, y);
 				}
 			}
 		});
@@ -177,12 +180,21 @@ public class GameScreen implements Screen {
 	 * @param x     The x index
 	 * @param y     The y index
 	 */
-	private void tileClicked(TiledMapTileLayer.Cell cell, float x, float y) {
+	private void tileClicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.Cell cell2,  float mouseX, float mouseY) {
 		// TODO: Need proper event callback
+		
 		if (game.getPhase() == 1){
 			if (currentButton != null) currentButton.remove();
 			currentButton = new TextButton("buy landplot", game.skin);
-			currentButton.setPosition(x, y);
+			currentButton.setPosition(mouseX, mouseY);
+			currentButton.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					if (currentButton != null) currentButton.remove();
+					game.getPlayer().purchaseLandPlot();
+					cell2.setTile(tmx.getTileSets().getTile(67 + game.getPlayerInt()));
+				}
+			});
 			stage.addActor(currentButton);
 			
 		}
@@ -190,7 +202,7 @@ public class GameScreen implements Screen {
 	}
 	public void topTextUpdate(){
 		if (this.topText != null) this.topText.remove();
-		String text = "    Player " + (game.getPlayer() + 1) + "; Phase " + game.getPhase();
+		String text = "    Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
 		this.topText = new TextField(text, game.skin);
 		topText.setPosition(270, 460);
 		stage.addActor(topText);
