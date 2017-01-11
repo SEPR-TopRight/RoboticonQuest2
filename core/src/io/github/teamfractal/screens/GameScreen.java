@@ -33,11 +33,14 @@ public class GameScreen implements Screen {
 	private TextButton currentButton;
 	private TextButton nextButton;
 	private TextField topText;
+	private TextField playerStats;
 	private float oldX;
 	private float oldY;
 
 	private float oldW;
 	private float oldH;
+	private boolean buttonNotPressed = true;
+	
 
 	/**
 	 * Initialise the class
@@ -65,11 +68,14 @@ public class GameScreen implements Screen {
 				if (currentButton != null) currentButton.remove();
 				game.nextPhase();
 				topTextUpdate();
+				playerStatsUpdate();
 			}
 		});
-		nextButton.setPosition(560, 0);
+		nextButton.setPosition(stage.getViewport().getWorldWidth() - 80, 0);
 		stage.addActor(nextButton);
 		topTextUpdate();
+		playerStatsUpdate();
+		
 		
 
 		// Drag the map within the screen.
@@ -182,30 +188,50 @@ public class GameScreen implements Screen {
 	 */
 	private void tileClicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.Cell cell2,  float mouseX, float mouseY) {
 		// TODO: Need proper event callback
-		
-		if (game.getPhase() == 1){
-			if (currentButton != null) currentButton.remove();
+		if (currentButton != null) {
+				currentButton.remove();
+			}
+		if (game.getPhase() == 1 && buttonNotPressed){
+			
 			currentButton = new TextButton("buy landplot", game.skin);
 			currentButton.setPosition(mouseX, mouseY);
 			currentButton.addListener(new ChangeListener() {
+				
+
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					if (currentButton != null) currentButton.remove();
 					game.getPlayer().purchaseLandPlot();
 					cell2.setTile(tmx.getTileSets().getTile(67 + game.getPlayerInt()));
+					playerStatsUpdate();
+					buttonNotPressed = false;
 				}
 			});
 			stage.addActor(currentButton);
 			
 		}
+		if (! buttonNotPressed){
+			buttonNotPressed = true;
+		}
 		
 	}
 	public void topTextUpdate(){
 		if (this.topText != null) this.topText.remove();
-		String text = "    Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
+		String text = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
 		this.topText = new TextField(text, game.skin);
-		topText.setPosition(270, 460);
+		topText.setWidth(120);
+		topText.setPosition(stage.getViewport().getWorldWidth()/2, stage.getViewport().getWorldHeight() - 20);
 		stage.addActor(topText);
+	}
+	
+	public void playerStatsUpdate(){
+		if (this.playerStats != null) this.playerStats.remove();
+		String text = "Ore: " + game.getPlayer().getOre() + " Energy: " +  game.getPlayer().getEnergy() + " Food: "
+				+ game.getPlayer().getFood() + " Money: " + game.getPlayer().getMoney();
+		this.playerStats = new TextField(text, game.skin);
+		playerStats.setWidth(250);
+		playerStats.setPosition(0, stage.getViewport().getWorldHeight() - 20);
+		stage.addActor(playerStats);
 	}
 	/**
 	 * Reset to new game status.
@@ -247,7 +273,9 @@ public class GameScreen implements Screen {
 		if (width != oldW && height != oldH) {
 			stage.getViewport().update(width, height, true);
 			camera.setToOrtho(false, width, height);
-
+			topTextUpdate();
+			playerStatsUpdate();
+			nextButton.setPosition(stage.getViewport().getWorldWidth() - 80, 0);
 			oldW = width;
 			oldH = height;
 		}

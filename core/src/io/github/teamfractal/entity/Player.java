@@ -18,10 +18,10 @@ public class Player {
 	ArrayList<Roboticon> roboticonList;
 	ArrayList<LandPlot> landList = new ArrayList<LandPlot>();
 
-	int getMoney() { return money; }
-	int getOre() { return ore; }
-	int getEnergy() { return energy; }
-	int getFood() { return food; }
+	public int getMoney() { return money; }
+	public int getOre() { return ore; }
+	public int getEnergy() { return energy; }
+	public int getFood() { return food; }
 
 	/**
 	 * Set the amount of money player has
@@ -169,6 +169,7 @@ public class Player {
 	}
 	public void purchaseLandPlot(){
 		landList.add(new LandPlot(1,1,1));
+		this.money -= 10;
 		
 	}
 	
