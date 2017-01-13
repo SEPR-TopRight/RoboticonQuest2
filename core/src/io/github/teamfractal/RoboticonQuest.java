@@ -83,6 +83,33 @@ public class RoboticonQuest extends Game {
 			this.nextPlayer();
 		}
 	}
+
+	public String getphaseEven(){
+
+		int phase = getPhase();
+
+		switch(phase){
+			case 1:
+				return "Buy Land Plot";
+
+			case 2:
+				return "Purchase Roboticons";
+
+			case 3:
+				return "Install Roboticons";
+
+			case 4:
+				return "Resource generation";
+
+			case 5:
+				return "Resource auction";
+
+			default:
+				return "Unknown phase";
+		}
+
+	}
+
 	public Player getPlayer(){
 		return this.playerList.get(this.currentPlayer);
 	}
@@ -98,4 +125,6 @@ public class RoboticonQuest extends Game {
 			this.currentPlayer += 1;
 		}
 	}
+
+
 }
