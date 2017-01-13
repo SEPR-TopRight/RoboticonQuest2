@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.actors.GameScreenActors;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
 
@@ -29,7 +30,6 @@ public class GameScreen implements Screen {
 	private final RoboticonQuest game;
 	private final OrthographicCamera camera;
 	private final Stage stage;
-	private final Table table;
 	private IsometricStaggeredTiledMapRenderer renderer;
 
 	private TiledMap tmx;
@@ -45,6 +45,8 @@ public class GameScreen implements Screen {
 
 	private float oldW;
 	private float oldH;
+	private GameScreenActors actors;
+	
 
 	private LandPlot selectedPlot;
 	private float maxDragX;
@@ -68,28 +70,15 @@ public class GameScreen implements Screen {
 
 		// TODO: Add some HUD gui stuff (buttons, mini-map etc...)
 		this.stage = new Stage(new ScreenViewport());
-		this.table = new Table();
-		stage.addActor(table);
-		nextButton = new TextButton("Next Phase", game.skin);
-		nextButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-			buyLandPlotBtn.setVisible(false);
-			game.nextPhase();
-			topTextUpdate();
-			playerStatsUpdate();
-			}
-		});
-		nextButton.setPosition(stage.getViewport().getWorldWidth() - 80, 0);
-
-		stage.addActor(nextButton);
-		topTextUpdate();
-		playerStatsUpdate();
+		this.actors = new GameScreenActors(game, this);
+		actors.initialiseButtons();
+		
+		actors.textUpdate();
 		
 		
 
 		// Drag the map within the screen.
-		stage.addListener(new DragListener() {
+		getStage().addListener(new DragListener() {
 			/**
 			 * On start of the drag event, record current position.
 			 * @param event    The event object
@@ -171,7 +160,7 @@ public class GameScreen implements Screen {
 
 		//<editor-fold desc="Click event handler. Check `tileClicked` for how to handle tile click.">
 		// Bind click event.
-		stage.addListener(new ClickListener() {
+		getStage().addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if (buyLandPlotBtn.isVisible()) {
@@ -230,6 +219,9 @@ public class GameScreen implements Screen {
 		Player player = game.getPlayer();
 
 		// TODO: Need proper event callback
+		actors.clicked(cell, cell2, mouseX, mouseY);
+		
+		
 		switch (game.getPhase()) {
 			// Phase 1:
 			// Purchase LandPlot.
@@ -244,24 +236,8 @@ public class GameScreen implements Screen {
 				break;
 		}
 	}
-	public void topTextUpdate(){
-		if (this.topText != null) this.topText.remove();
-		String text = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
-		this.topText = new Label(text, game.skin);
-		topText.setWidth(120);
-		topText.setPosition(stage.getViewport().getWorldWidth()/2, stage.getViewport().getWorldHeight() - 20);
-		stage.addActor(topText);
-	}
 	
-	public void playerStatsUpdate(){
-		if (this.playerStats != null) this.playerStats.remove();
-		String text = "Ore: " + game.getPlayer().getOre() + " Energy: " +  game.getPlayer().getEnergy() + " Food: "
-				+ game.getPlayer().getFood() + " Money: " + game.getPlayer().getMoney();
-		this.playerStats = new Label(text, game.skin);
-		playerStats.setWidth(250);
-		playerStats.setPosition(0, stage.getViewport().getWorldHeight() - 20);
-		stage.addActor(playerStats);
-	}
+
 	/**
 	 * Reset to new game status.
 	 */
@@ -283,7 +259,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
+		Gdx.input.setInputProcessor(getStage());
 	}
 
 	@Override
@@ -294,8 +270,8 @@ public class GameScreen implements Screen {
 		renderer.setView(camera);
 		renderer.render();
 
-		stage.act(delta);
-		stage.draw();
+		getStage().act(delta);
+		getStage().draw();
 	}
 
 	/**
@@ -307,11 +283,10 @@ public class GameScreen implements Screen {
 	public void resize(int width, int height) {
 		// Avoid the viewport update if they are not changed.
 		if (width != oldW && height != oldH) {
-			stage.getViewport().update(width, height, true);
+			getStage().getViewport().update(width, height, true);
 			camera.setToOrtho(false, width, height);
-			topTextUpdate();
-			playerStatsUpdate();
-			nextButton.setPosition(stage.getViewport().getWorldWidth() - 80, 0);
+			actors.textUpdate();
+			actors.nextUpdate();
 			oldW = width;
 			oldH = height;
 		}
@@ -336,6 +311,23 @@ public class GameScreen implements Screen {
 	public void dispose() {
 		tmx.dispose();
 		renderer.dispose();
-		stage.dispose();
+		getStage().dispose();
 	}
+
+	public Stage getStage() {
+		return stage;
+	}
+
+	public boolean isButtonNotPressed() {
+		return buttonNotPressed;
+	}
+
+	public void setButtonNotPressed(boolean buttonNotPressed) {
+		this.buttonNotPressed = buttonNotPressed;
+	}
+	
+	public TiledMap getTmx(){
+		return this.tmx;
+	}
+
 }
