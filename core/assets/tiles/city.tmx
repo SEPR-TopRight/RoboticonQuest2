@@ -161,11 +161,14 @@
    <image width="100" height="65" source="city/raw/sport village placeholder.png"/>
   </tile>
  </tileset>
- <tileset firstgid="67" name="player1 tiles" tilewidth="100" tileheight="65" tilecount="5" columns="0">
+ <tileset firstgid="100" name="PlayerTile" tilewidth="100" tileheight="65" tilecount="5" columns="0">
   <tile id="0">
-   <image width="100" height="65" source="city/Player1/player1.png"/>
+   <image width="100" height="65" source="city/Player1/empty.png"/>
   </tile>
   <tile id="1">
+   <image width="100" height="65" source="city/Player1/player1.png"/>
+  </tile>
+  <tile id="2">
    <image width="100" height="65" source="city/Player1/player2.png"/>
   </tile>
   <tile id="3">
@@ -174,11 +177,8 @@
   <tile id="4">
    <image width="100" height="65" source="city/Player1/player4.png"/>
   </tile>
-  <tile id="5">
-   <image width="100" height="65" source="city/Player1/empty.png"/>
-  </tile>
  </tileset>
- <layer name="Tile Layer 1" width="7" height="12">
+ <layer name="MapData" width="7" height="12">
   <data encoding="csv">
 2,2,7,61,61,61,61,
 2,6,5,61,61,2,61,
@@ -194,21 +194,20 @@
 66,2,2,52,2,2,2
 </data>
  </layer>
- <objectgroup name="Object Layer 1"/>
- <layer name="Tile Layer 2" width="7" height="12">
+ <layer name="PlayerOverlay" width="7" height="12">
   <data encoding="csv">
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72,
-72,72,72,72,72,72,72
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100,
+100,100,100,100,100,100,100
 </data>
  </layer>
 </map>

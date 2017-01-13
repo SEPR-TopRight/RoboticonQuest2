@@ -47,7 +47,9 @@ public class GameScreen implements Screen {
 	private float oldH;
 
 	private LandPlot selectedPlot;
-	
+	private float maxDragX;
+	private float maxDragY;
+
 
 	/**
 	 * Initialise the class
@@ -124,12 +126,14 @@ public class GameScreen implements Screen {
 				camera.translate(-deltaX, -deltaY);
 				if (camera.position.x < 20) camera.position.x = 20;
 				if (camera.position.y < 20) camera.position.y = 20;
-				if (camera.position.x > 10000) camera.position.x = 10000;
-				if (camera.position.y > 10000) camera.position.y = 10000;
+				if (camera.position.x > maxDragX) camera.position.x = maxDragX;
+				if (camera.position.y > maxDragY) camera.position.y = maxDragY;
 
 				// Record cords
 				oldX = x;
 				oldY = y;
+
+				// System.out.println("drag to " + x + ", " + y);
 			}
 		});
 
@@ -271,6 +275,8 @@ public class GameScreen implements Screen {
 
 		mapLayer = (TiledMapTileLayer)tmx.getLayers().get("MapData");
 		playerOverlay = (TiledMapTileLayer)tmx.getLayers().get("PlayerOverlay");
+		maxDragX = 0.75f * mapLayer.getTileWidth() * (mapLayer.getWidth() + 1);
+		maxDragY = 0.75f * mapLayer.getTileHeight() * (mapLayer.getHeight() + 1);
 
 		game.getPlotManager().setup(mapLayer, playerOverlay);
 	}
