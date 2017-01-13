@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
+import io.github.teamfractal.screens.ResourceMarketScreen;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.screens.GameScreen;
 
@@ -81,6 +82,15 @@ public class RoboticonQuest extends Game {
 		else{
 			this.phase = 1;
 			this.nextPlayer();
+		}
+		if (this.phase == 4){
+			setScreen(new ResourceMarketScreen(this));
+		}
+		
+		if(this.phase == 5){
+			gameScreen.getActors().textUpdate();
+			gameScreen.getActors().initialiseButtons();
+			setScreen(gameScreen);
 		}
 	}
 	public Player getPlayer(){

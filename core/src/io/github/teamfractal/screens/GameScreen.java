@@ -275,5 +275,8 @@ public class GameScreen implements Screen {
 	public TiledMap getTmx(){
 		return this.tmx;
 	}
-
+	
+	public GameScreenActors getActors(){
+		return this.actors;
+	}
 }
