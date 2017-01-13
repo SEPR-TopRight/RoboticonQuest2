@@ -19,9 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.entity.LandPlot;
+import io.github.teamfractal.entity.Player;
 
 public class GameScreen implements Screen {
 	private final RoboticonQuest game;
@@ -29,8 +30,12 @@ public class GameScreen implements Screen {
 	private final Stage stage;
 	private final Table table;
 	private IsometricStaggeredTiledMapRenderer renderer;
+
 	private TiledMap tmx;
-	private TextButton currentButton;
+	private TiledMapTileLayer mapLayer;
+	private TiledMapTileLayer playerOverlay;
+
+	private TextButton buyLandPlotBtn;
 	private TextButton nextButton;
 	private TextField topText;
 	private TextField playerStats;
@@ -39,7 +44,8 @@ public class GameScreen implements Screen {
 
 	private float oldW;
 	private float oldH;
-	private boolean buttonNotPressed = true;
+
+	private LandPlot selectedPlot;
 	
 
 	/**
@@ -65,13 +71,14 @@ public class GameScreen implements Screen {
 		nextButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (currentButton != null) currentButton.remove();
-				game.nextPhase();
-				topTextUpdate();
-				playerStatsUpdate();
+			buyLandPlotBtn.setVisible(false);
+			game.nextPhase();
+			topTextUpdate();
+			playerStatsUpdate();
 			}
 		});
 		nextButton.setPosition(stage.getViewport().getWorldWidth() - 80, 0);
+
 		stage.addActor(nextButton);
 		topTextUpdate();
 		playerStatsUpdate();
@@ -105,6 +112,10 @@ public class GameScreen implements Screen {
 			 */
 			@Override
 			public void drag(InputEvent event, float x, float y, int pointer) {
+				// TODO: control of pausing the drag.
+				// Prevent drag if the button is visible.
+				if (buyLandPlotBtn.isVisible()) return;
+
 				float deltaX = x - oldX;
 				float deltaY = y - oldY;
 
@@ -114,18 +125,40 @@ public class GameScreen implements Screen {
 				if (camera.position.y < 20) camera.position.y = 20;
 				if (camera.position.x > 10000) camera.position.x = 10000;
 				if (camera.position.y > 10000) camera.position.y = 10000;
-				if (currentButton != null){
-					currentButton.remove();
-					currentButton.setPosition(currentButton.getX() + deltaX,currentButton.getY() + deltaY);
-					stage.addActor(currentButton);
-				}
-				
 
 				// Record cords
 				oldX = x;
 				oldY = y;
 			}
 		});
+
+
+
+
+		buyLandPlotBtn = new TextButton("Buy LandPlot", game.skin);
+		buyLandPlotBtn.setVisible(false);
+		buyLandPlotBtn.pad(2, 10, 2, 10);
+		buyLandPlotBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				System.out.println("Click::BuyLandPlot");
+				// TODO: purchase land
+				if (selectedPlot.hasOwner()) {
+					return ;
+				}
+
+				Player player = game.getPlayer();
+				if (player.purchaseLandPlot(selectedPlot)) {
+					TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
+					playerTile.setTile(tmx.getTileSets().getTile(101 + game.getPlayerInt()));
+
+					playerStatsUpdate();
+				}
+			}
+		});
+		stage.addActor(buyLandPlotBtn);
+
+
 
 		// Set initial camera position.
 		camera.position.x = 20;
@@ -136,6 +169,11 @@ public class GameScreen implements Screen {
 		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				if (buyLandPlotBtn.isVisible()) {
+					buyLandPlotBtn.setVisible(false);
+					return;
+				}
+
 				// The Y from screen starts from bottom left.
 				Vector3 cord = new Vector3(x, oldH - y, 0);
 				camera.unproject(cord);
@@ -146,31 +184,28 @@ public class GameScreen implements Screen {
 
 				// Convert to grid index
 				// http://2dengine.com/doc/gs_isometric.html
-				TiledMapTileLayer layer = (TiledMapTileLayer)tmx.getLayers().get(0);
-				TiledMapTileLayer layer2 = (TiledMapTileLayer)tmx.getLayers().get(2);
-				
-				float tile_height = layer.getTileHeight();
-				float tile_width = layer.getTileWidth();
+
+				float tile_height = mapLayer.getTileHeight();
+				float tile_width = mapLayer.getTileWidth();
 
 				float ty = cord.y - cord.x/2 - tile_height;
 				float tx = cord.x + ty;
 				ty = MathUtils.ceil(-ty/(tile_width/2));
 				tx = MathUtils.ceil(tx/(tile_width/2)) + 1;
-				int cordX = MathUtils.floor((tx + ty)/2);
-				int cordY = -(int)(ty - tx);
+				int tileIndexX = MathUtils.floor((tx + ty)/2);
+				int tileIndexY = -(int)(ty - tx);
 
 
 				// TODO: Remove those magic numbers and fix it properly
-				// The magic numbers based on observation of number patterns
-				cordX -= 1;
-				if (cordY % 2 == 0) {
-					cordX --;
+				// Those magic numbers based on observation of number patterns
+				tileIndexX -= 1;
+				if (tileIndexY % 2 == 0) {
+					tileIndexX --;
 				}
 
-				TiledMapTileLayer.Cell c = layer.getCell(cordX, cordY);
-				TiledMapTileLayer.Cell c2 = layer2.getCell(cordX, cordY);
-				if (c != null) {
-					GameScreen.this.tileClicked(c, c2, x, y);
+				selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
+				if (selectedPlot != null) {
+					GameScreen.this.tileClicked(selectedPlot, x, y);
 				}
 			}
 		});
@@ -181,39 +216,28 @@ public class GameScreen implements Screen {
 	}
 
 	/**
-	 * TileCell been clicked
-	 * @param cell  The cell clicked
-	 * @param x     The x index
-	 * @param y     The y index
+	 * Tile click callback event.
+	 * @param plot          The landplot clicked.
+	 * @param x             Current mouse x position
+	 * @param y             Current mouse y position
 	 */
-	private void tileClicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.Cell cell2,  float mouseX, float mouseY) {
-		// TODO: Need proper event callback
-		if (currentButton != null) {
-				currentButton.remove();
-			}
-		if (game.getPhase() == 1 && buttonNotPressed){
-			
-			currentButton = new TextButton("buy landplot", game.skin);
-			currentButton.setPosition(mouseX, mouseY);
-			currentButton.addListener(new ChangeListener() {
-				
+	private void tileClicked(LandPlot plot, float x, float y) {
+		Player player = game.getPlayer();
 
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					if (currentButton != null) currentButton.remove();
-					game.getPlayer().purchaseLandPlot();
-					cell2.setTile(tmx.getTileSets().getTile(67 + game.getPlayerInt()));
-					playerStatsUpdate();
-					buttonNotPressed = false;
+		// TODO: Need proper event callback
+		switch (game.getPhase()) {
+			// Phase 1:
+			// Purchase LandPlot.
+			case 1:
+				buyLandPlotBtn.setPosition(x, y);
+				if (plot.hasOwner() || !player.haveEnoughMoneyForLandplot()) {
+					buyLandPlotBtn.setDisabled(true);
+				} else {
+					buyLandPlotBtn.setDisabled(false);
 				}
-			});
-			stage.addActor(currentButton);
-			
+				buyLandPlotBtn.setVisible(true);
+				break;
 		}
-		if (! buttonNotPressed){
-			buttonNotPressed = true;
-		}
-		
 	}
 	public void topTextUpdate(){
 		if (this.topText != null) this.topText.remove();
@@ -243,6 +267,11 @@ public class GameScreen implements Screen {
 
 		tmx = new TmxMapLoader().load("tiles/city.tmx");
 		renderer = new IsometricStaggeredTiledMapRenderer(tmx);
+
+		mapLayer = (TiledMapTileLayer)tmx.getLayers().get("MapData");
+		playerOverlay = (TiledMapTileLayer)tmx.getLayers().get("PlayerOverlay");
+
+		game.getPlotManager().setup(mapLayer, playerOverlay);
 	}
 
 	@Override

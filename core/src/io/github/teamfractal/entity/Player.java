@@ -167,20 +167,26 @@ public class Player {
 			throw new NotEnoughResourceException("Player.sellResourceToMarket", resource, amount, getResource(resource));
 		}
 	}
-	public void purchaseLandPlot(){
-		if (getMoney() >= 10){
-			landList.add(new LandPlot(1,1,1));
-			this.money -= 10;
+
+	public boolean haveEnoughMoneyForLandplot() {
+		// TODO: calculate landplot price??
+		return getMoney() >= 10;
+	}
+
+	public synchronized boolean purchaseLandPlot(LandPlot landPlot){
+		if (haveEnoughMoneyForLandplot() && landPlot.setOwner(this)){
+			setMoney(getMoney() - 10);
+			return true;
 		}
 
-		
+		return false;
 	}
 	
 	public void produceResources(){
-		for (int i = 0; i < landList.size(); i++){
-			ore += landList.get(i).produceResources()[0];
-			energy += landList.get(i).produceResources()[1];
-			food += landList.get(i).produceResources()[2];
+		for (LandPlot plot : landList) {
+			energy += plot.produceResource(ResourceType.ENERGY);
+			food += plot.produceResource(ResourceType.FOOD);
+			ore += plot.produceResource(ResourceType.ORE);
 		}
 	}
 	/**
@@ -192,5 +198,29 @@ public class Player {
 	public Roboticon customiseRoboticon(Roboticon roboticon, ResourceType type) {
 		roboticon.setCustomisation(type);
 		return roboticon;
+	}
+
+	/**
+	 * Add landplot to current user.
+	 *
+	 * @param landPlot  LandPlot to be bind to the user.
+	 *                  <code>LandPlot.setOwner(this_user)</code> first.
+	 */
+	public void addLandPlot(LandPlot landPlot) {
+		if (landPlot != null && !landList.contains(landPlot) && landPlot.getOwner() == this) {
+			landList.add(landPlot);
+		}
+	}
+
+	/**
+	 * Remove the LandPlot from the user.
+	 *
+	 * @param landPlot  LandPlot to be removed from the user.
+	 *                  <code>this_user</code> must be the current owner first.
+	 */
+	public void removeLandPlot(LandPlot landPlot) {
+		if (landPlot != null && landList.contains(landPlot) && landPlot.getOwner() == this) {
+			landList.add(landPlot);
+		}
 	}
 }

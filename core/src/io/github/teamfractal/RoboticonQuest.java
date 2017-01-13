@@ -11,28 +11,32 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.screens.GameScreen;
+import io.github.teamfractal.util.PlotManager;
 
 /**
  * This is the main game boot up class.
  * It will set up all the necessary classes.
  */
 public class RoboticonQuest extends Game {
+	private PlotManager plotManager;
 	SpriteBatch batch;
 	public Skin skin;
 	public MainMenuScreen mainMenuScreen;
 	public GameScreen gameScreen;
 	private int phase;
 	private int currentPlayer;
-	public ArrayList<Player> playerList;
+	public ArrayList<Player> playerList = new ArrayList<Player>();
 	
 	public RoboticonQuest(){
+		this.currentPlayer = 0;
 		this.phase = 1;
+
 		Player player1 = new Player();
 		Player player2 = new Player();
-		this.playerList = new ArrayList<Player>();
 		this.playerList.add(player1);
 		this.playerList.add(player2);
-		this.currentPlayer = 0;
+
+		this.plotManager = new PlotManager(this);
 	}
 	
 	@Override
@@ -97,5 +101,9 @@ public class RoboticonQuest extends Game {
 		else{
 			this.currentPlayer += 1;
 		}
+	}
+
+	public PlotManager getPlotManager() {
+		return plotManager;
 	}
 }

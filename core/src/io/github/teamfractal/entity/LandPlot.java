@@ -1,10 +1,64 @@
 package io.github.teamfractal.entity;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.InvalidResourceTypeException;
 import io.github.teamfractal.exception.NotCommonResourceException;
+import io.github.teamfractal.util.PlotManager;
 
 public class LandPlot {
+	private TiledMapTileLayer.Cell mapTile;
+	private TiledMapTileLayer.Cell playerTile;
+	private Player owner;
+	int x, y;
+
+
+	//<editor-fold desc="Class getters">
+	public TiledMapTileLayer.Cell getMapTile() {
+		return mapTile;
+	}
+
+	public TiledMapTileLayer.Cell getPlayerTile() {
+		return playerTile;
+	}
+
+	public Player getOwner() {
+		return owner;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+
+	public boolean setOwner(Player player) {
+		if (hasOwner()) {
+			return false;
+		}
+
+		owner = player;
+		player.addLandPlot(this);
+		return true;
+	}
+
+	public boolean hasOwner() {
+		return getOwner() != null;
+	}
+
+	public void removeOwner() {
+		if (!hasOwner())
+			return ;
+
+		owner.removeLandPlot(this);
+	}
+	//</editor-fold>
+
+
+
 	private final int IndexOre = 0;
 	private final int IndexEnergy = 1;
 	private final int IndexFood = 2;
@@ -30,6 +84,13 @@ public class LandPlot {
 	 */
 	public LandPlot(int ore, int energy, int food) {
 		this.productionAmounts = new int[]{ore, energy, food};
+	}
+
+	public void setupTile (PlotManager plotManager, int x, int y) {
+		this.x = x;
+		this.y = y;
+		this.mapTile = plotManager.getMapLayer().getCell(x, y);
+		this.playerTile = plotManager.getPlayerOverlay().getCell(x, y);
 	}
 
 	/**
@@ -79,5 +140,15 @@ public class LandPlot {
 			produced[i] = productionAmounts[i] * productionModifiers[i];
 		}
 		return produced;
+	}
+
+	/**
+	 * Calculate the amount of resources to be produced for specific resource.
+	 * @param resource  The resource type to be calculated.
+	 * @return          Calculated amount of resource to be generated.
+	 */
+	public int produceResource(ResourceType resource) {
+		int resIndex = resourceTypeToIndex(resource);
+		return productionAmounts[resIndex] * productionModifiers[resIndex];
 	}
 }
