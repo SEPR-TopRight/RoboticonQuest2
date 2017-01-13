@@ -1,5 +1,6 @@
 package io.github.teamfractal.entity;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import io.github.teamfractal.entity.enums.PurchaseStatus;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.NotCommonResourceException;

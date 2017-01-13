@@ -5,19 +5,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricStaggeredTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -36,22 +31,21 @@ public class GameScreen implements Screen {
 	private TiledMapTileLayer mapLayer;
 	private TiledMapTileLayer playerOverlay;
 
-	private TextButton buyLandPlotBtn;
-	private TextButton nextButton;
-	private Label topText;
-	private Label playerStats;
 	private float oldX;
 	private float oldY;
 
 	private float oldW;
 	private float oldH;
 	private GameScreenActors actors;
-	
 
 	private LandPlot selectedPlot;
 	private float maxDragX;
 	private float maxDragY;
 
+
+	public LandPlot getSelectedPlot() {
+		return selectedPlot;
+	}
 
 	/**
 	 * Initialise the class
@@ -72,13 +66,12 @@ public class GameScreen implements Screen {
 		this.stage = new Stage(new ScreenViewport());
 		this.actors = new GameScreenActors(game, this);
 		actors.initialiseButtons();
-		
 		actors.textUpdate();
 		
 		
 
 		// Drag the map within the screen.
-		getStage().addListener(new DragListener() {
+		stage.addListener(new DragListener() {
 			/**
 			 * On start of the drag event, record current position.
 			 * @param event    The event object
@@ -106,7 +99,7 @@ public class GameScreen implements Screen {
 			public void drag(InputEvent event, float x, float y, int pointer) {
 				// TODO: control of pausing the drag.
 				// Prevent drag if the button is visible.
-				if (buyLandPlotBtn.isVisible()) return;
+				if (actors.getBuyLandPlotBtn().isVisible()) return;
 
 				float deltaX = x - oldX;
 				float deltaY = y - oldY;
@@ -127,44 +120,17 @@ public class GameScreen implements Screen {
 		});
 
 
-
-
-		buyLandPlotBtn = new TextButton("Buy LandPlot", game.skin);
-		buyLandPlotBtn.setVisible(false);
-		buyLandPlotBtn.pad(2, 10, 2, 10);
-		buyLandPlotBtn.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Click::BuyLandPlot");
-				// TODO: purchase land
-				if (selectedPlot.hasOwner()) {
-					return ;
-				}
-
-				Player player = game.getPlayer();
-				if (player.purchaseLandPlot(selectedPlot)) {
-					TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
-					playerTile.setTile(tmx.getTileSets().getTile(101 + game.getPlayerInt()));
-
-					playerStatsUpdate();
-				}
-			}
-		});
-		stage.addActor(buyLandPlotBtn);
-
-
-
 		// Set initial camera position.
 		camera.position.x = 20;
 		camera.position.y = 50;
 
 		//<editor-fold desc="Click event handler. Check `tileClicked` for how to handle tile click.">
 		// Bind click event.
-		getStage().addListener(new ClickListener() {
+		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (buyLandPlotBtn.isVisible()) {
-					buyLandPlotBtn.setVisible(false);
+				if (actors.getBuyLandPlotBtn().isVisible()) {
+					actors.getBuyLandPlotBtn().setVisible(false);
 					return;
 				}
 
@@ -199,7 +165,7 @@ public class GameScreen implements Screen {
 
 				selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
 				if (selectedPlot != null) {
-					GameScreen.this.tileClicked(selectedPlot, x, y);
+					actors.tileClicked(selectedPlot, x, y);
 				}
 			}
 		});
@@ -209,34 +175,9 @@ public class GameScreen implements Screen {
 		newGame();
 	}
 
-	/**
-	 * Tile click callback event.
-	 * @param plot          The landplot clicked.
-	 * @param x             Current mouse x position
-	 * @param y             Current mouse y position
-	 */
-	private void tileClicked(LandPlot plot, float x, float y) {
-		Player player = game.getPlayer();
-
-		// TODO: Need proper event callback
-		actors.clicked(cell, cell2, mouseX, mouseY);
-		
-		
-		switch (game.getPhase()) {
-			// Phase 1:
-			// Purchase LandPlot.
-			case 1:
-				buyLandPlotBtn.setPosition(x, y);
-				if (plot.hasOwner() || !player.haveEnoughMoneyForLandplot()) {
-					buyLandPlotBtn.setDisabled(true);
-				} else {
-					buyLandPlotBtn.setDisabled(false);
-				}
-				buyLandPlotBtn.setVisible(true);
-				break;
-		}
+	public TiledMapTile getPlayerTile(Player player) {
+		return tmx.getTileSets().getTile(101 + game.getPlayerIndex(player));
 	}
-	
 
 	/**
 	 * Reset to new game status.
@@ -259,7 +200,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(getStage());
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
@@ -270,8 +211,8 @@ public class GameScreen implements Screen {
 		renderer.setView(camera);
 		renderer.render();
 
-		getStage().act(delta);
-		getStage().draw();
+		stage.act(delta);
+		stage.draw();
 	}
 
 	/**
@@ -283,7 +224,7 @@ public class GameScreen implements Screen {
 	public void resize(int width, int height) {
 		// Avoid the viewport update if they are not changed.
 		if (width != oldW && height != oldH) {
-			getStage().getViewport().update(width, height, true);
+			stage.getViewport().update(width, height, true);
 			camera.setToOrtho(false, width, height);
 			actors.textUpdate();
 			actors.nextUpdate();
@@ -311,23 +252,11 @@ public class GameScreen implements Screen {
 	public void dispose() {
 		tmx.dispose();
 		renderer.dispose();
-		getStage().dispose();
+		stage.dispose();
 	}
 
 	public Stage getStage() {
 		return stage;
-	}
-
-	public boolean isButtonNotPressed() {
-		return buttonNotPressed;
-	}
-
-	public void setButtonNotPressed(boolean buttonNotPressed) {
-		this.buttonNotPressed = buttonNotPressed;
-	}
-	
-	public TiledMap getTmx(){
-		return this.tmx;
 	}
 
 }

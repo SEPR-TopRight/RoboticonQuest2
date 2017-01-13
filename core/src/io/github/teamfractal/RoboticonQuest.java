@@ -7,6 +7,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
 import io.github.teamfractal.entity.Player;
@@ -25,7 +26,12 @@ public class RoboticonQuest extends Game {
 	public GameScreen gameScreen;
 	private int phase;
 	private int currentPlayer;
-	public ArrayList<Player> playerList = new ArrayList<Player>();
+
+	public int getPlayerIndex (Player player) {
+		return playerList.indexOf(player);
+	}
+
+	private ArrayList<Player> playerList = new ArrayList<Player>();
 	
 	public RoboticonQuest(){
 		this.currentPlayer = 0;
@@ -58,8 +64,8 @@ public class RoboticonQuest extends Game {
 	 */
 	private void setupSkin() {
 		skin = new Skin(
-				Gdx.files.internal("skin/skin.json"),
-				new TextureAtlas(Gdx.files.internal("skin/skin.atlas"))
+			Gdx.files.internal("skin/skin.json"),
+			new TextureAtlas(Gdx.files.internal("skin/skin.atlas"))
 		);
 	}
 
@@ -88,8 +94,7 @@ public class RoboticonQuest extends Game {
 		}
 	}
 
-	public String getphaseEven(){
-
+	public String getPhaseString () {
 		int phase = getPhase();
 
 		switch(phase){
