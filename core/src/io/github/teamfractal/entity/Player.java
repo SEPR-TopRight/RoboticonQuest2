@@ -168,8 +168,11 @@ public class Player {
 		}
 	}
 	public void purchaseLandPlot(){
-		landList.add(new LandPlot(1,1,1));
-		this.money -= 10;
+		if (getMoney() >= 10){
+			landList.add(new LandPlot(1,1,1));
+			this.money -= 10;
+		}
+
 		
 	}
 	
