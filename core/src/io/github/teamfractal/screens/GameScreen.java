@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -32,8 +33,8 @@ public class GameScreen implements Screen {
 	private TiledMap tmx;
 	private TextButton currentButton;
 	private TextButton nextButton;
-	private TextField topText;
-	private TextField playerStats;
+	private Label topText;
+	private Label playerStats;
 	private float oldX;
 	private float oldY;
 
@@ -115,8 +116,13 @@ public class GameScreen implements Screen {
 				if (camera.position.x > 10000) camera.position.x = 10000;
 				if (camera.position.y > 10000) camera.position.y = 10000;
 				if (currentButton != null){
+					if(camera.position.x > 20 && camera.position.x < 10000){
+						currentButton.setPosition(currentButton.getX() + deltaX, currentButton.getY());
+					}
+					if (camera.position.y > 20 && camera.position.y < 10000){
+						currentButton.setPosition(currentButton.getX(), currentButton.getY() + deltaY);
+						}
 					currentButton.remove();
-					currentButton.setPosition(currentButton.getX() + deltaX,currentButton.getY() + deltaY);
 					stage.addActor(currentButton);
 				}
 				
@@ -205,6 +211,7 @@ public class GameScreen implements Screen {
 					cell2.setTile(tmx.getTileSets().getTile(67 + game.getPlayerInt()));
 					playerStatsUpdate();
 					buttonNotPressed = false;
+					currentButton = null;
 				}
 			});
 			stage.addActor(currentButton);
@@ -218,7 +225,7 @@ public class GameScreen implements Screen {
 	public void topTextUpdate(){
 		if (this.topText != null) this.topText.remove();
 		String text = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
-		this.topText = new TextField(text, game.skin);
+		this.topText = new Label(text, game.skin);
 		topText.setWidth(120);
 		topText.setPosition(stage.getViewport().getWorldWidth()/2, stage.getViewport().getWorldHeight() - 20);
 		stage.addActor(topText);
@@ -228,7 +235,7 @@ public class GameScreen implements Screen {
 		if (this.playerStats != null) this.playerStats.remove();
 		String text = "Ore: " + game.getPlayer().getOre() + " Energy: " +  game.getPlayer().getEnergy() + " Food: "
 				+ game.getPlayer().getFood() + " Money: " + game.getPlayer().getMoney();
-		this.playerStats = new TextField(text, game.skin);
+		this.playerStats = new Label(text, game.skin);
 		playerStats.setWidth(250);
 		playerStats.setPosition(0, stage.getViewport().getWorldHeight() - 20);
 		stage.addActor(playerStats);
