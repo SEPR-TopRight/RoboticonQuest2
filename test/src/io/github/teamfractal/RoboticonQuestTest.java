@@ -27,10 +27,10 @@ public class RoboticonQuestTest {
 	
 	@Test
 	public void playerTest(){
-		assert(game.getPlayer() == 0);  //Test game starts in correct player
+		assert(game.getPlayerInt() == 0);  //Test game starts in correct player
 		game.nextPlayer();
-		assert(game.getPlayer() == 1);
+		assert(game.getPlayerInt() == 1);
 		game.nextPlayer();
-		assert(game.getPlayer() == 0);
+		assert(game.getPlayerInt() == 0);
 	}
 }
