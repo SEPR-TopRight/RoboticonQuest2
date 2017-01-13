@@ -7,20 +7,20 @@ import static org.junit.Assert.assertEquals;
 
 public class MiniGameTest {
 
-	private MinGame miniGame;
+	private MiniGame miniGame;
 
 	/**
 	 * Reset market to its default status.
 	 */
 	@Before
 	public void Contractor() {
-		miniGame = new MinGame();
+		miniGame = new MiniGame();
 
 	}
 
 	@Test
 	public void minGameShouldShowBooleanIfWinningTheGame() {
 		// assertEquals(true, miniGame.WinGame(3));
-		assertEquals(0, miniGame.WinGameGift(false));
+		assertEquals(0, miniGame.getPrice(false));
 	}
 }

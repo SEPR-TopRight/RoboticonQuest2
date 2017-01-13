@@ -1,5 +1,6 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.NotEnoughResourceException;
 import org.junit.Before;
 import org.junit.Rule;
