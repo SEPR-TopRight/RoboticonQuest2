@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
 import io.github.teamfractal.screens.ResourceMarketScreen;
+import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.screens.GameScreen;
 
@@ -25,6 +26,7 @@ public class RoboticonQuest extends Game {
 	private int phase;
 	private int currentPlayer;
 	public ArrayList<Player> playerList;
+	public Market market;
 	
 	public RoboticonQuest(){
 		this.phase = 1;
@@ -34,6 +36,7 @@ public class RoboticonQuest extends Game {
 		this.playerList.add(player1);
 		this.playerList.add(player2);
 		this.currentPlayer = 0;
+		this.market = new Market();
 	}
 	
 	@Override
