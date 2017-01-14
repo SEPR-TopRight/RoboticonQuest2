@@ -14,13 +14,15 @@ import io.github.teamfractal.screens.ResourceMarketScreen;
 
 public class ResourceMarketActors extends Table {
 	private RoboticonQuest game;
-	private Integer oreAmount;
+	private Integer buyOreAmount;
+	private Integer sellOreAmount;
 	private Integer energyAmount;
 	private Label topText;
 	private Label playerStats;
 	private ResourceMarketScreen screen;
 	private TextButton nextButton;
 	private Label marketStats;
+	private Integer sellEnergyAmount;
 	
 	public ResourceMarketActors(final RoboticonQuest game, ResourceMarketScreen screen) {
 		this.game = game;
@@ -30,30 +32,30 @@ public class ResourceMarketActors extends Table {
 		final Label buyLabel = new Label("Buy", game.skin);
 		buyLabel.setColor((float) 0.5, 0, 0, 1);
 		
-		final Label buyOreLabel = new Label("Ore: " + game.market.getBuyPrice(ResourceType.ORE) + " Gold", 
+		final Label buyOreLabel = new Label("Ore: " + game.market.getSellPrice(ResourceType.ORE) + " Gold", 
 				game.skin);
-		oreAmount = 0;
-		final Label oreAmountText = new Label(oreAmount.toString(), game.skin);
-		oreAmountText.setWidth(10);
+		buyOreAmount = 0;
+		final Label buyOreAmountText = new Label(buyOreAmount.toString(), game.skin);
+		buyOreAmountText.setWidth(10);
 		
 		
-		final TextButton addOreButton = new TextButton("+", game.skin);
-		addOreButton.addListener(new ChangeListener(){
+		final TextButton addBuyOreButton = new TextButton("+", game.skin);
+		addBuyOreButton.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				oreAmount += 1;
-				oreAmountText.setText(oreAmount.toString());
+				buyOreAmount += 1;
+				buyOreAmountText.setText(buyOreAmount.toString());
 		}
 		});
 		
 		
-		final TextButton subOreButton = new TextButton("-", game.skin);
-		subOreButton.addListener(new ChangeListener(){
+		final TextButton subBuyOreButton = new TextButton("-", game.skin);
+		subBuyOreButton.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (oreAmount > 0){
-					oreAmount -= 1;
-					oreAmountText.setText(oreAmount.toString());
+				if (buyOreAmount > 0){
+					buyOreAmount -= 1;
+					buyOreAmountText.setText(buyOreAmount.toString());
 				}
 		}
 		});
@@ -61,10 +63,10 @@ public class ResourceMarketActors extends Table {
 		buyOreButton.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				game.getPlayer().purchaseResourceFromMarket(oreAmount, game.market, ResourceType.ORE);
-				oreAmount = 0;
-				oreAmountText.setText(oreAmount.toString());
-				buyOreLabel.setText("Ore: " + game.market.getBuyPrice(ResourceType.ORE) + " Gold");
+				game.getPlayer().purchaseResourceFromMarket(buyOreAmount, game.market, ResourceType.ORE);
+				buyOreAmount = 0;
+				buyOreAmountText.setText(buyOreAmount.toString());
+				buyOreLabel.setText("Ore: " + game.market.getSellPrice(ResourceType.ORE) + " Gold");
 				widgetUpdate();
 				}
 		});
@@ -73,27 +75,27 @@ public class ResourceMarketActors extends Table {
 		
 		
 		
-		final Label buyEnergyLabel = new Label("Energy: " + game.market.getBuyPrice(ResourceType.ENERGY) 
+		final Label buyEnergyLabel = new Label("Energy: " + game.market.getSellPrice(ResourceType.ENERGY) 
 			+ " Gold", game.skin);
 		energyAmount = 0;
-		final Label energyAmountText = new Label(energyAmount.toString(), game.skin);
-		final TextButton addEnergyButton = new TextButton("+", game.skin);
-		addEnergyButton.addListener(new ChangeListener(){
+		final Label buyEnergyAmountText = new Label(energyAmount.toString(), game.skin);
+		final TextButton addBuyEnergyButton = new TextButton("+", game.skin);
+		addBuyEnergyButton.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				energyAmount += 1;
-				energyAmountText.setText(energyAmount.toString());
+				buyEnergyAmountText.setText(energyAmount.toString());
 		}
 		});
 		
 		
-		final TextButton subEnergyButton = new TextButton("-", game.skin);
-		subEnergyButton.addListener(new ChangeListener(){
+		final TextButton subBuyEnergyButton = new TextButton("-", game.skin);
+		subBuyEnergyButton.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (energyAmount > 0){
 					energyAmount -= 1;
-					energyAmountText.setText(energyAmount.toString());
+					buyEnergyAmountText.setText(energyAmount.toString());
 				}
 		}
 		});
@@ -104,34 +106,145 @@ public class ResourceMarketActors extends Table {
 			public void changed(ChangeEvent event, Actor actor) {
 				game.getPlayer().purchaseResourceFromMarket(energyAmount, game.market, ResourceType.ENERGY);
 				energyAmount = 0;
-				energyAmountText.setText(energyAmount.toString());
-				buyEnergyLabel.setText("Energy: " + game.market.getBuyPrice(ResourceType.ENERGY) 
+				buyEnergyAmountText.setText(energyAmount.toString());
+				buyEnergyLabel.setText("Energy: " + game.market.getSellPrice(ResourceType.ENERGY) 
 			+ " Gold");
 				widgetUpdate();
 				}
 		});
 		
 		
+		final Label sellLabel = new Label("Sell", game.skin);
+		sellLabel.setColor(0, (float) 0.5, 0, 1);
+		
+		final Label sellOreLabel = new Label("Ore: " + game.market.getBuyPrice(ResourceType.ORE) + " Gold", 
+				game.skin);
+		sellOreAmount = 0;
+		final Label sellOreAmountText = new Label(sellOreAmount.toString(), game.skin);
+		sellOreAmountText.setWidth(10);
+		
+		
+		final TextButton addSellOreButton = new TextButton("+", game.skin);
+		addSellOreButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				sellOreAmount += 1;
+				sellOreAmountText.setText(sellOreAmount.toString());
+		}
+		});
+		
+		
+		final TextButton subSellOreButton = new TextButton("-", game.skin);
+		subSellOreButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (sellOreAmount > 0){
+					sellOreAmount -= 1;
+					sellOreAmountText.setText(sellOreAmount.toString());
+				}
+		}
+		});
+		
+		final TextButton sellOreButton = new TextButton("Sell ore", game.skin);
+		sellOreButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.getPlayer().sellResourceToMarket(sellOreAmount, game.market, ResourceType.ORE);
+				sellOreAmount = 0;
+				sellOreAmountText.setText(sellOreAmount.toString());
+				sellOreLabel.setText("Ore: " + game.market.getBuyPrice(ResourceType.ORE) + " Gold");
+				widgetUpdate();
+				}
+		});
+		
+		
+		final Label sellEnergyLabel = new Label("Energy: " + game.market.getBuyPrice(ResourceType.ENERGY) + " Gold", 
+				game.skin);
+		sellEnergyAmount = 0;
+		final Label sellEnergyAmountText = new Label(sellEnergyAmount.toString(), game.skin);
+		sellEnergyAmountText.setWidth(10);
+		
+		
+		final TextButton addSellEnergyButton = new TextButton("+", game.skin);
+		addSellEnergyButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				sellEnergyAmount += 1;
+				sellEnergyAmountText.setText(sellEnergyAmount.toString());
+		}
+		});
+		
+		
+		final TextButton subSellEnergyButton = new TextButton("-", game.skin);
+		subSellEnergyButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (sellEnergyAmount > 0){
+					sellEnergyAmount -= 1;
+					sellEnergyAmountText.setText(sellEnergyAmount.toString());
+				}
+		}
+		});
+		
+		final TextButton sellEnergyButton = new TextButton("Sell energy", game.skin);
+		sellEnergyButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.getPlayer().sellResourceToMarket(sellEnergyAmount, game.market, ResourceType.ENERGY);
+				sellEnergyAmount = 0;
+				sellEnergyAmountText.setText(sellEnergyAmount.toString());
+				sellEnergyLabel.setText("Ore: " + game.market.getBuyPrice(ResourceType.ENERGY) + " Gold");
+				widgetUpdate();
+				}
+		});
+		
 		add(buyLabel).padTop(40).padLeft(90);
+		add();
+		add();
+		add(sellLabel).padTop(40).padLeft(250);
 		row();
 		add(buyOreLabel).padTop(20);
+		add();
+		add();
+		add(sellOreLabel).padTop(20).padLeft(250);
 		row();
-		add(subOreButton).padLeft(-10).padTop(10);
-		add(oreAmountText).padLeft(-10);
-		add(addOreButton).padLeft(40);
-		row();
-		add(buyOreButton).padTop(10).padLeft(30);
+		add(subBuyOreButton).padLeft(-10).padTop(10);
+		add(buyOreAmountText).padLeft(-10);
+		add(addBuyOreButton).padLeft(40);
 		
+		add(subSellOreButton).padLeft(200).padTop(10);
+		add(sellOreAmountText).padLeft(-10);
+		add(addSellOreButton).padLeft(40);
+		
+		row();
+		
+		add(buyOreButton).padTop(10).padLeft(30);
+		add();
+		add();
+		add(sellOreButton).padTop(10).padLeft(220);
 		row();
 		
 		
 		add(buyEnergyLabel).padTop(30).padLeft(25);
+		add();
+		add();
+		add(sellEnergyLabel).padTop(20).padLeft(250);
 		row();
-		add(subEnergyButton).padLeft(-10).padTop(10);
-		add(energyAmountText);
-		add(addEnergyButton).padLeft(40);
+		add(subBuyEnergyButton).padLeft(-10).padTop(10);
+		add(buyEnergyAmountText);
+		add(addBuyEnergyButton).padLeft(40);
+		
+		add(subSellEnergyButton).padLeft(200).padTop(10);
+		add(sellEnergyAmountText).padLeft(-10);
+		add(addSellEnergyButton).padLeft(40);
+		
 		row();
 		add(buyEnergyButton).padTop(10).padLeft(50);
+		add();
+		add();
+		add(sellEnergyButton).padTop(10).padLeft(220);
+		
+		
 		
 		
 		widgetUpdate();
