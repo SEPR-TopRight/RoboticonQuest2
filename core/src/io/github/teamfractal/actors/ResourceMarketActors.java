@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+import io.github.teamfractal.entity.enums.ResourceType;
 
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.screens.ResourceMarketScreen;
@@ -19,6 +20,7 @@ public class ResourceMarketActors extends Table {
 	private Label playerStats;
 	private ResourceMarketScreen screen;
 	private TextButton nextButton;
+	private Label marketStats;
 	
 	public ResourceMarketActors(final RoboticonQuest game, ResourceMarketScreen screen) {
 		this.game = game;
@@ -28,7 +30,8 @@ public class ResourceMarketActors extends Table {
 		final Label buyLabel = new Label("Buy", game.skin);
 		buyLabel.setColor((float) 0.5, 0, 0, 1);
 		
-		final Label buyOreLabel = new Label("Ore", game.skin);
+		final Label buyOreLabel = new Label("Ore: " + game.market.getBuyPrice(ResourceType.ORE) + " Gold", 
+				game.skin);
 		oreAmount = 0;
 		final Label oreAmountText = new Label(oreAmount.toString(), game.skin);
 		oreAmountText.setWidth(10);
@@ -55,8 +58,23 @@ public class ResourceMarketActors extends Table {
 		}
 		});
 		final TextButton buyOreButton = new TextButton("Buy ore", game.skin);
+		buyOreButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.getPlayer().purchaseResourceFromMarket(oreAmount, game.market, ResourceType.ORE);
+				oreAmount = 0;
+				oreAmountText.setText(oreAmount.toString());
+				buyOreLabel.setText("Ore: " + game.market.getBuyPrice(ResourceType.ORE) + " Gold");
+				widgetUpdate();
+				}
+		});
 		
-		final Label buyEnergyLabel = new Label("Energy", game.skin);
+		
+		
+		
+		
+		final Label buyEnergyLabel = new Label("Energy: " + game.market.getBuyPrice(ResourceType.ENERGY) 
+			+ " Gold", game.skin);
 		energyAmount = 0;
 		final Label energyAmountText = new Label(energyAmount.toString(), game.skin);
 		final TextButton addEnergyButton = new TextButton("+", game.skin);
@@ -75,12 +93,24 @@ public class ResourceMarketActors extends Table {
 			public void changed(ChangeEvent event, Actor actor) {
 				if (energyAmount > 0){
 					energyAmount -= 1;
-					energyAmountText.setText(oreAmount.toString());
+					energyAmountText.setText(energyAmount.toString());
 				}
 		}
 		});
 		
 		final TextButton buyEnergyButton = new TextButton("Buy energy", game.skin);
+		buyEnergyButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.getPlayer().purchaseResourceFromMarket(energyAmount, game.market, ResourceType.ENERGY);
+				energyAmount = 0;
+				energyAmountText.setText(energyAmount.toString());
+				buyEnergyLabel.setText("Energy: " + game.market.getBuyPrice(ResourceType.ENERGY) 
+			+ " Gold");
+				widgetUpdate();
+				}
+		});
+		
 		
 		add(buyLabel).padTop(40).padLeft(90);
 		row();
@@ -124,6 +154,24 @@ public void widgetUpdate(){
 	playerStats.setWidth(250);
 	playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
 	screen.getStage().addActor(playerStats);
+	
+	nextButton = new TextButton("nextPhase", game.skin);
+	nextButton.addListener(new ChangeListener() {
+		@Override
+		public void changed(ChangeEvent event, Actor actor) {
+			game.nextPhase();
+		}
+	});
+	
+	
+	if (this.marketStats != null) this.marketStats.remove();
+	String marketStatText = "Ore: " + game.market.getResource(ResourceType.ORE) 
+			+ " Energy: " +  game.market.getResource(ResourceType.ENERGY) + " Food: "
+			+ game.market.getResource(ResourceType.FOOD);
+	this.marketStats = new Label(marketStatText, game.skin);
+	marketStats.setWidth(250);
+	marketStats.setPosition(screen.getStage().getWidth() - 200, screen.getStage().getViewport().getWorldHeight() - 20);
+	screen.getStage().addActor(marketStats);
 	
 	nextButton = new TextButton("nextPhase", game.skin);
 	nextButton.addListener(new ChangeListener() {
