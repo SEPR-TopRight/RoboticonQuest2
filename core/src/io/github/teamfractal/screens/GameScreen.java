@@ -259,4 +259,19 @@ public class GameScreen implements Screen {
 		return stage;
 	}
 
+	public boolean isButtonNotPressed() {
+		return buttonNotPressed;
+	}
+
+	public void setButtonNotPressed(boolean buttonNotPressed) {
+		this.buttonNotPressed = buttonNotPressed;
+	}
+	
+	public TiledMap getTmx(){
+		return this.tmx;
+	}
+	
+	public GameScreenActors getActors(){
+		return this.actors;
+	}
 }

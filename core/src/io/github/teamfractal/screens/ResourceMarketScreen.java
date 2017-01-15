@@ -8,28 +8,29 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.teamfractal.RoboticonQuest;
-import io.github.teamfractal.actors.RoboticonMarketActors;
+import io.github.teamfractal.actors.ResourceMarketActors;
 
-public class RoboticonMarketScreen implements Screen {
 
+public class ResourceMarketScreen implements Screen {
 	final RoboticonQuest game;
 	final Stage stage;
 	final Table table;
-	private RoboticonMarketActors actors;
+	private final ResourceMarketActors actors;
 	
 	
-	public RoboticonMarketScreen(final RoboticonQuest game) {
-		this.game = game;
-		this.stage = new Stage(new ScreenViewport());
-		this.table = new Table();
-		table.setFillParent(true);
+public ResourceMarketScreen(final RoboticonQuest game) {
+			this.game = game;
+			this.stage = new Stage(new ScreenViewport());
+			this.table = new Table();
+			table.setFillParent(true);
+			
+			actors = new ResourceMarketActors(game, this);
+			table.top().left().add(actors);
+
+			stage.addActor(table);
 		
-		actors = new RoboticonMarketActors(game, this);
-		table.top().left().add(actors);
-		
-		stage.addActor(table);
 	}
-	
+
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
@@ -74,40 +75,5 @@ public class RoboticonMarketScreen implements Screen {
 	}
 	public Stage getStage(){
 		return this.stage;
-	}
-
-	@Override
-	public void show() {
-
-	}
-
-	@Override
-	public void render(float delta) {
-
-	}
-
-	@Override
-	public void resize(int width, int height) {
-
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
-	}
-
-	@Override
-	public void hide() {
-
-	}
-
-	@Override
-	public void dispose() {
-
 	}
 }

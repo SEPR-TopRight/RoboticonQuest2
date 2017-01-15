@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
+import io.github.teamfractal.screens.ResourceMarketScreen;
+import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.screens.GameScreen;
 import io.github.teamfractal.util.PlotManager;
@@ -26,12 +28,13 @@ public class RoboticonQuest extends Game {
 	public GameScreen gameScreen;
 	private int phase;
 	private int currentPlayer;
+	public ArrayList<Player> playerList;
+	public Market market;
 
 	public int getPlayerIndex (Player player) {
 		return playerList.indexOf(player);
 	}
 
-	private ArrayList<Player> playerList = new ArrayList<Player>();
 	
 	public RoboticonQuest(){
 		this.currentPlayer = 0;
@@ -41,8 +44,8 @@ public class RoboticonQuest extends Game {
 		Player player2 = new Player();
 		this.playerList.add(player1);
 		this.playerList.add(player2);
-
-		this.plotManager = new PlotManager(this);
+		this.currentPlayer = 0;
+		this.market = new Market();
 	}
 	
 	@Override
@@ -91,6 +94,15 @@ public class RoboticonQuest extends Game {
 		else{
 			this.phase = 1;
 			this.nextPlayer();
+		}
+		if (this.phase == 4){
+			setScreen(new ResourceMarketScreen(this));
+		}
+		
+		if(this.phase == 5){
+			gameScreen.getActors().textUpdate();
+			gameScreen.getActors().initialiseButtons();
+			setScreen(gameScreen);
 		}
 	}
 
