@@ -24,8 +24,8 @@ public ResourceMarketScreen(final RoboticonQuest game) {
 			this.table = new Table();
 			table.setFillParent(true);
 			
-			actors = new ResourceMarketActors(game, this);
-			table.top().left().add(actors);
+			actors = new ResourceMarketActors(game, this); // generates actors for the screen
+			table.top().left().add(actors); // positions actors
 
 			stage.addActor(table);
 		

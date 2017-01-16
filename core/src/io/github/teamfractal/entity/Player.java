@@ -173,6 +173,12 @@ public class Player {
 			throw new NotEnoughResourceException("Player.sellResourceToMarket", resource, amount, getResource(resource));
 		}
 	}
+	
+	/**
+	 * Player add a landplot to their inventory for gold
+	 * @param x The x coordinate of the cell on the TiledMaplTileLayer
+	 * @param y The y coordinate of the cell on the TiledMaplTileLayer
+	 */
 	public void purchaseLandPlot(int x, int y){
 		LandPlot plot = game.plotMap.getPlot(x, y);
 		if (! plot.isOwned()){
@@ -182,7 +188,9 @@ public class Player {
 		}
 		
 	}
-	
+	/**
+	 * Get a landplot to produce resources
+	 */
 	public void produceResources(){
 		for (int i = 0; i < landList.size(); i++){
 			ore += landList.get(i).produceResources()[0];

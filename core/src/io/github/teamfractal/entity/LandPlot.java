@@ -82,9 +82,17 @@ public class LandPlot {
 		}
 		return produced;
 	}
+	/**
+	 * Check whether a plot is owned
+	 * @return true if owned, false if not
+	 */
 	public boolean isOwned(){
 		return this.owned;
 	}
+	/**
+	 * Set whether plot is owned or not
+	 * @param owned True if owned, false if not
+	 */
 	public void setOwned(boolean owned){
 		this.owned = owned;
 	}

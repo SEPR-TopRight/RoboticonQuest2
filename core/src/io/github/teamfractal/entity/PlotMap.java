@@ -16,9 +16,11 @@ public class PlotMap {
 		this.tmx = tmx;
 		TiledMapTileLayer tileLayer = (TiledMapTileLayer) tmx.getLayers().get(0);
 		landPlots = new HashMap<String, LandPlot>();
+		//set up tile types
 		TiledMapTile city = tmx.getTileSets().getTile(60);
 		TiledMapTile forest = tmx.getTileSets().getTile(61);
 		TiledMapTile water = tmx.getTileSets().getTile(9);
+		//go through all tiles in tmx and add to hash table with coordinates as key 
 		for (int x = 0; x < tileLayer.getWidth(); x++){
 			for (int y = 0; y < tileLayer.getHeight(); y++){
 				
