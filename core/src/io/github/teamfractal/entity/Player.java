@@ -20,6 +20,7 @@ public class Player {
 	ArrayList<LandPlot> landList = new ArrayList<LandPlot>();
 	private RoboticonQuest game;
 	private PlotMap plotMap;
+	private boolean plotBought;
 
 	public int getMoney() { return money; }
 	public int getOre() { return ore; }
@@ -28,6 +29,7 @@ public class Player {
 	
 	public Player(RoboticonQuest game){
 		this.game = game;
+		plotBought = false;
 	}
 	/**
 	 * Set the amount of money player has
@@ -181,10 +183,11 @@ public class Player {
 	 */
 	public void purchaseLandPlot(int x, int y){
 		LandPlot plot = game.plotMap.getPlot(x, y);
-		if (! plot.isOwned()){
+		if (! plot.isOwned() && ! plotBought){
 			landList.add(plot);
 			this.money -= 10;
 			plot.setOwned(true);
+			plotBought = true;
 		}
 		
 	}
@@ -207,5 +210,12 @@ public class Player {
 	public Roboticon customiseRoboticon(Roboticon roboticon, ResourceType type) {
 		roboticon.setCustomisation(type);
 		return roboticon;
+	}
+	public void setPlotBought(boolean bought) {
+		plotBought = bought;
+		
+	}
+	public boolean getPlotBought() {
+		return plotBought;
 	}
 }

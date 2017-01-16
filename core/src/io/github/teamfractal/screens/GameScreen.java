@@ -108,10 +108,14 @@ public class GameScreen implements Screen {
 					if(camera.position.x > 20 && camera.position.x < 10000){
 						actors.getCurrentButton().setPosition(actors.getCurrentButton().getX() + deltaX,
 								actors.getCurrentButton().getY());
+						actors.getPlotStats().setPosition(actors.getPlotStats().getX() + deltaX,
+								actors.getPlotStats().getY());
 					}
 					if (camera.position.y > 20 && camera.position.y < 10000){
 						actors.getCurrentButton().setPosition(actors.getCurrentButton().getX(),
 								actors.getCurrentButton().getY() + deltaY);
+						actors.getPlotStats().setPosition(actors.getPlotStats().getX(),
+								actors.getPlotStats().getY() + deltaY);
 						}
 					actors.getCurrentButton().remove();
 					getStage().addActor(actors.getCurrentButton());

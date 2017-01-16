@@ -19,7 +19,7 @@ public class LandPlot {
 	 * The base production amounts.
 	 * [ Ore, Energy, Food ]
 	 */
-	int[] productionAmounts = {0, 0, 0};
+	private int[] productionAmounts = {0, 0, 0};
 	private boolean owned;
 
 	/**
@@ -95,5 +95,9 @@ public class LandPlot {
 	 */
 	public void setOwned(boolean owned){
 		this.owned = owned;
+	}
+	
+	public int[] getProductionAmounts(){
+		return productionAmounts;
 	}
 }

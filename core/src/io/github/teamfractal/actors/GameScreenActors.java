@@ -18,6 +18,7 @@ public class GameScreenActors extends Table {
 	private GameScreen screen;
 	private Label topText;
 	private Label playerStats;
+	private Label plotStats;
 	private TextButton currentButton;
 	private TextButton nextButton;
 	
@@ -40,6 +41,10 @@ public class GameScreenActors extends Table {
 				if (currentButton != null) {
 					currentButton.remove();
 					currentButton = null;
+				}
+				if (plotStats != null){
+					plotStats.remove();
+					plotStats = null;
 				}
 				game.nextPhase();
 				screen.setButtonNotPressed(false);
@@ -84,7 +89,7 @@ public class GameScreenActors extends Table {
 	}
 	
 	/**
-	 * Handles a mousec lick on screen
+	 * Handles a mouse click on screen
 	 * @param cell Cell on the tiled map bottom layer
 	 * @param cell2 Cell on the second tilemap layer
 	 * @param mouseX Position of mouse click on x axis
@@ -94,12 +99,15 @@ public class GameScreenActors extends Table {
 	 */
 	public void clicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.Cell cell2,
 			float mouseX, float mouseY, final int cordX, final int cordY){
-		if (currentButton != null) {
-			currentButton.remove();
-		}
+		if (currentButton != null) currentButton.remove();
+		if (plotStats != null) plotStats.remove();
 		if (game.getPhase() == 1 && screen.isButtonNotPressed() && 
-				! game.plotMap.getPlot(cordX, cordY).isOwned()){
-		
+				! game.plotMap.getPlot(cordX, cordY).isOwned()&& ! game.getPlayer().getPlotBought()){
+			
+			int[] productionAmounts =  game.plotMap.getPlot(cordX, cordY).getProductionAmounts();
+			String plotStatText = "Ore: " + productionAmounts[0] + " Energy: " + productionAmounts[1]  ;
+			plotStats = new Label(plotStatText, game.skin);
+			plotStats.setPosition(mouseX, mouseY + 25);
 			currentButton = new TextButton("buy landplot", game.skin);
 			currentButton.setPosition(mouseX, mouseY);
 			currentButton.addListener(new ChangeListener() {
@@ -108,19 +116,22 @@ public class GameScreenActors extends Table {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
 					if (currentButton != null) currentButton.remove();
-					if (! game.plotMap.getPlot(cordX, cordY).isOwned()){
+					if (plotStats != null) plotStats.remove();
+					if (! game.plotMap.getPlot(cordX, cordY).isOwned() ){
 						game.getPlayer().purchaseLandPlot(cordX, cordY);
 						cell2.setTile(screen.getTmx().getTileSets().getTile(67 + game.getPlayerInt()));
 						
 					}
 					
-					textUpdate();
-					screen.setButtonNotPressed(false);
-					currentButton = null;
+				textUpdate();
+				screen.setButtonNotPressed(false);
+				currentButton = null;
 			}
 		});
-		screen.getStage().addActor(currentButton);
+			
 		
+		screen.getStage().addActor(currentButton);
+		screen.getStage().addActor(plotStats);
 		}
 		if (! screen.isButtonNotPressed()){
 			screen.setButtonNotPressed(true);
@@ -134,5 +145,8 @@ public class GameScreenActors extends Table {
 	 */
 	public TextButton getCurrentButton() {
 		return currentButton;
+	}
+	public Label getPlotStats(){
+		return plotStats;
 	}
 }

@@ -93,10 +93,11 @@ public class RoboticonQuest extends Game {
 		else{
 			this.phase = 1;
 			this.nextPlayer();
+			this.getPlayer().setPlotBought(false);
 		}
-		if (this.phase == 2) {
+		/*if (this.phase == 2) {
 			setScreen(new RoboticonMarketScreen(this));
-		}
+		}*/
 		
 		if (this.phase == 4){
 			setScreen(new ResourceMarketScreen(this));
