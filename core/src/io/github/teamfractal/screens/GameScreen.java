@@ -167,7 +167,7 @@ public class GameScreen implements Screen {
 				TiledMapTileLayer.Cell c = layer.getCell(cordX, cordY);
 				TiledMapTileLayer.Cell c2 = layer2.getCell(cordX, cordY);
 				if (c != null) {
-					GameScreen.this.tileClicked(c, c2, x, y);
+					GameScreen.this.tileClicked(c, c2, x, y, cordX, cordY);
 				}
 			}
 		});
@@ -183,9 +183,10 @@ public class GameScreen implements Screen {
 	 * @param x     The x index
 	 * @param y     The y index
 	 */
-	private void tileClicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.Cell cell2,  float mouseX, float mouseY) {
+	private void tileClicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.Cell cell2,  float mouseX, float mouseY,
+			int cordX, int cordY) {
 		// TODO: Need proper event callback
-		actors.clicked(cell, cell2, mouseX, mouseY);
+		actors.clicked(cell, cell2, mouseX, mouseY, cordX, cordY);
 		
 		
 	}
@@ -198,8 +199,7 @@ public class GameScreen implements Screen {
 		// Setup the game board.
 		if (tmx != null) tmx.dispose();
 		if (renderer != null) renderer.dispose();
-
-		tmx = new TmxMapLoader().load("tiles/city.tmx");
+		this.tmx = new TmxMapLoader().load("tiles/city.tmx");
 		renderer = new IsometricStaggeredTiledMapRenderer(tmx);
 	}
 

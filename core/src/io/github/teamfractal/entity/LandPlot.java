@@ -20,6 +20,7 @@ public class LandPlot {
 	 * [ Ore, Energy, Food ]
 	 */
 	int[] productionAmounts = {0, 0, 0};
+	private boolean owned;
 
 	/**
 	 * Initialise LandPlot with specific base amount of resources.
@@ -30,6 +31,7 @@ public class LandPlot {
 	 */
 	public LandPlot(int ore, int energy, int food) {
 		this.productionAmounts = new int[]{ore, energy, food};
+		this.owned = false;
 	}
 
 	/**
@@ -79,5 +81,11 @@ public class LandPlot {
 			produced[i] = productionAmounts[i] * productionModifiers[i];
 		}
 		return produced;
+	}
+	public boolean isOwned(){
+		return this.owned;
+	}
+	public void setOwned(boolean owned){
+		this.owned = owned;
 	}
 }

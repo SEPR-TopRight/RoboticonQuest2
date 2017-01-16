@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.entity.PlotMap;
 import io.github.teamfractal.screens.GameScreen;
 
 public class GameScreenActors extends Table {
@@ -76,11 +77,13 @@ public void textUpdate(){
 	screen.getStage().addActor(playerStats);
 }
 
-public void clicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.Cell cell2,  float mouseX, float mouseY){
+public void clicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.Cell cell2,
+		float mouseX, float mouseY, final int cordX, final int cordY){
 	if (currentButton != null) {
 		currentButton.remove();
 	}
-	if (game.getPhase() == 1 && screen.isButtonNotPressed()){
+	if (game.getPhase() == 1 && screen.isButtonNotPressed() && 
+			! game.plotMap.getPlot(cordX, cordY).isOwned()){
 	
 		currentButton = new TextButton("buy landplot", game.skin);
 		currentButton.setPosition(mouseX, mouseY);
@@ -90,8 +93,13 @@ public void clicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.C
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (currentButton != null) currentButton.remove();
-				game.getPlayer().purchaseLandPlot();
-				cell2.setTile(screen.getTmx().getTileSets().getTile(67 + game.getPlayerInt()));
+				System.out.println(cordX + " " + cordY);
+				if (! game.plotMap.getPlot(cordX, cordY).isOwned()){
+					game.getPlayer().purchaseLandPlot(cordX, cordY);
+					cell2.setTile(screen.getTmx().getTileSets().getTile(67 + game.getPlayerInt()));
+					
+				}
+				
 				textUpdate();
 				screen.setButtonNotPressed(false);
 				currentButton = null;

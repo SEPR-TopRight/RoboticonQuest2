@@ -1,5 +1,6 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.enums.PurchaseStatus;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.NotCommonResourceException;
@@ -7,6 +8,7 @@ import io.github.teamfractal.exception.NotEnoughResourceException;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 public class Player {
@@ -15,14 +17,18 @@ public class Player {
 	private int ore = 0;
 	private int energy = 0;
 	private int food = 0;
-	ArrayList<Roboticon> roboticonList;
 	ArrayList<LandPlot> landList = new ArrayList<LandPlot>();
+	private RoboticonQuest game;
+	private PlotMap plotMap;
 
 	public int getMoney() { return money; }
 	public int getOre() { return ore; }
 	public int getEnergy() { return energy; }
 	public int getFood() { return food; }
-
+	
+	public Player(RoboticonQuest game){
+		this.game = game;
+	}
 	/**
 	 * Set the amount of money player has
 	 * @param money                      The amount of new money.
@@ -167,9 +173,13 @@ public class Player {
 			throw new NotEnoughResourceException("Player.sellResourceToMarket", resource, amount, getResource(resource));
 		}
 	}
-	public void purchaseLandPlot(){
-		landList.add(new LandPlot(1,1,1));
-		this.money -= 10;
+	public void purchaseLandPlot(int x, int y){
+		LandPlot plot = game.plotMap.getPlot(x, y);
+		if (! plot.isOwned()){
+			landList.add(plot);
+			this.money -= 10;
+			plot.setOwned(true);
+		}
 		
 	}
 	
