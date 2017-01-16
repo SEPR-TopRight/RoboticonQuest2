@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
 import io.github.teamfractal.screens.ResourceMarketScreen;
+import io.github.teamfractal.screens.RoboticonMarketScreen;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.PlotMap;
@@ -93,6 +94,10 @@ public class RoboticonQuest extends Game {
 			this.phase = 1;
 			this.nextPlayer();
 		}
+		if (this.phase == 2) {
+			setScreen(new RoboticonMarketScreen(this));
+		}
+		
 		if (this.phase == 4){
 			setScreen(new ResourceMarketScreen(this));
 		}
