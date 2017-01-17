@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -67,6 +68,10 @@ public class RoboticonQuest extends Game {
 		setScreen(mainMenuScreen);
 	}
 
+	public Batch getBatch() {
+		return batch;
+	}
+
 	/**
 	 * Setup the default skin for GUI components.
 	 */
@@ -92,10 +97,21 @@ public class RoboticonQuest extends Game {
 		return this.phase;
 	}
 	
-	public void nextPhase(){
+	public void nextPhase () {
+		int currentPhase = phase;
+		if (currentPhase == 5) {
+			currentPhase = 1;
+		} else {
+			currentPhase ++;
+		}
+		// phase = currentPhase;
+
+		// TODO: use current phase and remove phase increment below.
 		switch (phase) {
 			case 1:
 				phase++;
+
+				// Phase 2: Purchase Roboticon
 				setScreen(new RoboticonPurchaseScreen(this));
 				break;
 
@@ -105,23 +121,41 @@ public class RoboticonQuest extends Game {
 
 			case 3:
 				phase++;
+
+				// Phase 4: Purchase Resource
 				setScreen(new ResourceMarketScreen(this));
 				break;
 
 			case 4:
 				phase++;
-				gameScreen.getActors().textUpdate();
-				gameScreen.getActors().initialiseButtons();
-				setScreen(gameScreen);
+
+				// Phase 5: Generate resource for player.
+				generateResources();
 				break;
 
 			case 5:
 				// Reset to a new turn.
 				this.phase = 1;
+
+				// Phase 1: Purchase LandPlot
 				this.nextPlayer();
 				landBoughtThisTurn = 0;
 				break;
 		}
+	}
+
+	/**
+	 * Phase 5: generate resources.
+	 */
+	private void generateResources() {
+		// Switch back to purchase to game screen.
+		gameScreen.getActors().textUpdate();
+		gameScreen.getActors().initialiseButtons();
+		setScreen(gameScreen);
+
+		// Generate resources.
+		Player p = getPlayer();
+		p.generateResources();
 	}
 
 	/**
