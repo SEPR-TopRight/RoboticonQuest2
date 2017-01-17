@@ -7,12 +7,16 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.MainMenuScreen;
 import io.github.teamfractal.screens.ResourceMarketScreen;
+import io.github.teamfractal.screens.RoboticonMarketScreen;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
+import io.github.teamfractal.entity.PlotMap;
 import io.github.teamfractal.screens.GameScreen;
 import io.github.teamfractal.util.PlotManager;
 
@@ -35,6 +39,8 @@ public class RoboticonQuest extends Game {
 		return playerList.indexOf(player);
 	}
 
+	public TiledMap tmx;
+	public PlotMap plotMap;
 	
 	public RoboticonQuest(){
 		this.currentPlayer = 0;
@@ -42,6 +48,7 @@ public class RoboticonQuest extends Game {
 
 		Player player1 = new Player();
 		Player player2 = new Player();
+		this.playerList = new ArrayList<Player>();
 		this.playerList.add(player1);
 		this.playerList.add(player2);
 		this.currentPlayer = 0;
@@ -53,11 +60,13 @@ public class RoboticonQuest extends Game {
 		batch = new SpriteBatch();
 		setupSkin();
 		
-		
+	
+		gameScreen = new GameScreen(this);
+		this.plotMap = new PlotMap(gameScreen.getTmx());
 
 		// Setup other screens.
 		mainMenuScreen = new MainMenuScreen(this);
-		gameScreen = new GameScreen(this);
+		
 
 		setScreen(mainMenuScreen);
 	}
@@ -94,7 +103,12 @@ public class RoboticonQuest extends Game {
 		else{
 			this.phase = 1;
 			this.nextPlayer();
+			this.getPlayer().setPlotBought(false);
 		}
+		/*if (this.phase == 2) {
+			setScreen(new RoboticonMarketScreen(this));
+		}*/
+		
 		if (this.phase == 4){
 			setScreen(new ResourceMarketScreen(this));
 		}

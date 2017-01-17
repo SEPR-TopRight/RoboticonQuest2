@@ -73,7 +73,8 @@ public class LandPlot {
 	 * The base production amounts.
 	 * [ Ore, Energy, Food ]
 	 */
-	int[] productionAmounts = {0, 0, 0};
+	private int[] productionAmounts = {0, 0, 0};
+	private boolean owned;
 
 	/**
 	 * Initialise LandPlot with specific base amount of resources.
@@ -84,6 +85,7 @@ public class LandPlot {
 	 */
 	public LandPlot(int ore, int energy, int food) {
 		this.productionAmounts = new int[]{ore, energy, food};
+		this.owned = false;
 	}
 
 	public void setupTile (PlotManager plotManager, int x, int y) {

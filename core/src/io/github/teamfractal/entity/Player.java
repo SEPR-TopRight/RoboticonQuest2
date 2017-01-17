@@ -1,5 +1,6 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.RoboticonQuest;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import io.github.teamfractal.entity.enums.PurchaseStatus;
 import io.github.teamfractal.entity.enums.ResourceType;
@@ -8,6 +9,7 @@ import io.github.teamfractal.exception.NotEnoughResourceException;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 public class Player {
@@ -16,14 +18,20 @@ public class Player {
 	private int ore = 0;
 	private int energy = 0;
 	private int food = 0;
-	ArrayList<Roboticon> roboticonList;
 	ArrayList<LandPlot> landList = new ArrayList<LandPlot>();
+	private RoboticonQuest game;
+	private PlotMap plotMap;
+	private boolean plotBought;
 
 	public int getMoney() { return money; }
 	public int getOre() { return ore; }
 	public int getEnergy() { return energy; }
 	public int getFood() { return food; }
-
+	
+	public Player(RoboticonQuest game){
+		this.game = game;
+		plotBought = false;
+	}
 	/**
 	 * Set the amount of money player has
 	 * @param money                      The amount of new money.
@@ -168,21 +176,25 @@ public class Player {
 			throw new NotEnoughResourceException("Player.sellResourceToMarket", resource, amount, getResource(resource));
 		}
 	}
-
-	public boolean haveEnoughMoneyForLandplot() {
-		// TODO: calculate landplot price??
-		return getMoney() >= 10;
-	}
-
-	public synchronized boolean purchaseLandPlot(LandPlot landPlot){
-		if (haveEnoughMoneyForLandplot() && landPlot.setOwner(this)){
-			setMoney(getMoney() - 10);
-			return true;
-		}
-
-		return false;
-	}
 	
+	/**
+	 * Player add a landplot to their inventory for gold
+	 * @param x The x coordinate of the cell on the TiledMaplTileLayer
+	 * @param y The y coordinate of the cell on the TiledMaplTileLayer
+	 */
+	public void purchaseLandPlot(int x, int y){
+		LandPlot plot = game.plotMap.getPlot(x, y);
+		if (! plot.isOwned() && ! plotBought){
+			landList.add(plot);
+			this.money -= 10;
+			plot.setOwned(true);
+			plotBought = true;
+		}
+		
+	}
+	/**
+	 * Get a landplot to produce resources
+	 */
 	public void produceResources(){
 		for (LandPlot plot : landList) {
 			energy += plot.produceResource(ResourceType.ENERGY);
@@ -199,6 +211,13 @@ public class Player {
 	public Roboticon customiseRoboticon(Roboticon roboticon, ResourceType type) {
 		roboticon.setCustomisation(type);
 		return roboticon;
+	}
+	public void setPlotBought(boolean bought) {
+		plotBought = bought;
+		
+	}
+	public boolean getPlotBought() {
+		return plotBought;
 	}
 
 	/**
