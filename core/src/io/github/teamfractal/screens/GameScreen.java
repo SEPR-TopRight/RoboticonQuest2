@@ -257,21 +257,7 @@ public class GameScreen implements Screen {
 	public Stage getStage() {
 		return stage;
 	}
-	/**
-	 * checks if a button has just been clicked so it does not replicate
-	 * @return true if a button has not been pressed with last mouse click
-	 */
-	public boolean isButtonNotPressed() {
-		return buttonNotPressed;
-	}
-	/**
-	 * Sets whether the last mouse click was pressing a button
-	 * @param buttonNotPressed True if last mouse click was not on a button
-	 */
-	public void setButtonNotPressed(boolean buttonNotPressed) {
-		this.buttonNotPressed = buttonNotPressed;
-	}
-	
+
 	public TiledMap getTmx(){
 		return this.tmx;
 	}

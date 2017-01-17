@@ -153,4 +153,9 @@ public class LandPlot {
 		int resIndex = resourceTypeToIndex(resource);
 		return productionAmounts[resIndex] * productionModifiers[resIndex];
 	}
+
+	public int getResource(ResourceType resource) {
+		int resIndex = resourceTypeToIndex(resource);
+		return productionAmounts[resIndex];
+	}
 }

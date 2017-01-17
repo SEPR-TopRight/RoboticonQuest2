@@ -34,6 +34,7 @@ public class RoboticonQuest extends Game {
 	private int currentPlayer;
 	public ArrayList<Player> playerList;
 	public Market market;
+	private int landBoughtThisTurn;
 
 	public int getPlayerIndex (Player player) {
 		return playerList.indexOf(player);
@@ -46,13 +47,14 @@ public class RoboticonQuest extends Game {
 		this.currentPlayer = 0;
 		this.phase = 1;
 
-		Player player1 = new Player();
-		Player player2 = new Player();
+		Player player1 = new Player(this);
+		Player player2 = new Player(this);
 		this.playerList = new ArrayList<Player>();
 		this.playerList.add(player1);
 		this.playerList.add(player2);
 		this.currentPlayer = 0;
 		this.market = new Market();
+		plotManager = new PlotManager(this);
 	}
 	
 	@Override
@@ -97,27 +99,45 @@ public class RoboticonQuest extends Game {
 	}
 	
 	public void nextPhase(){
-		if(this.phase!= 5){
-			this.phase += 1;
+		switch (phase) {
+			case 1:
+				phase++;
+				break;
+
+			case 2:
+				phase++;
+				break;
+
+			case 3:
+				phase++;
+				setScreen(new ResourceMarketScreen(this));
+				break;
+
+			case 4:
+				phase++;
+				gameScreen.getActors().textUpdate();
+				gameScreen.getActors().initialiseButtons();
+				setScreen(gameScreen);
+				break;
+
+			case 5:
+				// Reset to a new turn.
+				this.phase = 1;
+				this.nextPlayer();
+				landBoughtThisTurn = 0;
+				break;
 		}
-		else{
-			this.phase = 1;
-			this.nextPlayer();
-			this.getPlayer().setPlotBought(false);
-		}
-		/*if (this.phase == 2) {
-			setScreen(new RoboticonMarketScreen(this));
-		}*/
-		
-		if (this.phase == 4){
-			setScreen(new ResourceMarketScreen(this));
-		}
-		
-		if(this.phase == 5){
-			gameScreen.getActors().textUpdate();
-			gameScreen.getActors().initialiseButtons();
-			setScreen(gameScreen);
-		}
+	}
+
+	/**
+	 * Event callback on player bought a {@link io.github.teamfractal.entity.LandPlot}
+	 */
+	public void landPurchasedThisTurn() {
+		landBoughtThisTurn ++;
+	}
+
+	public boolean canPurchaseLandThisTurn () {
+		return landBoughtThisTurn < 1;
 	}
 
 	public String getPhaseString () {
@@ -153,11 +173,11 @@ public class RoboticonQuest extends Game {
 		return this.currentPlayer;
 	}
 	public void nextPlayer(){
-		if (playerList.size() -1 == this.currentPlayer){
+		if (this.currentPlayer == playerList.size() - 1){
 			this.currentPlayer = 0; 
 		}
 		else{
-			this.currentPlayer += 1;
+			this.currentPlayer ++;
 		}
 	}
 
