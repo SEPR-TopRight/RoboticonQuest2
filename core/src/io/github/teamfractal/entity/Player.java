@@ -7,6 +7,11 @@ import io.github.teamfractal.exception.NotCommonResourceException;
 import io.github.teamfractal.exception.NotEnoughResourceException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import com.badlogic.gdx.utils.Array;
 
 public class Player {
 	//<editor-fold desc="Resource getter and setter">
@@ -15,6 +20,7 @@ public class Player {
 	private int energy = 0;
 	private int food = 0;
 	ArrayList<LandPlot> landList = new ArrayList<LandPlot>();
+	Array<Roboticon> roboticonList;
 	private RoboticonQuest game;
 	private PlotMap plotMap;
 
@@ -25,6 +31,10 @@ public class Player {
 	
 	public Player(RoboticonQuest game){
 		this.game = game;
+		this.roboticonList = new Array<Roboticon>();
+		this.roboticonList.add(new Roboticon());
+		this.roboticonList.add(new Roboticon());
+		
 	}
 	/**
 	 * Set the amount of money player has
@@ -238,5 +248,28 @@ public class Player {
 		if (landPlot != null && landList.contains(landPlot) && landPlot.getOwner() == this) {
 			landList.add(landPlot);
 		}
+	}
+	public Array<String> getRoboticonAmounts() {
+		int ore = 0;
+		int energy = 0;
+		int uncustomised = 0;
+		Array<String> roboticonAmountList = new Array<String>();
+		for (int i = 0; i < this.roboticonList.size; i++){
+			switch(this.roboticonList.get(i).getCustomisation()){
+				case ORE:
+					ore += 1;
+					break;
+				case ENERGY:
+					energy += 1;
+					break;
+				default:
+					uncustomised += 1;
+					break;
+			}
+		}
+		roboticonAmountList.add("Ore Specific x " + ore);
+		roboticonAmountList.add("Energy Specific x " + energy);
+		roboticonAmountList.add("Uncustomised x " + uncustomised);
+		return roboticonAmountList;
 	}
 }

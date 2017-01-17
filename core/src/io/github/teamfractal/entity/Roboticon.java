@@ -7,7 +7,7 @@ public class Roboticon {
 	private LandPlot installedLandplot;
 	
 	Roboticon() {
-		
+		customisation = ResourceType.Unknown;
 	}
 
 	ResourceType getCustomisation() {

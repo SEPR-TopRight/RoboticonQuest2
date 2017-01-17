@@ -129,9 +129,18 @@ public class GameScreen implements Screen {
 		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (actors.getBuyLandPlotBtn().isVisible()) {
-					actors.getBuyLandPlotBtn().setVisible(false);
-					return;
+				switch(game.getPhase()){
+				case 1:
+					if (actors.getBuyLandPlotBtn().isVisible()) {
+						actors.getBuyLandPlotBtn().setVisible(false);
+						return;
+					}
+				case 3:
+					if (actors.getInstallRoboticonSelect().isVisible()) {
+						actors.getInstallRoboticonSelect().setVisible(false);
+						actors.getInstallRoboticonLabel().setVisible(false);
+						return;
+					}
 				}
 
 				// The Y from screen starts from bottom left.
