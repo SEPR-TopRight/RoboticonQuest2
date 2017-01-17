@@ -1,11 +1,17 @@
 package io.github.teamfractal.actors;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.Roboticon;
@@ -18,6 +24,7 @@ public class RoboticonMarketActors extends Table{
 		private RoboticonMarketScreen screen;
 		private Integer roboticonAmount = 0;
 		private Roboticon currentlySelectedRoboticon;
+		private Texture roboticonTexture;
 		
 		public RoboticonMarketActors(final RoboticonQuest game, RoboticonMarketScreen screen) {
 			this.game = game;
@@ -67,6 +74,19 @@ public class RoboticonMarketActors extends Table{
 				}
 			});
 			
+			// Current Roboticon Text: Top Right
+			String playerRoboticonText = "Player " + game.getPlayerInt() + "'s Roboticons:";
+			final Label lblCurrentRoboticon = new Label(playerRoboticonText, game.skin);
+			
+			// Image widget which displays the roboticon in the player's inventory
+			roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/roboticon_uncustomised.jpg"));
+			final Image roboticonImage = new Image();
+			roboticonImage.setDrawable(new TextureRegionDrawable(new TextureRegion(roboticonTexture)));
+			roboticonImage.setSize(roboticonTexture.getWidth(), roboticonTexture.getHeight());
+			
+			//
+			
+			
 			// Buttons to move backwards and forwards in the player's roboticon inventory
 			final TextButton moveLeftRoboticonInventoryBtn= new TextButton("<", game.skin);
 			moveLeftRoboticonInventoryBtn.addListener(new ChangeListener() {
@@ -95,11 +115,23 @@ public class RoboticonMarketActors extends Table{
 			// Button to buy the selected customisation and customise the selected roboticon
 			final TextButton buyCustomisationButton = new TextButton("Buy Roboticon Customisation", game.skin);
 			
+			final TextButton nextButton = new TextButton("Next ->", game.skin);
+			nextButton.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					game.nextPhase();
+				}
+			});
 			
-			// Current Roboticon Text: Top Right
-			String playerRoboticonText = "Player " + game.getPlayerInt() + "'s Roboticons:";
-			final Label lblCurrentRoboticon = new Label(playerRoboticonText, game.skin);
+		
+			add(lblBuyRoboticon).padTop(40).padLeft(90);
+			add();
+			add();
+			add(lblCurrentRoboticon).padTop(40).padLeft(150);
 			
+			row();
+			
+			add(nextButton);
 			
 			
 			

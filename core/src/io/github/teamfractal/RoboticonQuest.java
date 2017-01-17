@@ -102,10 +102,14 @@ public class RoboticonQuest extends Game {
 		switch (phase) {
 			case 1:
 				phase++;
+				setScreen(new RoboticonMarketScreen(this));
 				break;
 
 			case 2:
 				phase++;
+				gameScreen.getActors().textUpdate();
+				gameScreen.getActors().initialiseButtons();
+				setScreen(gameScreen);
 				break;
 
 			case 3:
