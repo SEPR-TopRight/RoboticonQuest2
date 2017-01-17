@@ -1,5 +1,6 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.enums.PurchaseStatus;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.NotCommonResourceException;
@@ -7,22 +8,24 @@ import io.github.teamfractal.exception.NotEnoughResourceException;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-
 public class Player {
 	//<editor-fold desc="Resource getter and setter">
 	private int money = 100;
 	private int ore = 0;
 	private int energy = 0;
 	private int food = 0;
-	ArrayList<Roboticon> roboticonList;
 	ArrayList<LandPlot> landList = new ArrayList<LandPlot>();
+	private RoboticonQuest game;
+	private PlotMap plotMap;
 
 	public int getMoney() { return money; }
 	public int getOre() { return ore; }
 	public int getEnergy() { return energy; }
 	public int getFood() { return food; }
-
+	
+	public Player(RoboticonQuest game){
+		this.game = game;
+	}
 	/**
 	 * Set the amount of money player has
 	 * @param money                      The amount of new money.
@@ -167,20 +170,39 @@ public class Player {
 			throw new NotEnoughResourceException("Player.sellResourceToMarket", resource, amount, getResource(resource));
 		}
 	}
-	public void purchaseLandPlot(){
-		if (getMoney() >= 10){
-			landList.add(new LandPlot(1,1,1));
-			this.money -= 10;
+
+	/**
+	 * Check if the player have enough money for the {@link LandPlot}.
+	 * @param plot           The landplot to purchase
+	 * @return  true if the player have enough money for that plot.
+	 */
+	public synchronized boolean haveEnoughMoney(LandPlot plot) {
+		return getMoney() >= 10;
+	}
+
+	/**
+	 * Player add a landplot to their inventory for gold
+	 * @param plot           The landplot to purchase
+	 */
+	public synchronized boolean purchaseLandPlot(LandPlot plot){
+		if (plot.hasOwner() || !haveEnoughMoney(plot)) {
+			return false;
 		}
 
-		
+		landList.add(plot);
+		this.setMoney(this.getMoney() - 10);
+		plot.setOwner(this);
+		game.landPurchasedThisTurn();
+		return true;
 	}
-	
+	/**
+	 * Get a landplot to produce resources
+	 */
 	public void produceResources(){
-		for (int i = 0; i < landList.size(); i++){
-			ore += landList.get(i).produceResources()[0];
-			energy += landList.get(i).produceResources()[1];
-			food += landList.get(i).produceResources()[2];
+		for (LandPlot plot : landList) {
+			energy += plot.produceResource(ResourceType.ENERGY);
+			food += plot.produceResource(ResourceType.FOOD);
+			ore += plot.produceResource(ResourceType.ORE);
 		}
 	}
 	/**
@@ -192,5 +214,29 @@ public class Player {
 	public Roboticon customiseRoboticon(Roboticon roboticon, ResourceType type) {
 		roboticon.setCustomisation(type);
 		return roboticon;
+	}
+
+	/**
+	 * Add landplot to current user.
+	 *
+	 * @param landPlot  LandPlot to be bind to the user.
+	 *                  <code>LandPlot.setOwner(this_user)</code> first.
+	 */
+	public void addLandPlot(LandPlot landPlot) {
+		if (landPlot != null && !landList.contains(landPlot) && landPlot.getOwner() == this) {
+			landList.add(landPlot);
+		}
+	}
+
+	/**
+	 * Remove the LandPlot from the user.
+	 *
+	 * @param landPlot  LandPlot to be removed from the user.
+	 *                  <code>this_user</code> must be the current owner first.
+	 */
+	public void removeLandPlot(LandPlot landPlot) {
+		if (landPlot != null && landList.contains(landPlot) && landPlot.getOwner() == this) {
+			landList.add(landPlot);
+		}
 	}
 }

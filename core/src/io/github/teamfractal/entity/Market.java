@@ -8,7 +8,7 @@ public class Market {
 	/**
 	 * Initialise the market
 	 */
-	Market() {
+	public Market() {
 		setFood(16);
 		setEnergy(16);
 		setOre(0);
@@ -191,7 +191,7 @@ public class Market {
 	 * @param resource   The {@link ResourceType}.
 	 * @return           The buy in price.
 	 */
-	int getBuyPrice(ResourceType resource) {
+	public int getBuyPrice(ResourceType resource) {
 		int price;
 		switch (resource) {
 			case ORE:
@@ -220,7 +220,7 @@ public class Market {
 	 * @param resource   The {@link ResourceType}.
 	 * @return           The sell price.
 	 */
-	int getSellPrice(ResourceType resource) {
+	public int getSellPrice(ResourceType resource) {
 		double max = 50;
 		double min = 10;
 		double price = 1;

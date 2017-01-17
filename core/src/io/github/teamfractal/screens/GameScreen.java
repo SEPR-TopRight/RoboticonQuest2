@@ -5,43 +5,47 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricStaggeredTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.actors.GameScreenActors;
+import io.github.teamfractal.entity.LandPlot;
+import io.github.teamfractal.entity.Player;
 
 public class GameScreen implements Screen {
 	private final RoboticonQuest game;
 	private final OrthographicCamera camera;
 	private final Stage stage;
-	private final Table table;
 	private IsometricStaggeredTiledMapRenderer renderer;
+
 	private TiledMap tmx;
-	private TextButton currentButton;
-	private TextButton nextButton;
-	private Label topText;
-	private Label playerStats;
+	private TiledMapTileLayer mapLayer;
+	private TiledMapTileLayer playerOverlay;
+
 	private float oldX;
 	private float oldY;
 
 	private float oldW;
 	private float oldH;
-	private boolean buttonNotPressed = true;
-	
+	private GameScreenActors actors;
+
+	private LandPlot selectedPlot;
+	private float maxDragX;
+	private float maxDragY;
+
+
+	public LandPlot getSelectedPlot() {
+		return selectedPlot;
+	}
 
 	/**
 	 * Initialise the class
@@ -60,22 +64,9 @@ public class GameScreen implements Screen {
 
 		// TODO: Add some HUD gui stuff (buttons, mini-map etc...)
 		this.stage = new Stage(new ScreenViewport());
-		this.table = new Table();
-		stage.addActor(table);
-		nextButton = new TextButton("Next Phase", game.skin);
-		nextButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (currentButton != null) currentButton.remove();
-				game.nextPhase();
-				topTextUpdate();
-				playerStatsUpdate();
-			}
-		});
-		nextButton.setPosition(stage.getViewport().getWorldWidth() - 80, 0);
-		stage.addActor(nextButton);
-		topTextUpdate();
-		playerStatsUpdate();
+		this.actors = new GameScreenActors(game, this);
+		actors.initialiseButtons();
+		actors.textUpdate();
 		
 		
 
@@ -106,6 +97,10 @@ public class GameScreen implements Screen {
 			 */
 			@Override
 			public void drag(InputEvent event, float x, float y, int pointer) {
+				// TODO: control of pausing the drag.
+				// Prevent drag if the button is visible.
+				if (actors.getBuyLandPlotBtn().isVisible()) return;
+
 				float deltaX = x - oldX;
 				float deltaY = y - oldY;
 
@@ -113,25 +108,17 @@ public class GameScreen implements Screen {
 				camera.translate(-deltaX, -deltaY);
 				if (camera.position.x < 20) camera.position.x = 20;
 				if (camera.position.y < 20) camera.position.y = 20;
-				if (camera.position.x > 10000) camera.position.x = 10000;
-				if (camera.position.y > 10000) camera.position.y = 10000;
-				if (currentButton != null){
-					if(camera.position.x > 20 && camera.position.x < 10000){
-						currentButton.setPosition(currentButton.getX() + deltaX, currentButton.getY());
-					}
-					if (camera.position.y > 20 && camera.position.y < 10000){
-						currentButton.setPosition(currentButton.getX(), currentButton.getY() + deltaY);
-						}
-					currentButton.remove();
-					stage.addActor(currentButton);
-				}
-				
+				if (camera.position.x > maxDragX) camera.position.x = maxDragX;
+				if (camera.position.y > maxDragY) camera.position.y = maxDragY;
 
 				// Record cords
 				oldX = x;
 				oldY = y;
+
+				// System.out.println("drag to " + x + ", " + y);
 			}
 		});
+
 
 		// Set initial camera position.
 		camera.position.x = 20;
@@ -142,6 +129,11 @@ public class GameScreen implements Screen {
 		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				if (actors.getBuyLandPlotBtn().isVisible()) {
+					actors.getBuyLandPlotBtn().setVisible(false);
+					return;
+				}
+
 				// The Y from screen starts from bottom left.
 				Vector3 cord = new Vector3(x, oldH - y, 0);
 				camera.unproject(cord);
@@ -152,31 +144,28 @@ public class GameScreen implements Screen {
 
 				// Convert to grid index
 				// http://2dengine.com/doc/gs_isometric.html
-				TiledMapTileLayer layer = (TiledMapTileLayer)tmx.getLayers().get(0);
-				TiledMapTileLayer layer2 = (TiledMapTileLayer)tmx.getLayers().get(2);
-				
-				float tile_height = layer.getTileHeight();
-				float tile_width = layer.getTileWidth();
+
+				float tile_height = mapLayer.getTileHeight();
+				float tile_width = mapLayer.getTileWidth();
 
 				float ty = cord.y - cord.x/2 - tile_height;
 				float tx = cord.x + ty;
 				ty = MathUtils.ceil(-ty/(tile_width/2));
 				tx = MathUtils.ceil(tx/(tile_width/2)) + 1;
-				int cordX = MathUtils.floor((tx + ty)/2);
-				int cordY = -(int)(ty - tx);
+				int tileIndexX = MathUtils.floor((tx + ty)/2);
+				int tileIndexY = -(int)(ty - tx);
 
 
 				// TODO: Remove those magic numbers and fix it properly
-				// The magic numbers based on observation of number patterns
-				cordX -= 1;
-				if (cordY % 2 == 0) {
-					cordX --;
+				// Those magic numbers based on observation of number patterns
+				tileIndexX -= 1;
+				if (tileIndexY % 2 == 0) {
+					tileIndexX --;
 				}
 
-				TiledMapTileLayer.Cell c = layer.getCell(cordX, cordY);
-				TiledMapTileLayer.Cell c2 = layer2.getCell(cordX, cordY);
-				if (c != null) {
-					GameScreen.this.tileClicked(c, c2, x, y);
+				selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
+				if (selectedPlot != null) {
+					actors.tileClicked(selectedPlot, x, y);
 				}
 			}
 		});
@@ -186,60 +175,10 @@ public class GameScreen implements Screen {
 		newGame();
 	}
 
-	/**
-	 * TileCell been clicked
-	 * @param cell  The cell clicked
-	 * @param x     The x index
-	 * @param y     The y index
-	 */
-	private void tileClicked(final TiledMapTileLayer.Cell cell, final TiledMapTileLayer.Cell cell2,  float mouseX, float mouseY) {
-		// TODO: Need proper event callback
-		if (currentButton != null) {
-				currentButton.remove();
-			}
-		if (game.getPhase() == 1 && buttonNotPressed){
-			
-			currentButton = new TextButton("buy landplot", game.skin);
-			currentButton.setPosition(mouseX, mouseY);
-			currentButton.addListener(new ChangeListener() {
-				
+	public TiledMapTile getPlayerTile(Player player) {
+		return tmx.getTileSets().getTile(101 + game.getPlayerIndex(player));
+	}
 
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					if (currentButton != null) currentButton.remove();
-					game.getPlayer().purchaseLandPlot();
-					cell2.setTile(tmx.getTileSets().getTile(67 + game.getPlayerInt()));
-					playerStatsUpdate();
-					buttonNotPressed = false;
-					currentButton = null;
-				}
-			});
-			stage.addActor(currentButton);
-			
-		}
-		if (! buttonNotPressed){
-			buttonNotPressed = true;
-		}
-		
-	}
-	public void topTextUpdate(){
-		if (this.topText != null) this.topText.remove();
-		String text = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
-		this.topText = new Label(text, game.skin);
-		topText.setWidth(120);
-		topText.setPosition(stage.getViewport().getWorldWidth()/2, stage.getViewport().getWorldHeight() - 20);
-		stage.addActor(topText);
-	}
-	
-	public void playerStatsUpdate(){
-		if (this.playerStats != null) this.playerStats.remove();
-		String text = "Ore: " + game.getPlayer().getOre() + " Energy: " +  game.getPlayer().getEnergy() + " Food: "
-				+ game.getPlayer().getFood() + " Money: " + game.getPlayer().getMoney();
-		this.playerStats = new Label(text, game.skin);
-		playerStats.setWidth(250);
-		playerStats.setPosition(0, stage.getViewport().getWorldHeight() - 20);
-		stage.addActor(playerStats);
-	}
 	/**
 	 * Reset to new game status.
 	 */
@@ -247,9 +186,15 @@ public class GameScreen implements Screen {
 		// Setup the game board.
 		if (tmx != null) tmx.dispose();
 		if (renderer != null) renderer.dispose();
-
-		tmx = new TmxMapLoader().load("tiles/city.tmx");
+		this.tmx = new TmxMapLoader().load("tiles/city.tmx");
 		renderer = new IsometricStaggeredTiledMapRenderer(tmx);
+
+		mapLayer = (TiledMapTileLayer)tmx.getLayers().get("MapData");
+		playerOverlay = (TiledMapTileLayer)tmx.getLayers().get("PlayerOverlay");
+		maxDragX = 0.75f * mapLayer.getTileWidth() * (mapLayer.getWidth() + 1);
+		maxDragY = 0.75f * mapLayer.getTileHeight() * (mapLayer.getHeight() + 1);
+
+		game.getPlotManager().setup(mapLayer, playerOverlay);
 	}
 
 	@Override
@@ -280,9 +225,8 @@ public class GameScreen implements Screen {
 		if (width != oldW && height != oldH) {
 			stage.getViewport().update(width, height, true);
 			camera.setToOrtho(false, width, height);
-			topTextUpdate();
-			playerStatsUpdate();
-			nextButton.setPosition(stage.getViewport().getWorldWidth() - 80, 0);
+			actors.textUpdate();
+			actors.nextUpdate();
 			oldW = width;
 			oldH = height;
 		}
@@ -308,5 +252,17 @@ public class GameScreen implements Screen {
 		tmx.dispose();
 		renderer.dispose();
 		stage.dispose();
+	}
+
+	public Stage getStage() {
+		return stage;
+	}
+
+	public TiledMap getTmx(){
+		return this.tmx;
+	}
+	
+	public GameScreenActors getActors(){
+		return this.actors;
 	}
 }

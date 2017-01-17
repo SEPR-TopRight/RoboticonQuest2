@@ -8,28 +8,29 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.teamfractal.RoboticonQuest;
-import io.github.teamfractal.actors.RoboticonMarketActors;
+import io.github.teamfractal.actors.ResourceMarketActors;
 
-public class RoboticonMarketScreen implements Screen {
 
+public class ResourceMarketScreen implements Screen {
 	final RoboticonQuest game;
 	final Stage stage;
 	final Table table;
-	private RoboticonMarketActors actors;
+	private final ResourceMarketActors actors;
 	
 	
-	public RoboticonMarketScreen(final RoboticonQuest game) {
-		this.game = game;
-		this.stage = new Stage(new ScreenViewport());
-		this.table = new Table();
-		table.setFillParent(true);
+public ResourceMarketScreen(final RoboticonQuest game) {
+			this.game = game;
+			this.stage = new Stage(new ScreenViewport());
+			this.table = new Table();
+			table.setFillParent(true);
+			
+			actors = new ResourceMarketActors(game, this); // generates actors for the screen
+			table.top().left().add(actors); // positions actors
+
+			stage.addActor(table);
 		
-		actors = new RoboticonMarketActors(game, this);
-		table.top().left().add(actors);
-		
-		stage.addActor(table);
 	}
-	
+
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
