@@ -154,10 +154,10 @@ public class RoboticonQuest extends Game {
 				return "Install Roboticons";
 
 			case 4:
-				return "Resource generation";
+				return "Resource Auction";
 
 			case 5:
-				return "Resource auction";
+				return "Resource Generation";
 
 			default:
 				return "Unknown phase";
