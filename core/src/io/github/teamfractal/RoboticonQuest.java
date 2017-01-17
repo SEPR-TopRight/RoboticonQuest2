@@ -1,15 +1,12 @@
 package io.github.teamfractal;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
@@ -99,7 +96,7 @@ public class RoboticonQuest extends Game {
 		switch (phase) {
 			case 1:
 				phase++;
-				setScreen(new RoboticonPurchesScreen(this));
+				setScreen(new RoboticonPurchaseScreen(this));
 				break;
 
 			case 2:
