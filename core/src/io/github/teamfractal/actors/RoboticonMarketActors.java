@@ -32,7 +32,7 @@ public class RoboticonMarketActors extends Table{
 			
 			
 			// Buy Roboticon Text: Top Left
-			final Label lblBuyRoboticon = new Label("Purchase Roboticions:", game.skin);
+			final Label lblBuyRoboticon = new Label("Purchase Roboticons:", game.skin);
 			
 			//Roboticon text to go next to + and - buttons
 			final Label lblRoboticons = new Label("Roboticons:", game.skin);
@@ -75,7 +75,7 @@ public class RoboticonMarketActors extends Table{
 			});
 			
 			// Current Roboticon Text: Top Right
-			String playerRoboticonText = "Player " + game.getPlayerInt() + "'s Roboticons:";
+			String playerRoboticonText = "Player " + (game.getPlayerInt() + 1) + "'s Roboticons:";
 			final Label lblCurrentRoboticon = new Label(playerRoboticonText, game.skin);
 			
 			// Image widget which displays the roboticon in the player's inventory
@@ -123,15 +123,40 @@ public class RoboticonMarketActors extends Table{
 				}
 			});
 			
-		
-			add(lblBuyRoboticon).padTop(40).padLeft(90);
+			// Top Row Text
+			add(lblBuyRoboticon).padTop(40).padLeft(68);
 			add();
 			add();
-			add(lblCurrentRoboticon).padTop(40).padLeft(150);
+			add(lblCurrentRoboticon).padTop(40).padLeft(200);
 			
 			row();
 			
-			add(nextButton);
+			// Roboticon inc & dec buttons,
+			add(lblRoboticons).padTop(40);
+			add(subRoboticonButton).padTop(40).padLeft(-90);
+			add(lblRoboticonAmount).padTop(40);
+			add(addRoboticonButton).padTop(40).padLeft(-260);
+			
+			add();
+			add();
+			add();
+			
+			row();
+			
+			// Roboticon in inventory selection (moved to different row to preserve position of other buttons)
+			add();
+			add();
+			add();
+			add();
+			
+			add(moveLeftRoboticonInventoryBtn).padTop(40).padLeft(-350).padBottom(200);
+			add(roboticonImage).padLeft(-150).padRight(75).padBottom(100).padTop(-50);
+			add(moveRightRoboticonInventoryBtn).padTop(40).padLeft(-100).padBottom(200);
+			
+			row();
+			
+			row();
+			add(nextButton).padTop(40);
 			
 			
 			
