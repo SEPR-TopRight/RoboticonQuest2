@@ -75,6 +75,7 @@ public class LandPlot {
 	 */
 	private int[] productionAmounts = {0, 0, 0};
 	private boolean owned;
+	private Roboticon installedRoboticon;
 
 	/**
 	 * Initialise LandPlot with specific base amount of resources.
@@ -125,6 +126,7 @@ public class LandPlot {
 		int index = resourceTypeToIndex(roboticon.getCustomisation());
 		if (roboticon.setInstalledLandplot(this)) {
 			productionModifiers[index] += 1;
+			this.installedRoboticon = roboticon;
 			return true;
 		}
 
@@ -158,4 +160,6 @@ public class LandPlot {
 		int resIndex = resourceTypeToIndex(resource);
 		return productionAmounts[resIndex];
 	}
+
+
 }

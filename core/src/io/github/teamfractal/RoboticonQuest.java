@@ -119,11 +119,16 @@ public class RoboticonQuest extends Game {
 				phase++;
 
 				// Phase 2: Purchase Roboticon
+				// TODO: Check which screen to use.
 				setScreen(new RoboticonPurchaseScreen(this));
+				setScreen(new RoboticonMarketScreen(this));
 				break;
 
 			case 2:
 				phase++;
+				gameScreen.getActors().textUpdate();
+				gameScreen.getActors().initialiseButtons();
+				setScreen(gameScreen);
 				break;
 
 			case 3:
