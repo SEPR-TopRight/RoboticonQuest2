@@ -2,6 +2,7 @@ package io.github.teamfractal.entity;
 
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.animation.AnimationAddResources;
+import io.github.teamfractal.animation.IAnimation;
 import io.github.teamfractal.animation.IAnimationFinish;
 import io.github.teamfractal.entity.enums.PurchaseStatus;
 import io.github.teamfractal.entity.enums.ResourceType;
@@ -293,7 +294,7 @@ public class Player {
 		setFood(getFood() + food);
 		setOre(getOre() + ore);
 
-		AnimationAddResources animation = new AnimationAddResources(this, energy, food, ore);
+		IAnimation animation = new AnimationAddResources(this, energy, food, ore);
 		animation.setAnimationFinish(new IAnimationFinish() {
 			@Override
 			public void OnAnimationFinish() {
