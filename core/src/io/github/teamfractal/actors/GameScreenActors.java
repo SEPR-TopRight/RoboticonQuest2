@@ -4,11 +4,13 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
+import io.github.teamfractal.entity.Roboticon;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.GameScreen;
 
@@ -19,8 +21,11 @@ public class GameScreenActors {
 	private Label topText;
 	private Label playerStats;
 	private TextButton buyLandPlotBtn;
+	private Label installRoboticonLabel;
+	private SelectBox<String> installRoboticonSelect;
 	private Label plotStats;
 	private TextButton nextButton;
+	private boolean dropDownActive;
 
 	public GameScreenActors(final RoboticonQuest game, GameScreen screen) {
 		this.game = game;
@@ -30,6 +35,10 @@ public class GameScreenActors {
 	public void initialiseButtons() {
 		nextButton = new TextButton("Next ->", game.skin);
 		buyLandPlotBtn = new TextButton("Buy LandPlot", game.skin);
+		installRoboticonLabel = new Label("Install Roboticon", game.skin);
+		installRoboticonSelect = new SelectBox<String>(game.skin);
+		installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
+		
 		plotStats = new Label("", game.skin);
 
 		nextButton.addListener(new ChangeListener() {
@@ -65,8 +74,12 @@ public class GameScreenActors {
 				}
 			}
 		});
+		installRoboticonSelect.setVisible(false);
+		installRoboticonLabel.setVisible(false);
 		stage.addActor(nextButton);
 		stage.addActor(buyLandPlotBtn);
+		stage.addActor(installRoboticonSelect);
+		stage.addActor(installRoboticonLabel);
 	}
 
 	/**
@@ -98,14 +111,39 @@ public class GameScreenActors {
 
 				buyLandPlotBtn.setVisible(true);
 				break;
+			// Phase 3:
+			// Install Roboticon 
+			case 3:
+				dropDownActive = true;
+				if (dropDownActive){
+					installRoboticonLabel.setPosition(x-70, y);
+					installRoboticonLabel.setVisible(true);
+					installRoboticonSelect.setPosition(x + 40,y);
+					installRoboticonSelect.setVisible(true);
+					dropDownActive = false;
+				}
+				else dropDownActive = true;
+				break;
+				}
+				
 		}
-	}
 
 
 	public TextButton getBuyLandPlotBtn() {
 		return buyLandPlotBtn;
 	}
 	
+	public SelectBox<String> getInstallRoboticonSelect(){
+		return installRoboticonSelect;
+	}
+	
+	public Label getInstallRoboticonLabel(){
+		return installRoboticonLabel;
+	}
+	
+	public boolean getDropDownActive(){
+		return dropDownActive;
+	}
 	
 	
 	/**

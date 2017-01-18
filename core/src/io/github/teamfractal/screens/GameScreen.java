@@ -18,10 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.actors.GameScreenActors;
+import io.github.teamfractal.animation.AnimationAddResources;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
 
-public class GameScreen implements Screen {
+public class GameScreen extends AbstructAnimationScreen implements Screen  {
 	private final RoboticonQuest game;
 	private final OrthographicCamera camera;
 	private final Stage stage;
@@ -83,6 +84,7 @@ public class GameScreen implements Screen {
 			public void dragStart(InputEvent event, float x, float y, int pointer) {
 				oldX = x;
 				oldY = y;
+				addAnimation(new AnimationAddResources(game.getPlayer(), 1, 1, 1));
 			}
 
 			/**
@@ -129,9 +131,18 @@ public class GameScreen implements Screen {
 		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (actors.getBuyLandPlotBtn().isVisible()) {
-					actors.getBuyLandPlotBtn().setVisible(false);
-					return;
+				switch(game.getPhase()){
+				case 1:
+					if (actors.getBuyLandPlotBtn().isVisible()) {
+						actors.getBuyLandPlotBtn().setVisible(false);
+						return;
+					}
+				case 3:
+					if (actors.getInstallRoboticonSelect().isVisible()) {
+						actors.getInstallRoboticonSelect().setVisible(false);
+						actors.getInstallRoboticonLabel().setVisible(false);
+						return;
+					}
 				}
 
 				// The Y from screen starts from bottom left.
@@ -212,6 +223,9 @@ public class GameScreen implements Screen {
 
 		stage.act(delta);
 		stage.draw();
+
+		// System.out.print("render, delta = " + delta);
+		renderAnimation(delta);
 	}
 
 	/**
@@ -252,6 +266,11 @@ public class GameScreen implements Screen {
 		tmx.dispose();
 		renderer.dispose();
 		stage.dispose();
+	}
+
+	@Override
+	public RoboticonQuest getGame() {
+		return game;
 	}
 
 	public Stage getStage() {

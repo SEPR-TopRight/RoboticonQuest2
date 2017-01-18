@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,6 +20,12 @@ import io.github.teamfractal.util.PlotManager;
  * It will set up all the necessary classes.
  */
 public class RoboticonQuest extends Game {
+	static RoboticonQuest _instance;
+	public static RoboticonQuest getInstance() {
+		return _instance;
+	}
+
+
 	private PlotManager plotManager;
 	SpriteBatch batch;
 	public Skin skin;
@@ -38,6 +45,7 @@ public class RoboticonQuest extends Game {
 	public PlotMap plotMap;
 	
 	public RoboticonQuest(){
+		_instance = this;
 		this.currentPlayer = 0;
 		this.phase = 1;
 
@@ -67,6 +75,10 @@ public class RoboticonQuest extends Game {
 		setScreen(mainMenuScreen);
 	}
 
+	public Batch getBatch() {
+		return batch;
+	}
+
 	/**
 	 * Setup the default skin for GUI components.
 	 */
@@ -92,36 +104,56 @@ public class RoboticonQuest extends Game {
 		return this.phase;
 	}
 	
-	public void nextPhase(){
-		switch (phase) {
-			case 1:
-				phase++;
+	public void nextPhase () {
+		int newPhaseState = phase + 1;
+
+		switch (newPhaseState) {
+			case 2:
+				// Phase 2: Purchase Roboticon
 				setScreen(new RoboticonPurchaseScreen(this));
 				break;
 
-			case 2:
-				phase++;
-				break;
-
+				// Phase 3: Roboticon Customisation
 			case 3:
-				phase++;
-				setScreen(new ResourceMarketScreen(this));
-				break;
-
-			case 4:
-				phase++;
 				gameScreen.getActors().textUpdate();
 				gameScreen.getActors().initialiseButtons();
 				setScreen(gameScreen);
 				break;
 
+			// Phase 4: Purchase Resource
+			case 4:
+				setScreen(new ResourceMarketScreen(this));
+				break;
+
+			// Phase 5: Generate resource for player.
 			case 5:
-				// Reset to a new turn.
-				this.phase = 1;
+				generateResources();
+				break;
+
+			// End phase - CLean up and move to next player.
+			case 6:
+				// Phase 1: Enable of purchase LandPlot
+				newPhaseState = 1;
 				this.nextPlayer();
 				landBoughtThisTurn = 0;
 				break;
 		}
+
+		phase = newPhaseState;
+	}
+
+	/**
+	 * Phase 5: generate resources.
+	 */
+	private void generateResources() {
+		// Switch back to purchase to game screen.
+		gameScreen.getActors().textUpdate();
+		gameScreen.getActors().initialiseButtons();
+		setScreen(gameScreen);
+
+		// Generate resources.
+		Player p = getPlayer();
+		p.generateResources();
 	}
 
 	/**
