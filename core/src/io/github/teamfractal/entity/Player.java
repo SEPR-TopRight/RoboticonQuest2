@@ -252,7 +252,7 @@ public class Player {
 			landList.add(landPlot);
 		}
 	}
-	public Array<String> getRoboticonAmounts() {
+	public Array<String> getRoboticonList() {
 		int ore = 0;
 		int energy = 0;
 		int uncustomised = 0;

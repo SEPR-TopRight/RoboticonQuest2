@@ -106,6 +106,7 @@ public class RoboticonQuest extends Game {
 	
 	public void nextPhase () {
 		int newPhaseState = phase + 1;
+		phase = newPhaseState;
 
 		switch (newPhaseState) {
 			// Phase 2: Purchase Roboticon
@@ -115,8 +116,7 @@ public class RoboticonQuest extends Game {
 
 			// Phase 3: Roboticon Customisation
 			case 3:
-				gameScreen.getActors().textUpdate();
-				gameScreen.getActors().initialiseButtons();
+				gameScreen.getActors().updateRoboticonSelection();
 				setScreen(gameScreen);
 				break;
 
@@ -133,13 +133,13 @@ public class RoboticonQuest extends Game {
 			// End phase - CLean up and move to next player.
 			case 6:
 				// Phase 1: Enable of purchase LandPlot
-				newPhaseState = 1;
+				phase = newPhaseState = 1;
 				this.nextPlayer();
 				landBoughtThisTurn = 0;
 				break;
 		}
 
-		phase = newPhaseState;
+		gameScreen.getActors().textUpdate();
 	}
 
 	/**
@@ -147,8 +147,6 @@ public class RoboticonQuest extends Game {
 	 */
 	private void generateResources() {
 		// Switch back to purchase to game screen.
-		gameScreen.getActors().textUpdate();
-		gameScreen.getActors().initialiseButtons();
 		setScreen(gameScreen);
 
 		// Generate resources.

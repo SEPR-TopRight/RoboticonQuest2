@@ -31,6 +31,22 @@ public class AnimationAddResources implements IAnimation {
 		return (resCount > 0 ? "+" : "-") + resCount + " " + type + "   ";
 	}
 
+	private float fn_quad(float t) {
+		if (t > 1f) return 1;
+		return t * t;
+	}
+
+	private float fn_opacity () {
+		if (time < 1f) {
+			return fn_quad(time);
+		} else if (time >= 1f && time < 2f) {
+			return 1;
+		} else {
+			// 2 ~ 3:
+			return fn_quad(time - 2f);
+		}
+	}
+
 	private static final float animationLength = 3;
 
 	@Override
@@ -40,8 +56,8 @@ public class AnimationAddResources implements IAnimation {
 			return true;
 		}
 
-		font.setColor(1,1,1, (float)(1 - time / animationLength));
-		font.draw(batch, generateResourceString(), 20, 30);
+		font.setColor(1,1,1, fn_opacity());
+		font.draw(batch, generateResourceString(), 20, fn_quad(time) * 30);
 		return false;
 	}
 

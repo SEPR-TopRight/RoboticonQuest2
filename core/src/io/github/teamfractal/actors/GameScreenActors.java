@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
-import io.github.teamfractal.entity.Roboticon;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.GameScreen;
 
@@ -37,7 +36,6 @@ public class GameScreenActors {
 		buyLandPlotBtn = new TextButton("Buy LandPlot", game.skin);
 		installRoboticonLabel = new Label("Install Roboticon", game.skin);
 		installRoboticonSelect = new SelectBox<String>(game.skin);
-		installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
 		
 		plotStats = new Label("", game.skin);
 
@@ -80,6 +78,10 @@ public class GameScreenActors {
 		stage.addActor(buyLandPlotBtn);
 		stage.addActor(installRoboticonSelect);
 		stage.addActor(installRoboticonLabel);
+	}
+
+	public void updateRoboticonSelection () {
+		installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
 	}
 
 	/**
