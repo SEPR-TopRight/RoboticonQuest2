@@ -1,23 +1,18 @@
 package io.github.teamfractal;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import io.github.teamfractal.screens.MainMenuScreen;
-import io.github.teamfractal.screens.ResourceMarketScreen;
-import io.github.teamfractal.screens.RoboticonMarketScreen;
+import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.PlotMap;
-import io.github.teamfractal.screens.GameScreen;
 import io.github.teamfractal.util.PlotManager;
 
 /**
@@ -25,6 +20,12 @@ import io.github.teamfractal.util.PlotManager;
  * It will set up all the necessary classes.
  */
 public class RoboticonQuest extends Game {
+	static RoboticonQuest _instance;
+	public static RoboticonQuest getInstance() {
+		return _instance;
+	}
+
+
 	private PlotManager plotManager;
 	SpriteBatch batch;
 	public Skin skin;
@@ -44,6 +45,7 @@ public class RoboticonQuest extends Game {
 	public PlotMap plotMap;
 	
 	public RoboticonQuest(){
+		_instance = this;
 		this.currentPlayer = 0;
 		this.phase = 1;
 
@@ -73,6 +75,10 @@ public class RoboticonQuest extends Game {
 		setScreen(mainMenuScreen);
 	}
 
+	public Batch getBatch() {
+		return batch;
+	}
+
 	/**
 	 * Setup the default skin for GUI components.
 	 */
@@ -98,39 +104,56 @@ public class RoboticonQuest extends Game {
 		return this.phase;
 	}
 	
-	public void nextPhase(){
-		switch (phase) {
-			case 1:
-				phase++;
+	public void nextPhase () {
+		int newPhaseState = phase + 1;
+
+		switch (newPhaseState) {
+			// Phase 2: Purchase Roboticon
+			case 2:
 				setScreen(new RoboticonMarketScreen(this));
 				break;
 
-			case 2:
-				phase++;
+			// Phase 3: Roboticon Customisation
+			case 3:
 				gameScreen.getActors().textUpdate();
 				gameScreen.getActors().initialiseButtons();
 				setScreen(gameScreen);
 				break;
 
-			case 3:
-				phase++;
+			// Phase 4: Purchase Resource
+			case 4:
 				setScreen(new ResourceMarketScreen(this));
 				break;
 
-			case 4:
-				phase++;
-				gameScreen.getActors().textUpdate();
-				gameScreen.getActors().initialiseButtons();
-				setScreen(gameScreen);
+			// Phase 5: Generate resource for player.
+			case 5:
+				generateResources();
 				break;
 
-			case 5:
-				// Reset to a new turn.
-				this.phase = 1;
+			// End phase - CLean up and move to next player.
+			case 6:
+				// Phase 1: Enable of purchase LandPlot
+				newPhaseState = 1;
 				this.nextPlayer();
 				landBoughtThisTurn = 0;
 				break;
 		}
+
+		phase = newPhaseState;
+	}
+
+	/**
+	 * Phase 5: generate resources.
+	 */
+	private void generateResources() {
+		// Switch back to purchase to game screen.
+		gameScreen.getActors().textUpdate();
+		gameScreen.getActors().initialiseButtons();
+		setScreen(gameScreen);
+
+		// Generate resources.
+		Player p = getPlayer();
+		p.generateResources();
 	}
 
 	/**
@@ -158,10 +181,10 @@ public class RoboticonQuest extends Game {
 				return "Install Roboticons";
 
 			case 4:
-				return "Resource generation";
+				return "Resource Auction";
 
 			case 5:
-				return "Resource auction";
+				return "Resource Generation";
 
 			default:
 				return "Unknown phase";

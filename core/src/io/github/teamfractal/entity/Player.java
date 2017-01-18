@@ -1,6 +1,7 @@
 package io.github.teamfractal.entity;
 
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.animation.AnimationAddResources;
 import io.github.teamfractal.entity.enums.PurchaseStatus;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.NotCommonResourceException;
@@ -271,5 +272,26 @@ public class Player {
 		roboticonAmountList.add("Energy Specific x " + energy);
 		roboticonAmountList.add("Uncustomised x " + uncustomised);
 		return roboticonAmountList;
+	}
+
+	/**
+	 * Generate resources produced from each LandPlot
+	 */
+	public void generateResources() {
+		int energy = 0;
+		int food = 0;
+		int ore = 0;
+
+		for (LandPlot land : landList) {
+			energy += land.produceResource(ResourceType.ENERGY);
+			food += land.produceResource(ResourceType.FOOD);
+			ore += land.produceResource(ResourceType.ORE);
+		}
+
+		setEnergy(getEnergy() + energy);
+		setFood(getFood() + food);
+		setOre(getOre() + ore);
+
+		game.gameScreen.addAnimation(new AnimationAddResources(this, energy, food, ore));
 	}
 }
