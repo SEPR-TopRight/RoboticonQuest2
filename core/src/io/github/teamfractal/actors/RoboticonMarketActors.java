@@ -145,7 +145,7 @@ public class RoboticonMarketActors extends Table{
 			
 			// Roboticon in inventory selection (moved to different row to preserve position of other buttons)
 			add();
-			add();
+			add(buyRoboticonsButton).padLeft(-100).padBottom(160);
 			add();
 			add();
 			
@@ -155,7 +155,36 @@ public class RoboticonMarketActors extends Table{
 			
 			row();
 			
+			// Purchase customisation label
+			add();
+			add();
+			add();
+			add();
+			
+			add();
+			add(lblPurchaseCustomisation).padLeft(-225).padTop(-125);
+			
 			row();
+			
+			// Customisation Drop Down Menu
+			add();
+			add();
+			add();
+			add();
+			
+			add();
+			add(customisationDropDown).padLeft(-225).padTop(-60);
+			
+			row();
+			
+			// Buy Customisation Button
+			add();
+			add();
+			add();
+			add();
+			
+			add();
+			
 			add(nextButton).padTop(40);
 			
 			
