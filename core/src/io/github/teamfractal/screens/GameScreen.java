@@ -84,7 +84,6 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 			public void dragStart(InputEvent event, float x, float y, int pointer) {
 				oldX = x;
 				oldY = y;
-				addAnimation(new AnimationAddResources(game.getPlayer(), 1, 1, 1));
 			}
 
 			/**
