@@ -171,11 +171,9 @@ public class GameScreen implements Screen {
 				if (tileIndexY % 2 == 0) {
 					tileIndexX --;
 				}
-
-				selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
+				if (actors.getDropDownActive()) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
 				if (selectedPlot != null) {
-					actors.tileClicked(selectedPlot, x, y);
-				}
+					actors.tileClicked(selectedPlot, x, y);}
 			}
 		});
 		//</editor-fold>

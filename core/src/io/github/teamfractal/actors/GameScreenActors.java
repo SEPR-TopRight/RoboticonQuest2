@@ -54,8 +54,11 @@ public class GameScreenActors {
 			public void changed(ChangeEvent event, Actor actor) {
 				buyLandPlotBtn.setVisible(false);
 				plotStats.setVisible(false);
+				installRoboticonSelect.setVisible(false);
+				installRoboticonLabel.setVisible(false);
 				game.nextPhase();
 				dropDownActive = true;
+				installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
 				textUpdate();
 			}
 		});
@@ -102,7 +105,7 @@ public class GameScreenActors {
 						type = ResourceType.ORE;
 					case 1: 
 						type = ResourceType.ENERGY;
-					case 2:
+					default:
 						type = ResourceType.Unknown;
 						}
 					for (int i = 0; i < roboticons.size; i++){
