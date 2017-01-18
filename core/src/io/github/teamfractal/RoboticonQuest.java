@@ -108,12 +108,12 @@ public class RoboticonQuest extends Game {
 		int newPhaseState = phase + 1;
 
 		switch (newPhaseState) {
+			// Phase 2: Purchase Roboticon
 			case 2:
-				// Phase 2: Purchase Roboticon
-				setScreen(new RoboticonPurchaseScreen(this));
+				setScreen(new RoboticonMarketScreen(this));
 				break;
 
-				// Phase 3: Roboticon Customisation
+			// Phase 3: Roboticon Customisation
 			case 3:
 				gameScreen.getActors().textUpdate();
 				gameScreen.getActors().initialiseButtons();
