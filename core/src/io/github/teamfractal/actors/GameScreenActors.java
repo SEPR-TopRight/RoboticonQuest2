@@ -2,11 +2,17 @@ package io.github.teamfractal.actors;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
+
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
@@ -26,6 +32,8 @@ public class GameScreenActors {
 	private Label plotStats;
 	private TextButton nextButton;
 	private boolean dropDownActive;
+	private boolean listUpdated;
+
 
 	public GameScreenActors(final RoboticonQuest game, GameScreen screen) {
 		this.game = game;
@@ -47,6 +55,7 @@ public class GameScreenActors {
 				buyLandPlotBtn.setVisible(false);
 				plotStats.setVisible(false);
 				game.nextPhase();
+				dropDownActive = true;
 				textUpdate();
 			}
 		});
@@ -74,6 +83,46 @@ public class GameScreenActors {
 				}
 			}
 		});
+		installRoboticonSelect.setSelected(null);
+		listUpdated = false;
+		
+		installRoboticonSelect.addListener(new ChangeListener(){
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (! listUpdated){ //prevents updating selection list from updating change listener
+					LandPlot selectedPlot = screen.getSelectedPlot();
+					Roboticon roboticon = null;
+					int index = -1;
+					ResourceType type = ResourceType.Unknown;
+					int selection = installRoboticonSelect.getSelectedIndex();
+					Array<Roboticon> roboticons = game.getPlayer().getRoboticons();
+					switch(selection){
+					case 0:
+						type = ResourceType.ORE;
+					case 1: 
+						type = ResourceType.ENERGY;
+					case 2:
+						type = ResourceType.Unknown;
+						}
+					for (int i = 0; i < roboticons.size; i++){
+						if (type ==  roboticons.get(i).getCustomisation()){
+							roboticon = roboticons.get(i);
+							index = i;
+							break;
+						}
+					}
+					if (roboticon != null) selectedPlot.installRoboticon(roboticon);
+					if (index >= 0 && index < roboticons.size) roboticons.removeIndex(index);
+					listUpdated = true; 
+					installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
+						
+				}
+				else listUpdated = false;	
+			}
+		});
+
+		
 		installRoboticonSelect.setVisible(false);
 		installRoboticonLabel.setVisible(false);
 		stage.addActor(nextButton);
@@ -114,7 +163,7 @@ public class GameScreenActors {
 			// Phase 3:
 			// Install Roboticon 
 			case 3:
-				dropDownActive = true;
+				
 				if (dropDownActive){
 					installRoboticonLabel.setPosition(x-70, y);
 					installRoboticonLabel.setVisible(true);

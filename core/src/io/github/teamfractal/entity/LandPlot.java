@@ -55,6 +55,7 @@ public class LandPlot {
 
 		owner.removeLandPlot(this);
 	}
+	
 	//</editor-fold>
 
 
@@ -122,12 +123,19 @@ public class LandPlot {
 		if (roboticon.isInstalled()) {
 			return false;
 		}
-
-		int index = resourceTypeToIndex(roboticon.getCustomisation());
-		if (roboticon.setInstalledLandplot(this)) {
-			productionModifiers[index] += 1;
-			this.installedRoboticon = roboticon;
-			return true;
+		if (roboticon.getCustomisation() != ResourceType.Unknown){
+			int index = resourceTypeToIndex(roboticon.getCustomisation());
+			if (roboticon.setInstalledLandplot(this)) {
+				productionModifiers[index] += 1;
+				this.installedRoboticon = roboticon;
+				return true;
+			}
+		}
+		else{
+			if (roboticon.setInstalledLandplot(this)) {
+				this.installedRoboticon = roboticon;
+				return true;
+			}
 		}
 
 		return false;

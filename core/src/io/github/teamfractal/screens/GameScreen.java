@@ -136,7 +136,7 @@ public class GameScreen implements Screen {
 						return;
 					}
 				case 3:
-					if (actors.getInstallRoboticonSelect().isVisible()) {
+					if (actors.getInstallRoboticonSelect().isVisible() && actors.getDropDownActive()) {
 						actors.getInstallRoboticonSelect().setVisible(false);
 						actors.getInstallRoboticonLabel().setVisible(false);
 						return;
