@@ -1,7 +1,7 @@
 package io.github.teamfractal.entity;
 
 import io.github.teamfractal.RoboticonQuest;
-import io.github.teamfractal.animation.AddResourceAnimation;
+import io.github.teamfractal.animation.AnimationAddResources;
 import io.github.teamfractal.entity.enums.PurchaseStatus;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.NotCommonResourceException;
@@ -255,6 +255,10 @@ public class Player {
 			ore += land.produceResource(ResourceType.ORE);
 		}
 
-		game.gameScreen.addAnimation(new AddResourceAnimation(this, energy, food, ore));
+		setEnergy(getEnergy() + energy);
+		setFood(getFood() + food);
+		setOre(getOre() + ore);
+
+		game.gameScreen.addAnimation(new AnimationAddResources(this, energy, food, ore));
 	}
 }

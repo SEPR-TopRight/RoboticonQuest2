@@ -20,6 +20,12 @@ import io.github.teamfractal.util.PlotManager;
  * It will set up all the necessary classes.
  */
 public class RoboticonQuest extends Game {
+	static RoboticonQuest _instance;
+	public static RoboticonQuest getInstance() {
+		return _instance;
+	}
+
+
 	private PlotManager plotManager;
 	SpriteBatch batch;
 	public Skin skin;
@@ -39,6 +45,7 @@ public class RoboticonQuest extends Game {
 	public PlotMap plotMap;
 	
 	public RoboticonQuest(){
+		_instance = this;
 		this.currentPlayer = 0;
 		this.phase = 1;
 

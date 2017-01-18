@@ -18,11 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.actors.GameScreenActors;
-import io.github.teamfractal.animation.IAnimationScreen;
+import io.github.teamfractal.animation.AnimationAddResources;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
 
-public class GameScreen extends IAnimationScreen implements Screen  {
+public class GameScreen extends AbstructAnimationScreen implements Screen  {
 	private final RoboticonQuest game;
 	private final OrthographicCamera camera;
 	private final Stage stage;
@@ -84,6 +84,7 @@ public class GameScreen extends IAnimationScreen implements Screen  {
 			public void dragStart(InputEvent event, float x, float y, int pointer) {
 				oldX = x;
 				oldY = y;
+				addAnimation(new AnimationAddResources(game.getPlayer(), 1, 1, 1));
 			}
 
 			/**
@@ -214,6 +215,7 @@ public class GameScreen extends IAnimationScreen implements Screen  {
 		stage.act(delta);
 		stage.draw();
 
+		// System.out.print("render, delta = " + delta);
 		renderAnimation(delta);
 	}
 

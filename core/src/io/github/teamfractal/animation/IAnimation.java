@@ -1,5 +1,8 @@
 package io.github.teamfractal.animation;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import io.github.teamfractal.screens.AbstructAnimationScreen;
+
 public interface IAnimation {
 	/**
 	 * Draw animation on screen.
@@ -8,5 +11,7 @@ public interface IAnimation {
 	 * @param screen    The screen to draw on.
 	 * @return          return <code>true</code> for animation complete.
 	 */
-	boolean tick(float delta, IAnimationScreen screen);
+	boolean tick(float delta, AbstructAnimationScreen screen, Batch batch);
+	void setAnimationFinish(IAnimationFinish callback);
+	void callAnimationFinish();
 }
