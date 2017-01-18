@@ -275,6 +275,9 @@ public class Player {
 		roboticonAmountList.add("Uncustomised x " + uncustomised);
 		return roboticonAmountList;
 	}
+	public Array<Roboticon> getRoboticons(){
+		return this.roboticonList;
+	}
 
 	/**
 	 * Generate resources produced from each LandPlot

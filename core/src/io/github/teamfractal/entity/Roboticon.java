@@ -10,7 +10,7 @@ public class Roboticon {
 		customisation = ResourceType.Unknown;
 	}
 
-	ResourceType getCustomisation() {
+	public ResourceType getCustomisation() {
 		return this.customisation;
 	}
 	
@@ -22,7 +22,7 @@ public class Roboticon {
 		return installedLandplot != null;
 	}
 
-	synchronized boolean setInstalledLandplot(LandPlot landplot) {
+	public synchronized boolean setInstalledLandplot(LandPlot landplot) {
 		if (!isInstalled()) {
 			installedLandplot = landplot;
 			return true;
