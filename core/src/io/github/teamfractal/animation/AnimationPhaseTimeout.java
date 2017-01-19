@@ -37,6 +37,8 @@ public class AnimationPhaseTimeout implements IAnimation {
 				&& game.getPlayer() == player;
 	}
 
+
+
 	@Override
 	public boolean tick(float delta, AbstructAnimationScreen screen, Batch batch) {
 		if (!continueAnimation()) return true;
@@ -46,9 +48,8 @@ public class AnimationPhaseTimeout implements IAnimation {
 
 		if (time >= timeout) return true;
 
-		int timeLeft = (int)(timeout - time);
+		int timeLeft = (int)(timeout - time) + 1;
 		String countdown = String.valueOf(timeLeft);
-		// System.out.println("x -> " + (size.Width - 20 - glyphLayout.width));
 
 		synchronized (rect) {
 			rect.begin(ShapeRenderer.ShapeType.Filled);
