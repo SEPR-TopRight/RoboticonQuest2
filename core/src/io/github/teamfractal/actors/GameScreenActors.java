@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Array;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
+import io.github.teamfractal.entity.Roboticon;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.GameScreen;
 
@@ -56,7 +57,7 @@ public class GameScreenActors {
 				installRoboticonLabel.setVisible(false);
 				game.nextPhase();
 				dropDownActive = true;
-				installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
+				installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
 				textUpdate();
 			}
 		});
@@ -121,7 +122,7 @@ public class GameScreenActors {
 					}
 					if (index >= 0 && index < roboticons.size) roboticons.removeIndex(index);
 					listUpdated = true; 
-					installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
+					installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
 						
 				}
 				else listUpdated = false;	
