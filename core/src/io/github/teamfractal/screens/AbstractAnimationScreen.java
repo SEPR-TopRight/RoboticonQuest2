@@ -14,6 +14,10 @@ public abstract class AbstractAnimationScreen {
 	private final ArrayList<IAnimation> animations = new ArrayList<IAnimation>();
 	private final ArrayList<IAnimation> queueAnimations = new ArrayList<IAnimation>();
 
+	/**
+	 * Add a new animation to current Screen.
+	 * @param animation    The animation to be added.
+	 */
 	public void addAnimation(IAnimation animation) {
 		if (!animations.contains(animation) && !queueAnimations.contains(animation)) {
 			synchronized (queueAnimations) {
@@ -22,6 +26,10 @@ public abstract class AbstractAnimationScreen {
 		}
 	}
 
+	/**
+	 * Request to render animation.
+	 * @param delta   Time delta from last render call.
+	 */
 	void renderAnimation(float delta) {
 		Batch batch = getGame().getBatch();
 
@@ -43,8 +51,15 @@ public abstract class AbstractAnimationScreen {
 		}
 	}
 
+	/**
+	 * The screen size.
+	 * @return  Size of the screen.
+	 */
 	abstract public Size getScreenSize();
 
+	/**
+	 * A size structure with Width and Height property.
+	 */
 	public class Size {
 		public float Width;
 		public float Height;
