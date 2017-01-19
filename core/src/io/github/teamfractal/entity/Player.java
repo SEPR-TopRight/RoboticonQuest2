@@ -34,6 +34,12 @@ public class Player {
 		this.roboticonList = new Array<Roboticon>();
 		this.roboticonList.add(new Roboticon());
 		this.roboticonList.add(new Roboticon());
+		Roboticon ore = new Roboticon();
+		ore.setCustomisation(ResourceType.ORE);
+		this.roboticonList.add(ore);
+		Roboticon energy = new Roboticon();
+		energy.setCustomisation(ResourceType.ENERGY);
+		this.roboticonList.add(energy);
 		
 	}
 	/**

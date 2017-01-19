@@ -27,6 +27,8 @@ public class GameScreenActors {
 	private Label topText;
 	private Label playerStats;
 	private TextButton buyLandPlotBtn;
+	private TextButton installRoboticonBtn;
+	private TextButton installRoboticonBtnCancel;
 	private Label installRoboticonLabel;
 	private SelectBox<String> installRoboticonSelect;
 	private Label plotStats;
@@ -46,7 +48,8 @@ public class GameScreenActors {
 		installRoboticonLabel = new Label("Install Roboticon", game.skin);
 		installRoboticonSelect = new SelectBox<String>(game.skin);
 		installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
-		
+		installRoboticonBtn = new TextButton("confirm", game.skin);
+		installRoboticonBtnCancel = new TextButton("cancel", game.skin);
 		plotStats = new Label("", game.skin);
 
 		nextButton.addListener(new ChangeListener() {
@@ -56,6 +59,8 @@ public class GameScreenActors {
 				plotStats.setVisible(false);
 				installRoboticonSelect.setVisible(false);
 				installRoboticonLabel.setVisible(false);
+				installRoboticonBtn.setVisible(false);
+				installRoboticonBtnCancel.setVisible(false);
 				game.nextPhase();
 				dropDownActive = true;
 				installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
@@ -89,54 +94,84 @@ public class GameScreenActors {
 		installRoboticonSelect.setSelected(null);
 		listUpdated = false;
 		
-		installRoboticonSelect.addListener(new ChangeListener(){
+		installRoboticonBtn.addListener(new ChangeListener(){
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (! listUpdated){ //prevents updating selection list from updating change listener
 					LandPlot selectedPlot = screen.getSelectedPlot();
-					Roboticon roboticon = null;
-					int index = -1;
-					ResourceType type = ResourceType.Unknown;
-					int selection = installRoboticonSelect.getSelectedIndex();
-					Array<Roboticon> roboticons = game.getPlayer().getRoboticons();
-					switch(selection){
-					case 0:
-						type = ResourceType.ORE;
-					case 1: 
-						type = ResourceType.ENERGY;
-					default:
-						type = ResourceType.Unknown;
-						}
-					for (int i = 0; i < roboticons.size; i++){
-						if (type ==  roboticons.get(i).getCustomisation()){
-							roboticon = roboticons.get(i);
-							index = i;
-							break;
-						}
-					}
-					if (roboticon != null){
-						selectedPlot.installRoboticon(roboticon);
-						TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
-						playerTile.setTile(screen.getResourcePlayerTile(game.getPlayer(), type));
-						textUpdate();
-					}
-					if (index >= 0 && index < roboticons.size) roboticons.removeIndex(index);
-					listUpdated = true; 
-					installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
+					if(selectedPlot.getOwner() == game.getPlayer() && ! selectedPlot.hasRoboticon()){
+						Roboticon roboticon = null;
+						int index = -1;
+						ResourceType type = ResourceType.Unknown;
+						int selection = installRoboticonSelect.getSelectedIndex();
 						
+						Array<Roboticon> roboticons = game.getPlayer().getRoboticons();
+						switch(selection){
+						case 0:
+							type = ResourceType.ORE;
+							break;
+						case 1: 
+							type = ResourceType.ENERGY;
+							break;
+						default:
+							type = ResourceType.Unknown;
+							break;
+							}
+						for (int i = 0; i < roboticons.size; i++){
+							if (type ==  roboticons.get(i).getCustomisation()){
+								roboticon = roboticons.get(i);
+								index = i;
+								break;
+							}
+						}
+						if (roboticon != null){
+							selectedPlot.installRoboticon(roboticon);
+							TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
+							playerTile.setTile(screen.getResourcePlayerTile(game.getPlayer(), type));
+							selectedPlot.setHasRoboticon(true);
+							textUpdate();
+						}
+						if (index >= 0 && index < roboticons.size) roboticons.removeIndex(index);
+						listUpdated = true; 
+						installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
+						dropDownActive = false;
+						installRoboticonSelect.setVisible(false);
+						installRoboticonLabel.setVisible(false);
+						installRoboticonBtn.setVisible(false);
+						installRoboticonBtnCancel.setVisible(false);
+							
+					}
+					else listUpdated = false;	
 				}
-				else listUpdated = false;	
 			}
+		});
+		
+		installRoboticonBtnCancel.addListener(new ChangeListener(){
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				dropDownActive = false;
+				installRoboticonSelect.setVisible(false);
+				installRoboticonLabel.setVisible(false);
+				installRoboticonBtn.setVisible(false);
+				installRoboticonBtnCancel.setVisible(false);
+				
+			}
+			
 		});
 
 		
 		installRoboticonSelect.setVisible(false);
 		installRoboticonLabel.setVisible(false);
+		installRoboticonBtn.setVisible(false);
+		installRoboticonBtnCancel.setVisible(false);
 		stage.addActor(nextButton);
 		stage.addActor(buyLandPlotBtn);
 		stage.addActor(installRoboticonSelect);
 		stage.addActor(installRoboticonLabel);
+		stage.addActor(installRoboticonBtn);
+		stage.addActor(installRoboticonBtnCancel);
 	}
 
 	/**
@@ -177,9 +212,12 @@ public class GameScreenActors {
 					installRoboticonLabel.setVisible(true);
 					installRoboticonSelect.setPosition(x + 40,y);
 					installRoboticonSelect.setVisible(true);
+					installRoboticonBtn.setPosition(x+ 70, y);
+					installRoboticonBtn.setVisible(true);
+					installRoboticonBtnCancel.setPosition(x + 120, y);
+					installRoboticonBtnCancel.setVisible(true);
 					dropDownActive = false;
 				}
-				else dropDownActive = true;
 				break;
 				}
 				

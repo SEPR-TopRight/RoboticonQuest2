@@ -77,6 +77,7 @@ public class LandPlot {
 	private int[] productionAmounts = {0, 0, 0};
 	private boolean owned;
 	private Roboticon installedRoboticon;
+	private boolean hasRoboticon;
 
 	/**
 	 * Initialise LandPlot with specific base amount of resources.
@@ -167,6 +168,14 @@ public class LandPlot {
 	public int getResource(ResourceType resource) {
 		int resIndex = resourceTypeToIndex(resource);
 		return productionAmounts[resIndex];
+	}
+	
+	public boolean hasRoboticon(){
+		return this.hasRoboticon;
+	}
+	
+	public void setHasRoboticon(boolean roboticonInstalled){
+		this.hasRoboticon = roboticonInstalled;
 	}
 
 
