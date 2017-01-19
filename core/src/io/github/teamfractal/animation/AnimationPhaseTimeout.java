@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.Player;
-import io.github.teamfractal.screens.AbstructAnimationScreen;
+import io.github.teamfractal.screens.AbstractAnimationScreen;
 
 public class AnimationPhaseTimeout implements IAnimation {
 	private final Player player;
@@ -40,10 +40,10 @@ public class AnimationPhaseTimeout implements IAnimation {
 
 
 	@Override
-	public boolean tick(float delta, AbstructAnimationScreen screen, Batch batch) {
+	public boolean tick(float delta, AbstractAnimationScreen screen, Batch batch) {
 		if (!continueAnimation()) return true;
 
-		AbstructAnimationScreen.Size size = screen.getScreenSize();
+		AbstractAnimationScreen.Size size = screen.getScreenSize();
 		time += delta;
 
 		if (time >= timeout) return true;
@@ -52,6 +52,7 @@ public class AnimationPhaseTimeout implements IAnimation {
 		String countdown = String.valueOf(timeLeft);
 
 		synchronized (rect) {
+			rect.setProjectionMatrix(batch.getProjectionMatrix());
 			rect.begin(ShapeRenderer.ShapeType.Filled);
 			rect.setColor(0, 1, 0, 0.1f);
 			rect.rect(0, 0, (1 - time / timeout) * size.Width, 3);

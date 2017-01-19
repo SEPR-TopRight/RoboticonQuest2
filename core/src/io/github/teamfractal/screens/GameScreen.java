@@ -22,7 +22,7 @@ import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.enums.ResourceType;
 
-public class GameScreen extends AbstructAnimationScreen implements Screen  {
+public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private final RoboticonQuest game;
 	private final OrthographicCamera camera;
 	private final Stage stage;
@@ -228,6 +228,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		camera.update();
+
 		renderer.setView(camera);
 		renderer.render();
 
@@ -235,6 +236,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		stage.draw();
 
 		// System.out.print("render, delta = " + delta);
+		game.getBatch().setProjectionMatrix(stage.getCamera().combined);
 		renderAnimation(delta);
 	}
 
@@ -249,6 +251,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		if (width != oldW || height != oldH) {
 			stage.getViewport().update(width, height, true);
 			camera.setToOrtho(false, width, height);
+			// game.getBatch().getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			actors.textUpdate();
 			actors.nextUpdate();
 			oldW = width;

@@ -3,7 +3,7 @@ package io.github.teamfractal.animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import io.github.teamfractal.entity.Player;
-import io.github.teamfractal.screens.AbstructAnimationScreen;
+import io.github.teamfractal.screens.AbstractAnimationScreen;
 
 public class AnimationAddResources implements IAnimation {
 	private final Player player;
@@ -49,7 +49,7 @@ public class AnimationAddResources implements IAnimation {
 	private static final float animationLength = 3;
 
 	@Override
-	public boolean tick(float delta, AbstructAnimationScreen screen, Batch batch) {
+	public boolean tick(float delta, AbstractAnimationScreen screen, Batch batch) {
 		time += delta;
 		if (time > animationLength) {
 			return true;

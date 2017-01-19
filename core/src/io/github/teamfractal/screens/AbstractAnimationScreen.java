@@ -8,7 +8,7 @@ import io.github.teamfractal.animation.IAnimation;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public abstract class AbstructAnimationScreen {
+public abstract class AbstractAnimationScreen {
 	protected abstract RoboticonQuest getGame();
 
 	protected ArrayList<IAnimation> animations = new ArrayList<IAnimation>();
