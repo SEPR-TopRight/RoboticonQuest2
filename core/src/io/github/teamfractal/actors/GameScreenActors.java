@@ -113,7 +113,12 @@ public class GameScreenActors {
 							break;
 						}
 					}
-					if (roboticon != null) selectedPlot.installRoboticon(roboticon);
+					if (roboticon != null){
+						selectedPlot.installRoboticon(roboticon);
+						TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
+						playerTile.setTile(screen.getResourcePlayerTile(game.getPlayer(), type));
+						textUpdate();
+					}
 					if (index >= 0 && index < roboticons.size) roboticons.removeIndex(index);
 					listUpdated = true; 
 					installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());

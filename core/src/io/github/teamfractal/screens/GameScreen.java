@@ -21,6 +21,7 @@ import io.github.teamfractal.actors.GameScreenActors;
 import io.github.teamfractal.animation.AnimationAddResources;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
+import io.github.teamfractal.entity.enums.ResourceType;
 
 public class GameScreen extends AbstructAnimationScreen implements Screen  {
 	private final RoboticonQuest game;
@@ -172,7 +173,8 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 				if (tileIndexY % 2 == 0) {
 					tileIndexX --;
 				}
-				if (actors.getDropDownActive()) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
+				if (game.getPhase() != 3) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
+				else if (actors.getDropDownActive()) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
 				if (selectedPlot != null) {
 					actors.tileClicked(selectedPlot, x, y);}
 			}
@@ -184,9 +186,19 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 	}
 
 	public TiledMapTile getPlayerTile(Player player) {
-		return tmx.getTileSets().getTile(101 + game.getPlayerIndex(player));
+		return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player));
 	}
-
+	public TiledMapTile getResourcePlayerTile(Player player, ResourceType type){
+		switch(type){
+		case ORE:
+			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 4);
+		case ENERGY:
+			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 8);
+		default:
+			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 12);
+		}
+		}
+			
 	/**
 	 * Reset to new game status.
 	 */
