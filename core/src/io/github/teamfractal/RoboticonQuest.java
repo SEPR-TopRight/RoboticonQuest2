@@ -47,6 +47,7 @@ public class RoboticonQuest extends Game {
 	
 	public RoboticonQuest(){
 		_instance = this;
+		reset();
 	}
 	
 	@Override
