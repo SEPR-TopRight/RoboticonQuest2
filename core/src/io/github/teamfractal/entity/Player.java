@@ -9,6 +9,7 @@ import io.github.teamfractal.exception.NotEnoughResourceException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import com.badlogic.gdx.utils.Array;
@@ -137,6 +138,9 @@ public class Player {
 	}
 	
 	public PurchaseStatus purchaseRoboticonsFromMarket(int amount, Market market) {
+		Random random = new Random();
+		
+		
 		if (!market.hasEnoughResources(ResourceType.ROBOTICON, amount)) {
 			return PurchaseStatus.FailMarketNotEnoughResource;
 		}
@@ -150,7 +154,7 @@ public class Player {
 		market.sellResource(ResourceType.ROBOTICON, amount);
 		setMoney(money - cost);
 		for (int roboticon = 0; roboticon < amount; roboticon++) {
-			roboticonList.add(new Roboticon(roboticonList.size));
+			roboticonList.add(new Roboticon(random.nextInt(10000)));
 		}
 		
 		return PurchaseStatus.Success;

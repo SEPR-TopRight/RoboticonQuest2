@@ -23,10 +23,12 @@ public class RoboticonMarketActors extends Table{
 		private RoboticonQuest game;
 		private RoboticonMarketScreen screen;
 		private Integer roboticonAmount = 0;
+		private int currentlySelectedRoboticonPos = 0;
 		private Roboticon currentlySelectedRoboticon;
 		private Texture roboticonTexture;
 		private Label topText;
 		private Label playerStats;
+		private Image roboticonImage = new Image();
 		
 		public RoboticonMarketActors(final RoboticonQuest game, RoboticonMarketScreen screen) {
 			this.game = game;
@@ -81,12 +83,12 @@ public class RoboticonMarketActors extends Table{
 			final Label lblCurrentRoboticon = new Label(playerRoboticonText, game.skin);
 			
 			// Image widget which displays the roboticon in the player's inventory
-			roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/roboticon_uncustomised.jpg"));
-			final Image roboticonImage = new Image();
-			roboticonImage.setDrawable(new TextureRegionDrawable(new TextureRegion(roboticonTexture)));
-			roboticonImage.setSize(roboticonTexture.getWidth(), roboticonTexture.getHeight());
 			
-			//
+			currentlySelectedRoboticon = game.getPlayer().getRoboticons().get(currentlySelectedRoboticonPos);
+			setImage(currentlySelectedRoboticon);
+			
+			String ID = "Roboticon Issue Number: " + currentlySelectedRoboticon.getID();
+			final Label roboticonID = new Label(ID, game.skin); 
 			
 			
 			// Buttons to move backwards and forwards in the player's roboticon inventory
@@ -94,7 +96,12 @@ public class RoboticonMarketActors extends Table{
 			moveLeftRoboticonInventoryBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					
+					if (currentlySelectedRoboticonPos > 0) {
+						currentlySelectedRoboticonPos--;
+						currentlySelectedRoboticon = game.getPlayer().getRoboticons().get(currentlySelectedRoboticonPos);
+						roboticonID.setText("Roboticon Issue Number: " + currentlySelectedRoboticon.getID());
+						setImage(currentlySelectedRoboticon);
+					}
 				}
 			});
 			
@@ -102,14 +109,16 @@ public class RoboticonMarketActors extends Table{
 			moveRightRoboticonInventoryBtn.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					
+					if (currentlySelectedRoboticonPos < game.getPlayer().getRoboticons().size - 1) {
+						currentlySelectedRoboticonPos++;
+						currentlySelectedRoboticon = game.getPlayer().getRoboticons().get(currentlySelectedRoboticonPos);
+						roboticonID.setText("Roboticon Issue Number: " + currentlySelectedRoboticon.getID());
+						setImage(currentlySelectedRoboticon);
+					}
 				}
 			});
 			
-			currentlySelectedRoboticon = game.getPlayer().getRoboticons().get(0);
-			String ID = "Roboticon ID: " + currentlySelectedRoboticon.getID();
-			final Label roboticonID = new Label(ID, game.skin); 
-			
+
 			// Purchase Customisation Text: Bottom Right
 			final Label lblPurchaseCustomisation = new Label("Customisation Type:", game.skin);
 			
@@ -120,6 +129,12 @@ public class RoboticonMarketActors extends Table{
 			
 			// Button to buy the selected customisation and customise the selected roboticon
 			final TextButton buyCustomisationButton = new TextButton("Buy Roboticon Customisation", game.skin);
+			buyCustomisationButton.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					
+				}
+			});
 			
 			final TextButton nextButton = new TextButton("Next ->", game.skin);
 			nextButton.addListener(new ChangeListener() {
@@ -207,6 +222,27 @@ public class RoboticonMarketActors extends Table{
 			
 		}
 		
+		public void setImage(Roboticon roboticon) {
+			ResourceType roboticonType = roboticon.getCustomisation();
+			
+			switch(roboticonType) {
+				case Unknown: 
+					roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot.png"));
+					break;
+				case ENERGY:
+					roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot_energy.png"));
+					break;
+				case ORE:
+					roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot_ore.png"));
+					break;
+				default:
+					break;
+			}
+			
+			roboticonImage.setDrawable(new TextureRegionDrawable(new TextureRegion(roboticonTexture)));
+			roboticonImage.setSize(roboticonTexture.getWidth(), roboticonTexture.getHeight());
+		}
+		
 		public void widgetUpdate() {
 			// Draws turn and phase info on screen
 			if (this.topText != null) this.topText.remove();
@@ -224,6 +260,8 @@ public class RoboticonMarketActors extends Table{
 			playerStats.setWidth(250);
 			playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
 			screen.getStage().addActor(playerStats);
+			
+			
 			
 		}
 		
