@@ -6,34 +6,48 @@ import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.animation.IAnimation;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public abstract class AbstructAnimationScreen {
 	protected abstract RoboticonQuest getGame();
 
 	protected ArrayList<IAnimation> animations = new ArrayList<IAnimation>();
+	protected ArrayList<IAnimation> queueAnimations = new ArrayList<IAnimation>();
 
 	protected abstract Stage getStage();
 	public void addAnimation(IAnimation animation) {
-		if (!animations.contains(animation)) {
-			animations.add(animation);
+		if (!animations.contains(animation) && !queueAnimations.contains(animation)) {
+			synchronized (queueAnimations) {
+				queueAnimations.add(animation);
+			}
 		}
 	}
 
 	public void renderAnimation(float delta) {
-		ArrayList<IAnimation> toRemove = new ArrayList<IAnimation>();
-
 		Batch batch = getGame().getBatch();
-		batch.begin();
-		for (IAnimation animation : animations) {
-			if (animation.tick(delta, this, batch)) {
-				toRemove.add(animation);
-				animation.callAnimationFinish();
+
+		synchronized (animations) {
+			synchronized (queueAnimations) {
+				animations.addAll(queueAnimations);
+				queueAnimations.clear();
+			}
+
+			Iterator<IAnimation> iter = animations.iterator();
+
+			while (iter.hasNext()) {
+				IAnimation animation = iter.next();
+				if (animation.tick(delta, this, batch)) {
+					iter.remove();
+					animation.callAnimationFinish();
+				}
 			}
 		}
-		batch.end();
+	}
 
-		for (IAnimation animation : toRemove) {
-			animations.remove(animation);
-		}
+	abstract public Size getScreenSize();
+
+	public class Size {
+		public float Width;
+		public float Height;
 	}
 }

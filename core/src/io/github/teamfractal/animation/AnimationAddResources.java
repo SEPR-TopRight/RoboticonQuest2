@@ -11,8 +11,7 @@ public class AnimationAddResources implements IAnimation {
 	private final int food;
 	private final int ore;
 	private float time;
-	BitmapFont font = new BitmapFont();
-
+	private static BitmapFont font = new BitmapFont();
 
 	public AnimationAddResources(Player player, int energy, int food, int ore) {
 		time = 0;
@@ -56,8 +55,10 @@ public class AnimationAddResources implements IAnimation {
 			return true;
 		}
 
+		batch.begin();
 		font.setColor(1,1,1, fn_opacity());
 		font.draw(batch, generateResourceString(), 20, fn_quad(time) * 30);
+		batch.end();
 		return false;
 	}
 
@@ -70,6 +71,12 @@ public class AnimationAddResources implements IAnimation {
 	public void callAnimationFinish() {
 		if (callback != null)
 			callback.OnAnimationFinish();
+	}
+
+	@Override
+	public void cancelAnimation() {
+		callback = null;
+		time += animationLength;
 	}
 
 	private String generateResourceString() {

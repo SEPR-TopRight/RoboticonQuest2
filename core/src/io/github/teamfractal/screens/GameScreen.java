@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.actors.GameScreenActors;
-import io.github.teamfractal.animation.AnimationAddResources;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.enums.ResourceType;
@@ -68,7 +67,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		this.stage = new Stage(new ScreenViewport());
 		this.actors = new GameScreenActors(game, this);
 		actors.initialiseButtons();
-		actors.textUpdate();
+		// actors.textUpdate();
 		
 		
 
@@ -182,7 +181,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		//</editor-fold>
 
 		// Finally, start a new game and initialise variables.
-		newGame();
+		// newGame();
 	}
 
 	public TiledMapTile getPlayerTile(Player player) {
@@ -208,6 +207,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		if (renderer != null) renderer.dispose();
 		this.tmx = new TmxMapLoader().load("tiles/city.tmx");
 		renderer = new IsometricStaggeredTiledMapRenderer(tmx);
+		game.reset();
 
 		mapLayer = (TiledMapTileLayer)tmx.getLayers().get("MapData");
 		playerOverlay = (TiledMapTileLayer)tmx.getLayers().get("PlayerOverlay");
@@ -215,6 +215,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		maxDragY = 0.75f * mapLayer.getTileHeight() * (mapLayer.getHeight() + 1);
 
 		game.getPlotManager().setup(mapLayer, playerOverlay);
+		game.nextPhase();
 	}
 
 	@Override
@@ -245,7 +246,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 	@Override
 	public void resize(int width, int height) {
 		// Avoid the viewport update if they are not changed.
-		if (width != oldW && height != oldH) {
+		if (width != oldW || height != oldH) {
 			stage.getViewport().update(width, height, true);
 			camera.setToOrtho(false, width, height);
 			actors.textUpdate();
@@ -284,6 +285,14 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 
 	public Stage getStage() {
 		return stage;
+	}
+
+	@Override
+	public Size getScreenSize() {
+		Size s = new Size();
+		s.Height = oldH;
+		s.Width = oldW;
+		return s;
 	}
 
 	public TiledMap getTmx(){

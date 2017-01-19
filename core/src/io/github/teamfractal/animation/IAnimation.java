@@ -12,6 +12,12 @@ public interface IAnimation {
 	 * @return          return <code>true</code> for animation complete.
 	 */
 	boolean tick(float delta, AbstructAnimationScreen screen, Batch batch);
+
+	/**
+	 *
+	 * @param callback
+	 */
 	void setAnimationFinish(IAnimationFinish callback);
 	void callAnimationFinish();
+	void cancelAnimation();
 }

@@ -99,6 +99,7 @@ public class GameScreenActors {
 					ResourceType type = ResourceType.Unknown;
 					int selection = installRoboticonSelect.getSelectedIndex();
 					Array<Roboticon> roboticons = game.getPlayer().getRoboticons();
+
 					switch(selection){
 					case 0:
 						type = ResourceType.ORE;
@@ -114,7 +115,7 @@ public class GameScreenActors {
 							break;
 						}
 					}
-					if (roboticon != null){
+					if (roboticon != null && selectedPlot != null){
 						selectedPlot.installRoboticon(roboticon);
 						TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
 						playerTile.setTile(screen.getResourcePlayerTile(game.getPlayer(), type));

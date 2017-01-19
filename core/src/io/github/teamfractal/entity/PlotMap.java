@@ -13,6 +13,8 @@ public class PlotMap {
 
 	
 	public PlotMap(TiledMap tmx){
+		if (tmx == null) return ;
+
 		this.tmx = tmx;
 		TiledMapTileLayer tileLayer = (TiledMapTileLayer) tmx.getLayers().get(0);
 		landPlots = new HashMap<String, LandPlot>();
