@@ -35,8 +35,8 @@ public class Player {
 	public Player(RoboticonQuest game){
 		this.game = game;
 		this.roboticonList = new Array<Roboticon>();
-		this.roboticonList.add(new Roboticon());
-		this.roboticonList.add(new Roboticon());
+		this.roboticonList.add(new Roboticon(roboticonList.size));
+		this.roboticonList.add(new Roboticon(roboticonList.size));
 		
 	}
 	/**
@@ -138,6 +138,27 @@ public class Player {
 				throw new NotCommonResourceException(type);
 		}
 	}
+	
+	public PurchaseStatus purchaseRoboticonsFromMarket(int amount, Market market) {
+		if (!market.hasEnoughResources(ResourceType.ROBOTICON, amount)) {
+			return PurchaseStatus.FailMarketNotEnoughResource;
+		}
+
+		int cost = amount * market.getSellPrice(ResourceType.ROBOTICON);
+		int money = getMoney();
+		if (cost > money) {
+			return PurchaseStatus.FailPlayerNotEnoughMoney;
+		}
+		
+		market.sellResource(ResourceType.ROBOTICON, amount);
+		setMoney(money - cost);
+		for (int roboticon = 0; roboticon < amount; roboticon++) {
+			roboticonList.add(new Roboticon(roboticonList.size));
+		}
+		
+		return PurchaseStatus.Success;
+	}
+	
 	//</editor-fold>
 
 	/**
