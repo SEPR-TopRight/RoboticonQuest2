@@ -11,10 +11,9 @@ import java.util.Iterator;
 public abstract class AbstractAnimationScreen {
 	protected abstract RoboticonQuest getGame();
 
-	protected ArrayList<IAnimation> animations = new ArrayList<IAnimation>();
-	protected ArrayList<IAnimation> queueAnimations = new ArrayList<IAnimation>();
+	private final ArrayList<IAnimation> animations = new ArrayList<IAnimation>();
+	private final ArrayList<IAnimation> queueAnimations = new ArrayList<IAnimation>();
 
-	protected abstract Stage getStage();
 	public void addAnimation(IAnimation animation) {
 		if (!animations.contains(animation) && !queueAnimations.contains(animation)) {
 			synchronized (queueAnimations) {
@@ -23,7 +22,7 @@ public abstract class AbstractAnimationScreen {
 		}
 	}
 
-	public void renderAnimation(float delta) {
+	void renderAnimation(float delta) {
 		Batch batch = getGame().getBatch();
 
 		synchronized (animations) {
@@ -32,12 +31,12 @@ public abstract class AbstractAnimationScreen {
 				queueAnimations.clear();
 			}
 
-			Iterator<IAnimation> iter = animations.iterator();
+			Iterator<IAnimation> iterator = animations.iterator();
 
-			while (iter.hasNext()) {
-				IAnimation animation = iter.next();
+			while (iterator.hasNext()) {
+				IAnimation animation = iterator.next();
 				if (animation.tick(delta, this, batch)) {
-					iter.remove();
+					iterator.remove();
 					animation.callAnimationFinish();
 				}
 			}
