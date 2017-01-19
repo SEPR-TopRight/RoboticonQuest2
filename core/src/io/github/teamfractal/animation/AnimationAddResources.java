@@ -42,7 +42,7 @@ public class AnimationAddResources implements IAnimation {
 			return 1;
 		} else {
 			// 2 ~ 3:
-			return fn_quad(time - 2f);
+			return 1f - fn_quad(time - 2f);
 		}
 	}
 
