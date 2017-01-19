@@ -35,6 +35,7 @@ public class GameScreenActors {
 	private TextButton nextButton;
 	private boolean dropDownActive;
 	private boolean listUpdated;
+	private boolean nextClickNull;
 
 
 	public GameScreenActors(final RoboticonQuest game, GameScreen screen) {
@@ -51,6 +52,7 @@ public class GameScreenActors {
 		installRoboticonBtn = new TextButton("confirm", game.skin);
 		installRoboticonBtnCancel = new TextButton("cancel", game.skin);
 		plotStats = new Label("", game.skin);
+		nextClickNull = false;
 
 		nextButton.addListener(new ChangeListener() {
 			@Override
@@ -135,14 +137,15 @@ public class GameScreenActors {
 						if (index >= 0 && index < roboticons.size) roboticons.removeIndex(index);
 						listUpdated = true; 
 						installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmounts());
-						dropDownActive = false;
+						dropDownActive = true;
 						installRoboticonSelect.setVisible(false);
 						installRoboticonLabel.setVisible(false);
 						installRoboticonBtn.setVisible(false);
 						installRoboticonBtnCancel.setVisible(false);
+						nextClickNull = true;
 							
 					}
-					else listUpdated = false;	
+					else listUpdated = false;
 				}
 			}
 		});
@@ -151,11 +154,12 @@ public class GameScreenActors {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				dropDownActive = false;
+				dropDownActive = true;
 				installRoboticonSelect.setVisible(false);
 				installRoboticonLabel.setVisible(false);
 				installRoboticonBtn.setVisible(false);
 				installRoboticonBtnCancel.setVisible(false);
+				nextClickNull = true;
 				
 			}
 			
@@ -206,6 +210,7 @@ public class GameScreenActors {
 			// Phase 3:
 			// Install Roboticon 
 			case 3:
+				if (!nextClickNull){
 				
 				if (dropDownActive){
 					installRoboticonLabel.setPosition(x-70, y);
@@ -218,8 +223,16 @@ public class GameScreenActors {
 					installRoboticonBtnCancel.setVisible(true);
 					dropDownActive = false;
 				}
-				break;
+				if (plot.hasRoboticon()){
+					dropDownActive = true;
 				}
+				else dropDownActive = false;
+					
+					break;
+				}
+				else nextClickNull = false;
+		}
+		
 				
 		}
 
