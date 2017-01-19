@@ -7,12 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.Roboticon;
 import io.github.teamfractal.entity.enums.ResourceType;
+import io.github.teamfractal.screens.AbstractAnimationScreen;
 import io.github.teamfractal.screens.GameScreen;
 
 public class GameScreenActors {
@@ -40,6 +42,10 @@ public class GameScreenActors {
 	}
 
 	public void initialiseButtons() {
+		topText = new Label("", game.skin);
+		topText.setAlignment(Align.right);
+		playerStats = new Label("", game.skin);
+
 		nextButton = new TextButton("Next ->", game.skin);
 		buyLandPlotBtn = new TextButton("Buy LandPlot", game.skin);
 		installRoboticonLabel = new Label("Install Roboticon", game.skin);
@@ -47,8 +53,8 @@ public class GameScreenActors {
 		installRoboticonSelect = new SelectBox<String>(game.skin);
 		installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
 
-		installRoboticonBtn = new TextButton("confirm", game.skin);
-		installRoboticonBtnCancel = new TextButton("cancel", game.skin);
+		installRoboticonBtn = new TextButton("Confirm", game.skin);
+		installRoboticonBtnCancel = new TextButton("Cancel", game.skin);
 
 		plotStats = new Label("", game.skin);
 		nextClickNull = false;
@@ -68,8 +74,6 @@ public class GameScreenActors {
 				textUpdate();
 			}
 		});
-
-		nextButton.setPosition(this.stage.getWidth() - 80, 0);
 
 
 		buyLandPlotBtn.setVisible(false);
@@ -174,6 +178,12 @@ public class GameScreenActors {
 		stage.addActor(installRoboticonLabel);
 		stage.addActor(installRoboticonBtn);
 		stage.addActor(installRoboticonBtnCancel);
+		stage.addActor(topText);
+		stage.addActor(playerStats);
+
+		// Force update of positions.
+		AbstractAnimationScreen.Size size = screen.getScreenSize();
+		resizeScreen(size.Width, size.Height);
 	}
 
 	/**
@@ -210,6 +220,8 @@ public class GameScreenActors {
 			// Install Roboticon 
 			case 3:
 				if (!nextClickNull) {
+					dropDownActive = plot.hasRoboticon();
+
 					if (dropDownActive) {
 						installRoboticonLabel.setPosition(x - 70, y);
 						installRoboticonLabel.setVisible(true);
@@ -219,11 +231,6 @@ public class GameScreenActors {
 						installRoboticonBtn.setVisible(true);
 						installRoboticonBtnCancel.setPosition(x + 120, y);
 						installRoboticonBtnCancel.setVisible(true);
-						dropDownActive = false;
-					}
-					if (plot.hasRoboticon()) {
-						dropDownActive = true;
-					} else {
 						dropDownActive = false;
 					}
 				} else {
@@ -251,39 +258,28 @@ public class GameScreenActors {
 		return dropDownActive;
 	}
 
-
-	/**
-	 * Updates next phase button
-	 */
-	public void nextUpdate() {
-		if (nextButton != null) nextButton.remove();
-		nextButton.setPosition(this.screen.getStage().getWidth() - 80, 0);
-		screen.getStage().addActor(nextButton);
-	}
-
-
 	/**
 	 * Updates Textfield widgets
 	 */
 	public void textUpdate() {
-		if (this.topText != null) this.topText.remove();
 		String phaseText = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase() + " - " + game.getPhaseString();
-		this.topText = new Label(phaseText, game.skin);
-		topText.setWidth(120);
-		topText.setPosition(screen.getStage().getViewport().getWorldWidth() / 2, screen.getStage().getViewport().getWorldHeight() - 20);
-		screen.getStage().addActor(topText);
+		topText.setText(phaseText);
 
-
-		if (this.playerStats != null) this.playerStats.remove();
 		String statText = "Ore: " + game.getPlayer().getOre()
 				+ " Energy: " + game.getPlayer().getEnergy()
 				+ " Food: " + game.getPlayer().getFood()
 				+ " Money: " + game.getPlayer().getMoney();
 
-		this.playerStats = new Label(statText, game.skin);
-		playerStats.setWidth(250);
-		playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
-		screen.getStage().addActor(playerStats);
+		playerStats.setText(statText);
+	}
+
+	public void resizeScreen(float width, float height) {
+		float topBarY = height - 20;
+		topText.setWidth(width - 10);
+		topText.setPosition(0, topBarY);
+
+		playerStats.setPosition(10, topBarY);
+		nextButton.setPosition(width - nextButton.getWidth() - 10, 10);
 	}
 
 	public Label getPlotStats() {

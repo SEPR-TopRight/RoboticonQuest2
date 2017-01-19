@@ -251,9 +251,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		if (width != oldW || height != oldH) {
 			stage.getViewport().update(width, height, true);
 			camera.setToOrtho(false, width, height);
-			// game.getBatch().getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			actors.textUpdate();
-			actors.nextUpdate();
+			actors.resizeScreen(width, height);
 			oldW = width;
 			oldH = height;
 		}
