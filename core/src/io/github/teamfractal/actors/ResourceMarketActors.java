@@ -3,11 +3,13 @@ package io.github.teamfractal.actors;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.ResourceMarketScreen;
 
@@ -26,7 +28,6 @@ public class ResourceMarketActors extends Table {
 	public ResourceMarketActors(final RoboticonQuest game, ResourceMarketScreen screen) {
 		debug();
 		center();
-		setFillParent(true);
 
 		this.game = game;
 		this.screen = screen;
@@ -41,28 +42,37 @@ public class ResourceMarketActors extends Table {
 
 		Stage stage = screen.getStage();
 
-		// stage.addActor(playerStats);
-		// stage.addActor(marketStats);
-
 		stage.addActor(phaseInfo);
 		stage.addActor(nextButton);
 
-		//Set up and position Buy Label
-		final Label buyLabel = new Label("Buy", game.skin);
-		buyLabel.setColor((float) 0.5, 0, 0, 1);
-
-
-		// Buy Ore
-		AdjustableActor buyOre = new AdjustableActor(game.skin, 0, 0, game.getPlayer().getOre(),
-				"Ore: " + game.market.getSellPrice(ResourceType.ORE) + " Gold", "Buy Ore");
-
-		// First row: player and market stats.
+		// Row: player and market stats.
 		add(playerStats);
+		add().spaceRight(20);
 		add(marketStats);
 		row();
+		addEmptyRow(20);
 
-		add(buyOre);
+		// Row: Label of Sell and Buy
+		Market market = game.market;
+		Skin skin = game.skin;
+		Label buyLabel  = new Label("Buy",  skin);
+		Label sellLabel = new Label("Sell", skin);
+
+		buyLabel.setAlignment(Align.center);
+		sellLabel.setAlignment(Align.center);
+
+
+		add(buyLabel);
+		add();
+		add(sellLabel);
 		row();
+		addEmptyRow(10);
+
+		// Row:
+
+		// new AdjustableActor(skin, 0, 0, market.getResource(ResourceType.ORE), "Buy Ore", "Buy Ore");
+
+
 
 		/*
 
@@ -303,6 +313,11 @@ public class ResourceMarketActors extends Table {
 		*/
 
 		widgetUpdate();
+	}
+
+	private void addEmptyRow(int height) {
+		add().spaceTop(height);
+		row();
 	}
 
 	/**
