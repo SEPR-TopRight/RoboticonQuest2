@@ -1,5 +1,7 @@
 package io.github.teamfractal.actors;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -125,7 +127,13 @@ public class RoboticonMarketActors extends Table{
 			buyCustomisationButton.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
+					HashMap<String, ResourceType> converter = new HashMap<String, ResourceType>();
+					converter.put("Energy", ResourceType.ENERGY);
+					converter.put("Ore", ResourceType.ORE);
+					Roboticon roboticonToCustomise = game.getPlayer().getRoboticons().get(currentlySelectedRoboticonPos);
 					
+					game.getPlayer().purchaseCustomisationFromMarket(converter.get(customisationDropDown.getSelected()), roboticonToCustomise, game.market);
+					widgetUpdate();
 				}
 			});
 			
