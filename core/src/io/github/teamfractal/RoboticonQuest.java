@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -118,11 +119,14 @@ public class RoboticonQuest extends Game {
 		switch (newPhaseState) {
 			// Phase 2: Purchase Roboticon
 			case 2:
-				setScreen(new RoboticonMarketScreen(this));
+				RoboticonMarketScreen roboticonMarket = new RoboticonMarketScreen(this);
+				roboticonMarket.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30));
+				setScreen(roboticonMarket);
 				break;
 
 			// Phase 3: Roboticon Customisation
 			case 3:
+				gameScreen.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30));
 				gameScreen.getActors().updateRoboticonSelection();
 				setScreen(gameScreen);
 				break;
@@ -147,7 +151,6 @@ public class RoboticonQuest extends Game {
 			// Phase 1: Enable of purchase LandPlot
 			case 1:
 				landBoughtThisTurn = 0;
-				gameScreen.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30));
 				break;
 		}
 
