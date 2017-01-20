@@ -34,7 +34,7 @@ public class RoboticonMarketActors extends Table{
 			this.game = game;
 			this.screen = screen;
 			
-			this.roboticonID = new Label("Test", game.skin);
+			this.roboticonID = new Label("", game.skin);
 			
 			widgetUpdate();
 			
@@ -237,7 +237,7 @@ public class RoboticonMarketActors extends Table{
 			this.roboticonID.setText("Roboticon Issue Number: " + game.getPlayer().getRoboticons().get(roboticonPos).getID());
 			
 			} else {
-				roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/No_roboticons.png"));
+				roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/no_roboticons.png"));
 				this.roboticonID.setText("Roboticon Issue Number: ####");
 			}
 			
