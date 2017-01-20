@@ -23,18 +23,22 @@ public class RoboticonMarketActors extends Table{
 		private RoboticonQuest game;
 		private RoboticonMarketScreen screen;
 		private Integer roboticonAmount = 0;
-		private int currentlySelectedRoboticonPos = 0;
-		private Roboticon currentlySelectedRoboticon;
+		private int currentlySelectedRoboticonPos;
 		private Texture roboticonTexture;
 		private Label topText;
 		private Label playerStats;
+		private Label roboticonID;
 		private Image roboticonImage = new Image();
 		
 		public RoboticonMarketActors(final RoboticonQuest game, RoboticonMarketScreen screen) {
 			this.game = game;
 			this.screen = screen;
 			
+			this.roboticonID = new Label("Test", game.skin);
 			
+			widgetUpdate();
+			
+
 			// Buy Roboticon Text: Top Left
 			final Label lblBuyRoboticon = new Label("Purchase Roboticons:", game.skin);
 			
@@ -84,13 +88,6 @@ public class RoboticonMarketActors extends Table{
 			
 			// Image widget which displays the roboticon in the player's inventory
 			
-			currentlySelectedRoboticon = game.getPlayer().getRoboticons().get(currentlySelectedRoboticonPos);
-			setImage(currentlySelectedRoboticon);
-			
-			String ID = "Roboticon Issue Number: " + currentlySelectedRoboticon.getID();
-			final Label roboticonID = new Label(ID, game.skin); 
-			
-			
 			// Buttons to move backwards and forwards in the player's roboticon inventory
 			final TextButton moveLeftRoboticonInventoryBtn= new TextButton("<", game.skin);
 			moveLeftRoboticonInventoryBtn.addListener(new ChangeListener() {
@@ -98,9 +95,7 @@ public class RoboticonMarketActors extends Table{
 				public void changed(ChangeEvent event, Actor actor) {
 					if (currentlySelectedRoboticonPos > 0) {
 						currentlySelectedRoboticonPos--;
-						currentlySelectedRoboticon = game.getPlayer().getRoboticons().get(currentlySelectedRoboticonPos);
-						roboticonID.setText("Roboticon Issue Number: " + currentlySelectedRoboticon.getID());
-						setImage(currentlySelectedRoboticon);
+						setCurrentlySelectedRoboticon(currentlySelectedRoboticonPos);
 					}
 				}
 			});
@@ -111,9 +106,7 @@ public class RoboticonMarketActors extends Table{
 				public void changed(ChangeEvent event, Actor actor) {
 					if (currentlySelectedRoboticonPos < game.getPlayer().getRoboticons().size - 1) {
 						currentlySelectedRoboticonPos++;
-						currentlySelectedRoboticon = game.getPlayer().getRoboticons().get(currentlySelectedRoboticonPos);
-						roboticonID.setText("Roboticon Issue Number: " + currentlySelectedRoboticon.getID());
-						setImage(currentlySelectedRoboticon);
+						setCurrentlySelectedRoboticon(currentlySelectedRoboticonPos);
 					}
 				}
 			});
@@ -222,21 +215,30 @@ public class RoboticonMarketActors extends Table{
 			
 		}
 		
-		public void setImage(Roboticon roboticon) {
-			ResourceType roboticonType = roboticon.getCustomisation();
+		public void setCurrentlySelectedRoboticon(int roboticonPos) {
+			if (roboticonPos != -1) {
 			
-			switch(roboticonType) {
-				case Unknown: 
-					roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot.png"));
-					break;
-				case ENERGY:
-					roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot_energy.png"));
-					break;
-				case ORE:
-					roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot_ore.png"));
-					break;
-				default:
-					break;
+				ResourceType roboticonType = game.getPlayer().getRoboticons().get(roboticonPos).getCustomisation();
+				
+				switch(roboticonType) {
+					case Unknown: 
+						roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot.png"));
+						break;
+					case ENERGY:
+						roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot_energy.png"));
+						break;
+					case ORE:
+						roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot_ore.png"));
+						break;
+					default:
+						break;
+				}
+				
+			this.roboticonID.setText("Roboticon Issue Number: " + game.getPlayer().getRoboticons().get(roboticonPos).getID());
+			
+			} else {
+				roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/No_roboticons.png"));
+				this.roboticonID.setText("Roboticon Issue Number: ####");
 			}
 			
 			roboticonImage.setDrawable(new TextureRegionDrawable(new TextureRegion(roboticonTexture)));
@@ -261,8 +263,13 @@ public class RoboticonMarketActors extends Table{
 			playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
 			screen.getStage().addActor(playerStats);
 			
+			if (game.getPlayer().getRoboticons().size == 0) {
+				currentlySelectedRoboticonPos = -1;
+			} else {
+				currentlySelectedRoboticonPos = 0;
+			}
 			
-			
+			setCurrentlySelectedRoboticon(currentlySelectedRoboticonPos);
 		}
 		
 }

@@ -33,8 +33,7 @@ public class Player {
 	public Player(RoboticonQuest game){
 		this.game = game;
 		this.roboticonList = new Array<Roboticon>();
-		this.roboticonList.add(new Roboticon(roboticonList.size));
-		this.roboticonList.add(new Roboticon(roboticonList.size));
+
 		
 	}
 	/**
