@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import io.github.teamfractal.animation.AnimationPhaseTimeout;
 import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
@@ -46,17 +47,7 @@ public class RoboticonQuest extends Game {
 	
 	public RoboticonQuest(){
 		_instance = this;
-		this.currentPlayer = 0;
-		this.phase = 1;
-
-		Player player1 = new Player(this);
-		Player player2 = new Player(this);
-		this.playerList = new ArrayList<Player>();
-		this.playerList.add(player1);
-		this.playerList.add(player2);
-		this.currentPlayer = 0;
-		this.market = new Market();
-		plotManager = new PlotManager(this);
+		reset();
 	}
 	
 	@Override
@@ -103,10 +94,27 @@ public class RoboticonQuest extends Game {
 	public int getPhase(){
 		return this.phase;
 	}
-	
+
+	public void reset() {
+		this.currentPlayer = 0;
+		this.phase = 0;
+
+		Player player1 = new Player(this);
+		Player player2 = new Player(this);
+		this.playerList = new ArrayList<Player>();
+		this.playerList.add(player1);
+		this.playerList.add(player2);
+		this.currentPlayer = 0;
+		this.market = new Market();
+		plotManager = new PlotManager(this);
+	}
+
 	public void nextPhase () {
 		int newPhaseState = phase + 1;
+		phase = newPhaseState;
+		// phase = newPhaseState = 4;
 
+		System.out.println("RoboticonQuest::nextPhase -> newPhaseState: " + newPhaseState);
 		switch (newPhaseState) {
 			// Phase 2: Purchase Roboticon
 			case 2:
@@ -115,8 +123,7 @@ public class RoboticonQuest extends Game {
 
 			// Phase 3: Roboticon Customisation
 			case 3:
-				gameScreen.getActors().textUpdate();
-				gameScreen.getActors().initialiseButtons();
+				gameScreen.getActors().updateRoboticonSelection();
 				setScreen(gameScreen);
 				break;
 
@@ -132,14 +139,19 @@ public class RoboticonQuest extends Game {
 
 			// End phase - CLean up and move to next player.
 			case 6:
-				// Phase 1: Enable of purchase LandPlot
-				newPhaseState = 1;
+				phase = newPhaseState = 1;
 				this.nextPlayer();
+				// No "break;" here!
+				// Let the game to do phase 1 preparation.
+
+			// Phase 1: Enable of purchase LandPlot
+			case 1:
 				landBoughtThisTurn = 0;
+				gameScreen.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30));
 				break;
 		}
 
-		phase = newPhaseState;
+		gameScreen.getActors().textUpdate();
 	}
 
 	/**
@@ -147,8 +159,6 @@ public class RoboticonQuest extends Game {
 	 */
 	private void generateResources() {
 		// Switch back to purchase to game screen.
-		gameScreen.getActors().textUpdate();
-		gameScreen.getActors().initialiseButtons();
 		setScreen(gameScreen);
 
 		// Generate resources.

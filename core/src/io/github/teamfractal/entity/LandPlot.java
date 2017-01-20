@@ -55,6 +55,7 @@ public class LandPlot {
 
 		owner.removeLandPlot(this);
 	}
+	
 	//</editor-fold>
 
 
@@ -76,6 +77,7 @@ public class LandPlot {
 	private int[] productionAmounts = {0, 0, 0};
 	private boolean owned;
 	private Roboticon installedRoboticon;
+	private boolean hasRoboticon;
 
 	/**
 	 * Initialise LandPlot with specific base amount of resources.
@@ -122,12 +124,19 @@ public class LandPlot {
 		if (roboticon.isInstalled()) {
 			return false;
 		}
-
-		int index = resourceTypeToIndex(roboticon.getCustomisation());
-		if (roboticon.setInstalledLandplot(this)) {
-			productionModifiers[index] += 1;
-			this.installedRoboticon = roboticon;
-			return true;
+		if (roboticon.getCustomisation() != ResourceType.Unknown){
+			int index = resourceTypeToIndex(roboticon.getCustomisation());
+			if (roboticon.setInstalledLandplot(this)) {
+				productionModifiers[index] += 1;
+				this.installedRoboticon = roboticon;
+				return true;
+			}
+		}
+		else{
+			if (roboticon.setInstalledLandplot(this)) {
+				this.installedRoboticon = roboticon;
+				return true;
+			}
 		}
 
 		return false;
@@ -159,6 +168,14 @@ public class LandPlot {
 	public int getResource(ResourceType resource) {
 		int resIndex = resourceTypeToIndex(resource);
 		return productionAmounts[resIndex];
+	}
+	
+	public boolean hasRoboticon(){
+		return this.hasRoboticon;
+	}
+	
+	public void setHasRoboticon(boolean roboticonInstalled){
+		this.hasRoboticon = roboticonInstalled;
 	}
 
 

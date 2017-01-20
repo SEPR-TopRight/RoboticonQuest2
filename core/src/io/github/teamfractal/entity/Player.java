@@ -35,8 +35,8 @@ public class Player {
 	public Player(RoboticonQuest game){
 		this.game = game;
 		this.roboticonList = new Array<Roboticon>();
-		this.roboticonList.add(new Roboticon());
-		this.roboticonList.add(new Roboticon());
+		this.roboticonList.add(new Roboticon(roboticonList.size));
+		this.roboticonList.add(new Roboticon(roboticonList.size));
 		
 	}
 	/**
@@ -122,7 +122,7 @@ public class Player {
 	 * @param type   The {@link ResourceType}
 	 * @return       The amount of specified resource.
 	 */
-	int getResource(ResourceType type) {
+	public int getResource(ResourceType type) {
 		switch (type) {
 			case ENERGY:
 				return getEnergy();
@@ -138,6 +138,27 @@ public class Player {
 				throw new NotCommonResourceException(type);
 		}
 	}
+	
+	public PurchaseStatus purchaseRoboticonsFromMarket(int amount, Market market) {
+		if (!market.hasEnoughResources(ResourceType.ROBOTICON, amount)) {
+			return PurchaseStatus.FailMarketNotEnoughResource;
+		}
+
+		int cost = amount * market.getSellPrice(ResourceType.ROBOTICON);
+		int money = getMoney();
+		if (cost > money) {
+			return PurchaseStatus.FailPlayerNotEnoughMoney;
+		}
+		
+		market.sellResource(ResourceType.ROBOTICON, amount);
+		setMoney(money - cost);
+		for (int roboticon = 0; roboticon < amount; roboticon++) {
+			roboticonList.add(new Roboticon(roboticonList.size));
+		}
+		
+		return PurchaseStatus.Success;
+	}
+	
 	//</editor-fold>
 
 	/**
@@ -252,7 +273,7 @@ public class Player {
 			landList.add(landPlot);
 		}
 	}
-	public Array<String> getRoboticonAmounts() {
+	public Array<String> getRoboticonList() {
 		int ore = 0;
 		int energy = 0;
 		int uncustomised = 0;
@@ -274,6 +295,9 @@ public class Player {
 		roboticonAmountList.add("Energy Specific x " + energy);
 		roboticonAmountList.add("Uncustomised x " + uncustomised);
 		return roboticonAmountList;
+	}
+	public Array<Roboticon> getRoboticons(){
+		return this.roboticonList;
 	}
 
 	/**

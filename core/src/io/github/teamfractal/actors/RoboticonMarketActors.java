@@ -25,6 +25,8 @@ public class RoboticonMarketActors extends Table{
 		private Integer roboticonAmount = 0;
 		private Roboticon currentlySelectedRoboticon;
 		private Texture roboticonTexture;
+		private Label topText;
+		private Label playerStats;
 		
 		public RoboticonMarketActors(final RoboticonQuest game, RoboticonMarketScreen screen) {
 			this.game = game;
@@ -32,7 +34,7 @@ public class RoboticonMarketActors extends Table{
 			
 			
 			// Buy Roboticon Text: Top Left
-			final Label lblBuyRoboticon = new Label("Purchase Roboticions:", game.skin);
+			final Label lblBuyRoboticon = new Label("Purchase Roboticons:", game.skin);
 			
 			//Roboticon text to go next to + and - buttons
 			final Label lblRoboticons = new Label("Roboticons:", game.skin);
@@ -66,7 +68,7 @@ public class RoboticonMarketActors extends Table{
 			buyRoboticonsButton.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					game.getPlayer().purchaseResourceFromMarket(roboticonAmount, game.market, ResourceType.ROBOTICON);
+					game.getPlayer().purchaseRoboticonsFromMarket(roboticonAmount, game.market);
 					roboticonAmount = 0;
 					lblRoboticonAmount.setText(roboticonAmount.toString());
 					widgetUpdate();
@@ -75,7 +77,7 @@ public class RoboticonMarketActors extends Table{
 			});
 			
 			// Current Roboticon Text: Top Right
-			String playerRoboticonText = "Player " + game.getPlayerInt() + "'s Roboticons:";
+			String playerRoboticonText = "Player " + (game.getPlayerInt() + 1) + "'s Roboticons:";
 			final Label lblCurrentRoboticon = new Label(playerRoboticonText, game.skin);
 			
 			// Image widget which displays the roboticon in the player's inventory
@@ -104,8 +106,12 @@ public class RoboticonMarketActors extends Table{
 				}
 			});
 			
+			currentlySelectedRoboticon = game.getPlayer().getRoboticons().get(0);
+			String ID = "Roboticon ID: " + currentlySelectedRoboticon.getID();
+			final Label roboticonID = new Label(ID, game.skin); 
+			
 			// Purchase Customisation Text: Bottom Right
-			final Label lblPurchaseCustomisation = new Label("Purchase Customisation:", game.skin);
+			final Label lblPurchaseCustomisation = new Label("Customisation Type:", game.skin);
 			
 			// Drop down menu to select how to customise the selected roboticion
 			final SelectBox<String> customisationDropDown = new SelectBox<String>(game.skin);
@@ -123,21 +129,101 @@ public class RoboticonMarketActors extends Table{
 				}
 			});
 			
-		
-			add(lblBuyRoboticon).padTop(40).padLeft(90);
+			// Top Row Text
+			add(lblBuyRoboticon).padTop(40).padLeft(68);
 			add();
 			add();
-			add(lblCurrentRoboticon).padTop(40).padLeft(150);
+			add(lblCurrentRoboticon).padTop(40).padLeft(200);
 			
 			row();
 			
-			add(nextButton);
+			// Roboticon inc & dec buttons,
+			add(lblRoboticons).padTop(40);
+			add(subRoboticonButton).padTop(40).padLeft(-90);
+			add(lblRoboticonAmount).padTop(40);
+			add(addRoboticonButton).padTop(40).padLeft(-260);
 			
+			add();
+			add();
+			add();
 			
+			row();
+			
+			// Roboticon in inventory selection (moved to different row to preserve position of other buttons)
+			add();
+			add(buyRoboticonsButton).padLeft(-100).padBottom(160);
+			add();
+			add();
+			
+			add(moveLeftRoboticonInventoryBtn).padTop(40).padLeft(-350).padBottom(200);
+			add(roboticonImage).padLeft(-150).padRight(75).padBottom(100).padTop(-50);
+			add(moveRightRoboticonInventoryBtn).padTop(40).padLeft(-100).padBottom(200);
+			
+			row();
+			
+			add();
+			add();
+			add();
+			add();
+			
+			add();
+			add(roboticonID).padLeft(-225).padTop(-170);
+			
+			// Purchase customisation label
+			add();
+			add();
+			add();
+			add();
+			
+			add();
+			add(lblPurchaseCustomisation).padLeft(-300).padTop(-100);
+			
+			row();
+			
+			// Customisation Drop Down Menu
+			add();
+			add();
+			add();
+			add();
+			
+			add();
+			add(customisationDropDown).padLeft(-225).padTop(-50);
+			
+			row();
+			
+			// Buy Customisation Button
+			add();
+			add();
+			add();
+			add();
+			
+			add();
+			add(buyCustomisationButton).padLeft(-225);
+			
+			row();
+			add(nextButton).padTop(40);
+			
+			widgetUpdate();
 			
 		}
 		
 		public void widgetUpdate() {
+			// Draws turn and phase info on screen
+			if (this.topText != null) this.topText.remove();
+			String phaseText = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
+			this.topText = new Label(phaseText, game.skin);
+			topText.setWidth(120);
+			topText.setPosition(screen.getStage().getWidth()/2 - 40, screen.getStage().getViewport().getWorldHeight() - 20);
+			screen.getStage().addActor(topText);
+			
+			// Draws player stats on screen
+			if (this.playerStats != null) this.playerStats.remove();
+			String statText = "Ore: " + game.getPlayer().getOre() + " Energy: " +  game.getPlayer().getEnergy() + " Food: "
+					+ game.getPlayer().getFood() + " Money: " + game.getPlayer().getMoney();
+			this.playerStats = new Label(statText, game.skin);
+			playerStats.setWidth(250);
+			playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
+			screen.getStage().addActor(playerStats);
 			
 		}
 		

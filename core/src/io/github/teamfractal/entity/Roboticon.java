@@ -3,14 +3,20 @@ package io.github.teamfractal.entity;
 import io.github.teamfractal.entity.enums.ResourceType;
 
 public class Roboticon {
+	private int ID;
 	private ResourceType customisation;
 	private LandPlot installedLandplot;
 	
-	Roboticon() {
+	Roboticon(int ID) {
+		this.ID = ID;
 		customisation = ResourceType.Unknown;
 	}
+	
+	public int getID () {
+		return this.ID;
+	}
 
-	ResourceType getCustomisation() {
+	public ResourceType getCustomisation() {
 		return this.customisation;
 	}
 	
@@ -22,7 +28,7 @@ public class Roboticon {
 		return installedLandplot != null;
 	}
 
-	synchronized boolean setInstalledLandplot(LandPlot landplot) {
+	public synchronized boolean setInstalledLandplot(LandPlot landplot) {
 		if (!isInstalled()) {
 			installedLandplot = landplot;
 			return true;

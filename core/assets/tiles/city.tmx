@@ -161,12 +161,12 @@
    <image width="100" height="65" source="city/raw/sport village placeholder.png"/>
   </tile>
  </tileset>
- <tileset firstgid="100" name="player1 tiles" tilewidth="100" tileheight="65" tilecount="5" columns="0">
+ <tileset firstgid="67" name="player1 tiles" tilewidth="104" tileheight="69" tilecount="17" columns="0">
   <tile id="0">
    <image width="100" height="65" source="city/Player1/empty.png"/>
   </tile>
   <tile id="1">
-   <image width="100" height="65" source="city/Player1/player1.png"/>
+   <image width="104" height="69" source="city/Player1/player1.png"/>
   </tile>
   <tile id="2">
    <image width="100" height="65" source="city/Player1/player2.png"/>
@@ -176,6 +176,42 @@
   </tile>
   <tile id="4">
    <image width="100" height="65" source="city/Player1/player4.png"/>
+  </tile>
+  <tile id="5">
+   <image width="104" height="69" source="city/Player1/player1ore.png"/>
+  </tile>
+  <tile id="6">
+   <image width="100" height="65" source="city/Player1/player2ore.png"/>
+  </tile>
+  <tile id="7">
+   <image width="100" height="65" source="city/Player1/player3Ore.png"/>
+  </tile>
+  <tile id="8">
+   <image width="100" height="65" source="city/Player1/player4Ore.png"/>
+  </tile>
+  <tile id="9">
+   <image width="104" height="69" source="city/Player1/player1Energy.png"/>
+  </tile>
+  <tile id="10">
+   <image width="100" height="65" source="city/Player1/player2Energy.png"/>
+  </tile>
+  <tile id="11">
+   <image width="100" height="65" source="city/Player1/player3Energy.png"/>
+  </tile>
+  <tile id="12">
+   <image width="100" height="65" source="city/Player1/player4Energy.png"/>
+  </tile>
+  <tile id="13">
+   <image width="104" height="69" source="city/Player1/player1Uncustomised.png"/>
+  </tile>
+  <tile id="14">
+   <image width="100" height="65" source="city/Player1/player2Uncustomised.png"/>
+  </tile>
+  <tile id="15">
+   <image width="100" height="65" source="city/Player1/player3Uncustomised.png"/>
+  </tile>
+  <tile id="16">
+   <image width="100" height="65" source="city/Player1/player4Uncustomised.png"/>
   </tile>
  </tileset>
  <layer name="MapData" width="7" height="12">
@@ -196,18 +232,18 @@
  </layer>
  <layer name="PlayerOverlay" width="7" height="12">
   <data encoding="csv">
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100,
-100,100,100,100,100,100,100
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67,
+67,67,67,67,67,67,67
 </data>
  </layer>
 </map>

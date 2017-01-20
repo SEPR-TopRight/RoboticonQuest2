@@ -18,11 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.actors.GameScreenActors;
-import io.github.teamfractal.animation.AnimationAddResources;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
+import io.github.teamfractal.entity.enums.ResourceType;
 
-public class GameScreen extends AbstructAnimationScreen implements Screen  {
+public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private final RoboticonQuest game;
 	private final OrthographicCamera camera;
 	private final Stage stage;
@@ -67,7 +67,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		this.stage = new Stage(new ScreenViewport());
 		this.actors = new GameScreenActors(game, this);
 		actors.initialiseButtons();
-		actors.textUpdate();
+		// actors.textUpdate();
 		
 		
 
@@ -137,7 +137,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 						return;
 					}
 				case 3:
-					if (actors.getInstallRoboticonSelect().isVisible()) {
+					if (actors.getInstallRoboticonSelect().isVisible() && actors.getDropDownActive()) {
 						actors.getInstallRoboticonSelect().setVisible(false);
 						actors.getInstallRoboticonLabel().setVisible(false);
 						return;
@@ -172,23 +172,32 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 				if (tileIndexY % 2 == 0) {
 					tileIndexX --;
 				}
-
-				selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
+				if (game.getPhase() != 3) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
+				else if (actors.getDropDownActive()) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
 				if (selectedPlot != null) {
-					actors.tileClicked(selectedPlot, x, y);
-				}
+					actors.tileClicked(selectedPlot, x, y);}
 			}
 		});
 		//</editor-fold>
 
 		// Finally, start a new game and initialise variables.
-		newGame();
+		// newGame();
 	}
 
 	public TiledMapTile getPlayerTile(Player player) {
-		return tmx.getTileSets().getTile(101 + game.getPlayerIndex(player));
+		return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player));
 	}
-
+	public TiledMapTile getResourcePlayerTile(Player player, ResourceType type){
+		switch(type){
+		case ORE:
+			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 4);
+		case ENERGY:
+			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 8);
+		default:
+			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 12);
+		}
+		}
+			
 	/**
 	 * Reset to new game status.
 	 */
@@ -198,6 +207,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		if (renderer != null) renderer.dispose();
 		this.tmx = new TmxMapLoader().load("tiles/city.tmx");
 		renderer = new IsometricStaggeredTiledMapRenderer(tmx);
+		game.reset();
 
 		mapLayer = (TiledMapTileLayer)tmx.getLayers().get("MapData");
 		playerOverlay = (TiledMapTileLayer)tmx.getLayers().get("PlayerOverlay");
@@ -205,6 +215,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		maxDragY = 0.75f * mapLayer.getTileHeight() * (mapLayer.getHeight() + 1);
 
 		game.getPlotManager().setup(mapLayer, playerOverlay);
+		game.nextPhase();
 	}
 
 	@Override
@@ -217,6 +228,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		camera.update();
+
 		renderer.setView(camera);
 		renderer.render();
 
@@ -224,6 +236,7 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 		stage.draw();
 
 		// System.out.print("render, delta = " + delta);
+		game.getBatch().setProjectionMatrix(stage.getCamera().combined);
 		renderAnimation(delta);
 	}
 
@@ -235,11 +248,10 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 	@Override
 	public void resize(int width, int height) {
 		// Avoid the viewport update if they are not changed.
-		if (width != oldW && height != oldH) {
+		if (width != oldW || height != oldH) {
 			stage.getViewport().update(width, height, true);
 			camera.setToOrtho(false, width, height);
-			actors.textUpdate();
-			actors.nextUpdate();
+			actors.resizeScreen(width, height);
 			oldW = width;
 			oldH = height;
 		}
@@ -274,6 +286,14 @@ public class GameScreen extends AbstructAnimationScreen implements Screen  {
 
 	public Stage getStage() {
 		return stage;
+	}
+
+	@Override
+	public Size getScreenSize() {
+		Size s = new Size();
+		s.Height = oldH;
+		s.Width = oldW;
+		return s;
 	}
 
 	public TiledMap getTmx(){
