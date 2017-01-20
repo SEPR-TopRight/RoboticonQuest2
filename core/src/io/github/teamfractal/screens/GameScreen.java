@@ -235,8 +235,6 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		stage.act(delta);
 		stage.draw();
 
-		// System.out.print("render, delta = " + delta);
-		game.getBatch().setProjectionMatrix(stage.getCamera().combined);
 		renderAnimation(delta);
 	}
 
@@ -247,14 +245,12 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	 */
 	@Override
 	public void resize(int width, int height) {
-		// Avoid the viewport update if they are not changed.
-		if (width != oldW || height != oldH) {
-			stage.getViewport().update(width, height, true);
-			camera.setToOrtho(false, width, height);
-			actors.resizeScreen(width, height);
-			oldW = width;
-			oldH = height;
-		}
+		stage.getViewport().update(width, height, true);
+		game.getBatch().setProjectionMatrix(stage.getCamera().combined);
+		camera.setToOrtho(false, width, height);
+		actors.resizeScreen(width, height);
+		oldW = width;
+		oldH = height;
 	}
 
 	@Override
