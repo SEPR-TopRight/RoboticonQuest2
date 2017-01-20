@@ -132,6 +132,9 @@ public class Market {
 
 			case FOOD:
 				return getFood();
+				
+			case CUSTOMISATION:
+				return 1000;
 
 			default:
 				throw new NotCommonResourceException(type);
@@ -165,6 +168,9 @@ public class Market {
 
 			case FOOD:
 				setFood(amount);;
+				break;
+				
+			case CUSTOMISATION:
 				break;
 
 			default:
@@ -209,6 +215,9 @@ public class Market {
 			case ROBOTICON:
 				price = 100;
 				return price;
+				
+			case CUSTOMISATION:
+				price = 10;
 
 			default:
 				throw new IllegalArgumentException("Error: Resource type is incorrect.");

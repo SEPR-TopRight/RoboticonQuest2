@@ -10,6 +10,7 @@ public enum ResourceType {
 	ORE,
 	FOOD,
 	ROBOTICON,
+	CUSTOMISATION,
 	Unknown;
 
 	public boolean isValidResource() {
@@ -23,6 +24,7 @@ public enum ResourceType {
 			case ORE:
 			case FOOD:
 			case ROBOTICON:
+			case CUSTOMISATION:
 				return StringUtil.Capitalise(super.toString().toLowerCase());
 
 			case Unknown:

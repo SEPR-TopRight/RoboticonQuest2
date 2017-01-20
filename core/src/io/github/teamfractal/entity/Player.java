@@ -159,6 +159,25 @@ public class Player {
 		return PurchaseStatus.Success;
 	}
 	
+	public PurchaseStatus purchaseCustomisationFromMarket(ResourceType resource, Roboticon roboticon, Market market) {
+		
+		if (!market.hasEnoughResources(ResourceType.CUSTOMISATION, 1)) {
+			return PurchaseStatus.FailMarketNotEnoughResource;
+		}
+
+		int cost = 1 * market.getSellPrice(ResourceType.CUSTOMISATION);
+		int money = getMoney();
+		if (cost > money) {
+			return PurchaseStatus.FailPlayerNotEnoughMoney;
+		}
+		
+		market.sellResource(ResourceType.CUSTOMISATION, 1);
+		setMoney(money - cost);
+		customiseRoboticon(roboticon, resource);
+		
+		return PurchaseStatus.Success;
+	}
+	
 	//</editor-fold>
 
 	/**
