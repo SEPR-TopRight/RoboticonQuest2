@@ -30,7 +30,7 @@ public class MainMenuScreen implements Screen {
 
 		stage.addActor(table);
 
-
+		/*
 		AdjustableActor actor1 = new AdjustableActor(game.skin, 0, 0, 100, "Ore: 10 Gold","Action");
 		actor1.setActionEvent(new ChangeListener() {
 			@Override
@@ -40,6 +40,7 @@ public class MainMenuScreen implements Screen {
 		});
 		actor1.setPosition(40, 40);
 		stage.addActor(actor1);
+		*/
 	}
 
 	@Override

@@ -17,9 +17,9 @@ public class AdjustableActor extends Table {
 	private final Label titleLabel;
 
 	//<editor-fold desc="Getter / Setter">
-	private int value;
-	private int min;
-	private int max;
+	private int value = 0;
+	private int min   = 0;
+	private int max   = 9;
 	private ChangeListener actionEvent;
 
 	public String getTitle() {
@@ -78,21 +78,16 @@ public class AdjustableActor extends Table {
 		} else if (value > max) {
 			value = max;
 		}
+
+		updateValueDisplay();
 	}
 
-	public AdjustableActor(Skin skin, int value, int min, int max, String title, String action) {
-		// debug();
-
-		this.value = value;
-		this.min = min;
-		this.max = max;
-
+	public AdjustableActor(Skin skin, String title, String action) {
 		subButton = new TextButton("<", skin);
 		addButton = new TextButton(">", skin);
 		actButton = new TextButton(action, skin);
 		valueLabel = new Label("0", skin);
 		titleLabel = new Label(title, skin);
-
 		bindButtonEvents();
 
 		/*
@@ -117,13 +112,18 @@ public class AdjustableActor extends Table {
 		add(subButton).align(Align.left);
 		add(valueLabel).fillX();
 		add(addButton).align(Align.right);
-
 		row();
 
 		add(actButton).colspan(3).fillX().spaceTop(10);
-
 		row();
+	}
 
+	public AdjustableActor(Skin skin, int value, int min, int max, String title, String action) {
+		this(skin, title, action);
+
+		this.value = value;
+		this.min = min;
+		this.max = max;
 	}
 
 	private void bindButtonEvents() {

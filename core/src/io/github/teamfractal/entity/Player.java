@@ -122,7 +122,7 @@ public class Player {
 	 * @param type   The {@link ResourceType}
 	 * @return       The amount of specified resource.
 	 */
-	int getResource(ResourceType type) {
+	public int getResource(ResourceType type) {
 		switch (type) {
 			case ENERGY:
 				return getEnergy();

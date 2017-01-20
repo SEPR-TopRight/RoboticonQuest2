@@ -10,10 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.Market;
+import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.ResourceMarketScreen;
 
 public class ResourceMarketActors extends Table {
+	private final AdjustableActor oreBuy;
+	private final AdjustableActor oreSell;
+	private final AdjustableActor energyBuy;
+	private final AdjustableActor energySell;
 	private RoboticonQuest game;
 	private Integer buyOreAmount;
 	private Integer sellOreAmount;
@@ -25,32 +30,98 @@ public class ResourceMarketActors extends Table {
 	private Label marketStats;
 	private Integer sellEnergyAmount;
 
+	/**
+	 * Get price in string format
+	 *
+	 * @param resource   The resource type.
+	 * @param bIsSell    <code>true</code> if is for sell,
+	 *                   or <code>false</code> if is for buy in.
+	 * @return           The formatted string for the resource.
+	 */
+	private String getPriceString(ResourceType resource, boolean bIsSell) {
+		// getBuyPrice: market buy-in price (user sell price)
+		// getSellPrice: market sell price (user buy price)
+		return resource.toString() + ": "
+				+ (bIsSell
+					? game.market.getBuyPrice(resource)
+					: game.market.getSellPrice(resource))
+				+ " Gold";
+	}
+
+	private void updateAdjustable(AdjustableActor adjustableActor, ResourceType resource, boolean bIsSell) {
+		if (bIsSell) {
+			adjustableActor.setMax(game.getPlayer().getResource(resource));
+		} else {
+			adjustableActor.setMax(game.market.getResource(resource));
+		}
+
+		adjustableActor.setTitle(getPriceString(resource, bIsSell));
+	}
+
+	/**
+	 * Generate an adjustable actor for sell/buy.
+	 *
+	 * @param resource   The resource type.
+	 * @param bIsSell    <code>true</code> if is for sell,
+	 *                   or <code>false</code> if is for buy in.
+	 * @return           The adjustable actor generated.
+	 */
+	private AdjustableActor addAdjustable(final ResourceType resource, final boolean bIsSell) {
+		final Player player = game.getPlayer();
+		final AdjustableActor adjustableActor = new AdjustableActor(game.skin, getPriceString(resource, bIsSell),
+				(bIsSell ? "Sell" : "Buy") + " " + resource.toString());
+		updateAdjustable(adjustableActor, resource, bIsSell);
+		adjustableActor.setActionEvent(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (bIsSell) {
+					// Sell from player to market.
+					player.sellResourceToMarket(adjustableActor.getValue(), game.market, resource);
+				} else {
+					// Player buy from market.
+					player.purchaseResourceFromMarket(adjustableActor.getValue(), game.market, resource);
+				}
+
+				ResourceMarketActors.this.widgetUpdate();
+			}
+		});
+		add(adjustableActor);
+		return adjustableActor;
+	}
+
 	public ResourceMarketActors(final RoboticonQuest game, ResourceMarketScreen screen) {
-		debug();
+		// debug();
 		center();
 
 		this.game = game;
 		this.screen = screen;
 
-		phaseInfo = new Label("", game.skin);
-		playerStats = new Label("", game.skin);
-		nextButton = new TextButton("Next ->", game.skin);
-		marketStats = new Label("", game.skin);
-
-		phaseInfo.setAlignment(Align.bottomLeft);
-		marketStats.setAlignment(Align.right);
-
 		Stage stage = screen.getStage();
 
+		phaseInfo = new Label("", game.skin);
+		phaseInfo.setAlignment(Align.bottomLeft);
+
+		nextButton = new TextButton("Next ->", game.skin);
+		nextButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.nextPhase();
+			}
+		});
 		stage.addActor(phaseInfo);
 		stage.addActor(nextButton);
 
+
+
 		// Row: player and market stats.
+		playerStats = new Label("", game.skin);
+		marketStats = new Label("", game.skin);
+		marketStats.setAlignment(Align.right);
+
 		add(playerStats);
 		add().spaceRight(20);
 		add(marketStats);
-		row();
-		addEmptyRow(20);
+		rowWithHeight(20);
 
 		// Row: Label of Sell and Buy
 		Market market = game.market;
@@ -65,257 +136,29 @@ public class ResourceMarketActors extends Table {
 		add(buyLabel);
 		add();
 		add(sellLabel);
-		row();
-		addEmptyRow(10);
+		rowWithHeight(10);
 
-		// Row:
-
-		// new AdjustableActor(skin, 0, 0, market.getResource(ResourceType.ORE), "Buy Ore", "Buy Ore");
-
-
-
-		/*
-
-
-
-		//Set up and position ore Label
-		final Label buyOreLabel = new Label("Ore: " + game.market.getSellPrice(ResourceType.ORE) + " Gold",
-				game.skin);
-		//initialise ore amount
-		buyOreAmount = 0;
-
-		//Set up the display to show how much ore is being bought
-		final Label buyOreAmountText = new Label(buyOreAmount.toString(), game.skin);
-		buyOreAmountText.setWidth(10);
-
-		//Set button to increment ore to be bought
-		final TextButton addBuyOreButton = new TextButton("+", game.skin);
-		addBuyOreButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				buyOreAmount += 1;
-				buyOreAmountText.setText(buyOreAmount.toString());
-			}
-		});
-
-		//Set up button to decrement ore to be bought
-		final TextButton subBuyOreButton = new TextButton("-", game.skin);
-		subBuyOreButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (buyOreAmount > 0) {
-					buyOreAmount -= 1;
-					buyOreAmountText.setText(buyOreAmount.toString());
-				}
-			}
-		});
-		//Set up button to confirm ore purchase
-		final TextButton buyOreButton = new TextButton("Buy ore", game.skin);
-		buyOreButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.getPlayer().purchaseResourceFromMarket(buyOreAmount, game.market, ResourceType.ORE);
-				buyOreAmount = 0;
-				buyOreAmountText.setText(buyOreAmount.toString());
-				buyOreLabel.setText("Ore: " + game.market.getSellPrice(ResourceType.ORE) + " Gold");
-				widgetUpdate();
-			}
-		});
-
-
-		//Set up and position energy Label
-		final Label buyEnergyLabel = new Label("Energy: " + game.market.getSellPrice(ResourceType.ENERGY)
-				+ " Gold", game.skin);
-
-		buyEnergyAmount = 0;
-
-		//Set up the display to show how much energy is being bought
-		final Label buyEnergyAmountText = new Label(buyEnergyAmount.toString(), game.skin);
-
-		//set up button to increment Energy amount
-		final TextButton addBuyEnergyButton = new TextButton("+", game.skin);
-		addBuyEnergyButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				buyEnergyAmount += 1;
-				buyEnergyAmountText.setText(buyEnergyAmount.toString());
-			}
-		});
-
-		//set up button to decrement energy amount
-		final TextButton subBuyEnergyButton = new TextButton("-", game.skin);
-		subBuyEnergyButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (buyEnergyAmount > 0) {
-					buyEnergyAmount -= 1;
-					buyEnergyAmountText.setText(buyEnergyAmount.toString());
-				}
-			}
-		});
-
-		//set up button to confirm energy purchase
-		final TextButton buyEnergyButton = new TextButton("Buy energy", game.skin);
-		buyEnergyButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.getPlayer().purchaseResourceFromMarket(buyEnergyAmount, game.market, ResourceType.ENERGY);
-				buyEnergyAmount = 0;
-				buyEnergyAmountText.setText(buyEnergyAmount.toString());
-				buyEnergyLabel.setText("Energy: " + game.market.getSellPrice(ResourceType.ENERGY)
-						+ " Gold");
-				widgetUpdate();
-			}
-		});
-
-		//set up sell label
-		final Label sellLabel = new Label("Sell", game.skin);
-		sellLabel.setColor(0, (float) 0.5, 0, 1);
-
-		//set up ore label
-		final Label sellOreLabel = new Label("Ore: " + game.market.getBuyPrice(ResourceType.ORE) + " Gold",
-				game.skin);
-
-		//initalise ore amount
-		sellOreAmount = 0;
-
-		//set up display of ore amount to be sold
-		final Label sellOreAmountText = new Label(sellOreAmount.toString(), game.skin);
-		sellOreAmountText.setWidth(10);
-
-		//set up button to increment ore amount 
-		final TextButton addSellOreButton = new TextButton("+", game.skin);
-		addSellOreButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				sellOreAmount += 1;
-				sellOreAmountText.setText(sellOreAmount.toString());
-			}
-		});
-
-		//set up button to decrement ore amount
-		final TextButton subSellOreButton = new TextButton("-", game.skin);
-		subSellOreButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (sellOreAmount > 0) {
-					sellOreAmount -= 1;
-					sellOreAmountText.setText(sellOreAmount.toString());
-				}
-			}
-		});
-		//set up button to confirm ore sale
-		final TextButton sellOreButton = new TextButton("Sell ore", game.skin);
-		sellOreButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.getPlayer().sellResourceToMarket(sellOreAmount, game.market, ResourceType.ORE);
-				sellOreAmount = 0;
-				sellOreAmountText.setText(sellOreAmount.toString());
-				sellOreLabel.setText("Ore: " + game.market.getBuyPrice(ResourceType.ORE) + " Gold");
-				widgetUpdate();
-			}
-		});
-
-		//set up label for energy
-		final Label sellEnergyLabel = new Label("Energy: " + game.market.getBuyPrice(ResourceType.ENERGY) + " Gold",
-				game.skin);
-
-		//initialise energy amount
-		sellEnergyAmount = 0;
-
-		//set up display for amount of energy being sold
-		final Label sellEnergyAmountText = new Label(sellEnergyAmount.toString(), game.skin);
-		sellEnergyAmountText.setWidth(10);
-
-
-		//set up button to increment energy being sold amount
-		final TextButton addSellEnergyButton = new TextButton("+", game.skin);
-		addSellEnergyButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				sellEnergyAmount += 1;
-				sellEnergyAmountText.setText(sellEnergyAmount.toString());
-			}
-		});
-
-		//set up button to decrement energy being sold amount
-		final TextButton subSellEnergyButton = new TextButton("-", game.skin);
-		subSellEnergyButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (sellEnergyAmount > 0) {
-					sellEnergyAmount -= 1;
-					sellEnergyAmountText.setText(sellEnergyAmount.toString());
-				}
-			}
-		});
-
-		//set up button to confirm energy sale
-		final TextButton sellEnergyButton = new TextButton("Sell energy", game.skin);
-		sellEnergyButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.getPlayer().sellResourceToMarket(sellEnergyAmount, game.market, ResourceType.ENERGY);
-				sellEnergyAmount = 0;
-				sellEnergyAmountText.setText(sellEnergyAmount.toString());
-				sellEnergyLabel.setText("Ore: " + game.market.getBuyPrice(ResourceType.ENERGY) + " Gold");
-				widgetUpdate();
-			}
-		});
-
-		//place all widgets in table
-		add(buyLabel).padTop(40).padLeft(90);
+		// Row: Ore buy/sell
+		oreBuy = addAdjustable(ResourceType.ORE, false);
 		add();
-		add();
-		add(sellLabel).padTop(40).padLeft(250);
-		row();
-		add(buyOreLabel).padTop(20);
-		add();
-		add();
-		add(sellOreLabel).padTop(20).padLeft(250);
-		row();
-		add(subBuyOreButton).padLeft(-10).padTop(10);
-		add(buyOreAmountText).padLeft(-10);
-		add(addBuyOreButton).padLeft(40);
+		oreSell = addAdjustable(ResourceType.ORE, true);
+		rowWithHeight(10);
 
-		add(subSellOreButton).padLeft(200).padTop(10);
-		add(sellOreAmountText).padLeft(-10);
-		add(addSellOreButton).padLeft(40);
-
-		row();
-
-		add(buyOreButton).padTop(10).padLeft(30);
+		// Row: Energy buy/sell
+		energyBuy = addAdjustable(ResourceType.ENERGY, false);
 		add();
-		add();
-		add(sellOreButton).padTop(10).padLeft(220);
-		row();
-
-
-		add(buyEnergyLabel).padTop(30).padLeft(25);
-		add();
-		add();
-		add(sellEnergyLabel).padTop(20).padLeft(250);
-		row();
-		add(subBuyEnergyButton).padLeft(-10).padTop(10);
-		add(buyEnergyAmountText);
-		add(addBuyEnergyButton).padLeft(40);
-
-		add(subSellEnergyButton).padLeft(200).padTop(10);
-		add(sellEnergyAmountText).padLeft(-10);
-		add(addSellEnergyButton).padLeft(40);
-
-		row();
-		add(buyEnergyButton).padTop(10).padLeft(50);
-		add();
-		add();
-		add(sellEnergyButton).padTop(10).padLeft(220);
-		*/
+		energySell = addAdjustable(ResourceType.ENERGY, true);
+		rowWithHeight(10);
 
 		widgetUpdate();
 	}
 
-	private void addEmptyRow(int height) {
+	/**
+	 * Add an empty row to current table.
+	 * @param height  The height for that empty row.
+	 */
+	private void rowWithHeight(int height) {
+		row();
 		add().spaceTop(height);
 		row();
 	}
@@ -343,6 +186,12 @@ public class ResourceMarketActors extends Table {
 		phaseInfo.setText(phaseText);
 		playerStats.setText(statText);
 		marketStats.setText(marketStatText);
+
+		updateAdjustable(oreBuy, ResourceType.ORE, false);
+		updateAdjustable(oreSell, ResourceType.ORE, true);
+
+		updateAdjustable(energyBuy, ResourceType.ENERGY, false);
+		updateAdjustable(energySell, ResourceType.ENERGY, true);
 	}
 
 	public void screenResize(float width, float height) {
