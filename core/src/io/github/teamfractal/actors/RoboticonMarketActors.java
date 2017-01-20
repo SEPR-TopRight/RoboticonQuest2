@@ -237,7 +237,7 @@ public class RoboticonMarketActors extends Table{
 			this.roboticonID.setText("Roboticon Issue Number: " + game.getPlayer().getRoboticons().get(roboticonPos).getID());
 			
 			} else {
-				roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/No_roboticons.png"));
+				roboticonTexture = new Texture(Gdx.files.internal("roboticon_images/robot_question.png"));
 				this.roboticonID.setText("Roboticon Issue Number: ####");
 			}
 			
