@@ -261,7 +261,6 @@ public class RoboticonMarketActors extends Table{
 			}
 			
 			roboticonImage.setDrawable(new TextureRegionDrawable(new TextureRegion(roboticonTexture)));
-			roboticonImage.setSize(roboticonTexture.getWidth(), roboticonTexture.getHeight());
 		}
 		
 		public void widgetUpdate() {
