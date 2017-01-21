@@ -1,0 +1,1 @@
+set "PATH=X:\Path\To\ImageMagick;%PATH%"

@@ -1,146 +1,131 @@
 package io.github.teamfractal.entity;
 
-import io.github.teamfractal.entity.resource.ResourceType;
-import org.junit.Test;
+import io.github.teamfractal.entity.enums.ResourceType;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
+
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
 public class MarketTest {
-	Market market;
-	Player player;
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
+
+	private Market market;
 
 	/**
-	 * Reset variables.
+	 * Reset market to its default status.
 	 */
-	public void reset () {
+	@Before
+	public void Contractor() {
 		market = new Market();
-		player = new Player();
-
-		// Give the player A LOT of money.
-		player.addMoney(100000);
 	}
 
 	/**
-	 * Player should be able to purchase robotics from market.
+	 * test start mo
+	 * The market should start with correct amount of resources.
+	 * 16 Food & Energy, 0 Ore, 12 Robotics
 	 */
 	@Test
-	public void buyRoboticon() {
-		reset();
-
-        int roboticBefore = player.getResource(ResourceType.Robotic);
-        market.buyRoboticon(player,3);
-        int roboticAfter = player.getResource(ResourceType.Robotic);
-
-        assertEquals(3, roboticAfter - roboticBefore);
-    }
-
-	/**
-	 * Market upon initialize should have expected number of resources.
-	 */
-	@Test
-	public void initResources(){
-		reset();
-
-		assertEquals(market.getOre(), 0);
-		assertEquals(market.getEnergy(), 16);
-		assertEquals(market.getFood(), 16);
-		assertEquals(market.getRobotic(), 12);
+	public void marketShouldInitWithCorrectValues() {
+		assertEquals(16, market.getFood());
+		assertEquals(16, market.getEnergy());
+		assertEquals(0, market.getOre());
+		assertEquals(12, market.getRoboticon());
 	}
 
 	/**
-	 * Player should be able to purchase energy from market.
+	 * test setEnergy(), setOre(), setFood(), setRoboticon()
+	 * The market should be able to set and get resources.
 	 */
 	@Test
-	public void buyEnergy() {
-		Market market = new Market();
-		Player player = new Player();
-		player.setResource(ResourceType.Energy, 0);
-
-		player.addMoney(100000);
-
-		market.buyEnergy(player,3);
-		int energyAfter = player.getResource(ResourceType.Energy);
-
-		// check if player energy increase,
-		// this should increase 3 since there is 0 energy in the beginning
-		assertEquals(3, energyAfter);
+	public void marketShouldAbleToGetAndSetResources() {
+		Random rnd = new Random();
+		int valueToTest = rnd.nextInt(100);
+		market.setEnergy(valueToTest);
+		market.setOre(valueToTest);
+		market.setFood(valueToTest);
+		market.setRoboticon(valueToTest);
 
 
+		assertEquals(valueToTest, market.getEnergy());
+		assertEquals(valueToTest, market.getOre());
+		assertEquals(valueToTest, market.getFood());
+		assertEquals(valueToTest, market.getRoboticon());
 	}
 
 	/**
-	 * Player should be able to sell energy to market.
+	 * test: getBuyPrice()
+	 * The market should start with correct price for player to buy.
+	 * Prices listed here are subjected for change in later development.
+	 *
+	 * Ore: $10
+	 * Food: $10
+	 * Energy: $10
+	 * Roboticon: $10
 	 */
 	@Test
-	public void sellEnergy() {
-		Market market = new Market();
-		Player player = new Player();
-		player.setResource(ResourceType.Energy, 3);
-
-		market.sellEnergy(player,3);
-		int energyAfter = player.getResource(ResourceType.Energy);
-
-
-		assertEquals(0, energyAfter);
+	public void marketShouldHaveCorrectPricesForResources() throws Exception {
+		assertEquals(20, market.getBuyPrice(ResourceType.ORE));
+		assertEquals(30, market.getBuyPrice(ResourceType.ENERGY));
+		assertEquals(40, market.getBuyPrice(ResourceType.FOOD));
+		assertEquals(100, market.getBuyPrice(ResourceType.ROBOTICON));
 	}
+
 
 	/**
-	 * Player should be able to sell ore to market.
+	 * test: hasEnoughResources
+	 * player class can use this method to find out that the amount of resource
+	 * player want to buy is avaliable in the market, if the amount of resource
+	 * in the market is less than the amount of resources player want to buy then
+	 * throw exception
 	 */
+
 	@Test
-	public void sellOre () {
-		reset();
-
-
-		/// Setup variables
-		int playerOreBefore = 100;
-		int oreToSell = 10;
-		player.setOre(playerOreBefore);
-		int marketOreBefore = market.getOre();
-		double moneyBefore = player.getMoney();
-
-		/// Test body
-		market.sellOre(player, oreToSell);
-
-		/// Variables to be tested.
-		int marketOreAfter = market.getOre();
-		int playerOreAfter = player.getOre();
-		double moneyAfter = player.getMoney();
-
-		// Check if 10 ores were sold to market.
-		assertEquals(playerOreBefore - playerOreAfter,  oreToSell);
-		assertEquals(marketOreBefore - marketOreAfter, -oreToSell);
-
-		// Check if player's money increased.
-		assertTrue(moneyAfter > moneyBefore);
+	public void marketCanCheckResourceMoreThanAmountYouWantToBuy() {
+		assertFalse(market.hasEnoughResources(ResourceType.ORE, 1000000));
+		assertFalse(market.hasEnoughResources(ResourceType.ENERGY, 1000000));
+		assertFalse(market.hasEnoughResources(ResourceType.ROBOTICON, 1000000));
+		assertFalse(market.hasEnoughResources(ResourceType.FOOD, 1000000));
 	}
 
 
-	@Test
-	public void testRoboticonProduction() {
-		// setup
-		Market market = new Market();
-		int oreBefore = market.getOre();
-		int roboticonBefore = market.getRoboticons();
-		// Action
-		market.generateRoboticon();
-		// Tests
-		assertEquals(oreBefore - 2, market.getOre());
-		assertEquals(roboticonBefore + 1, market.getRoboticons());
-	}
-/**
- * The market should be change the price of resources based on abundance
- */
+	/**
+	 * test: getSellPrice()
+	 */
 
 	@Test
-	public void priceTest() {
-		//setup
-		Market market = new Market();
-		Player player = new Player();
-		int oldValue = market.getPrice(Ore);
-		//action
-		market.sellOre(player, 10);
-		//test
-		assertTrue(oldValue > market.getPrice(Ore));
+	public void marketShouldReturnCorrectSellPrice(){
+		int valueToTest1 = 20;
+		market.setEnergy(valueToTest1);
+		market.setOre(valueToTest1);
+		market.setFood(valueToTest1);
+		market.setRoboticon(valueToTest1);
+
+		assertEquals(20,market.getSellPrice(ResourceType.FOOD));
+		assertEquals(20,market.getSellPrice(ResourceType.ORE));
+		assertEquals(20,market.getSellPrice(ResourceType.ROBOTICON));
+		assertEquals(20,market.getSellPrice(ResourceType.ENERGY));
 	}
+
+	@Test
+	public void marketShouldReduceResourcesWhenSells(){
+		market.setEnergy(10);
+		market.setOre(10);
+		market.setFood(10);
+		market.setRoboticon(10);
+
+		market.sellResource(ResourceType.FOOD, 5);
+		market.sellResource(ResourceType.ORE, 5);
+		market.sellResource(ResourceType.ENERGY, 5);
+		market.sellResource(ResourceType.ROBOTICON, 5);
+
+		assertEquals(5, market.getFood() );
+		assertEquals(5, market.getOre() );
+		assertEquals(5, market.getEnergy() );
+		assertEquals(5, market.getRoboticon() );
+
+	}
+
 }

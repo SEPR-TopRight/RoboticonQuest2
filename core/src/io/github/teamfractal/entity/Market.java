@@ -1,213 +1,276 @@
 package io.github.teamfractal.entity;
 
-import io.github.teamfractal.entity.resource.ITrade;
-import io.github.teamfractal.entity.resource.Resource;
-import io.github.teamfractal.entity.resource.ResourceType;
+import io.github.teamfractal.entity.enums.ResourceType;
+import io.github.teamfractal.exception.InvalidResourceTypeException;
+import io.github.teamfractal.exception.NotCommonResourceException;
 
-// TODO: Other resource buy/sell methods.
-// TODO: Other resource parameter.
-
-public class Market implements ITrade {
+public class Market {
 	/**
-	 * Current resources present at the Market.
+	 * Initialise the market
 	 */
+	public Market() {
+		setFood(16);
+		setEnergy(16);
+		setOre(0);
+		setRoboticon(12);
+	}
+
+	//<editor-fold desc="Resource getters and setters">
 	private int food;
 	private int energy;
 	private int ore;
-	private int robotics;
+	private int roboticon;
 
 	/**
-	 * Resource bounded to a class.
+	 * Get the amount of food in the market
+	 * @return The amount of food in the market.
 	 */
-	private Resource foodResource;
-	private Resource energyResource;
-	private Resource oreResource;
-	private Resource roboticResource;
-
-	/**
-	 * Private instance of Market
-	 */
-	private static Market instance;
-
-	/**
-	 * Get an instance of the Market.
-	 * New instance will be created in case of non initialised.
-	 * @return Market
-	 */
-	static Market getInstance() {
-		if (instance == null)
-			instance = new Market();
-
-		return instance;
-	}
-
-	/**
-	 * Init the Market.
-	 */
-	public Market() {
-		food = 16;
-		energy = 16;
-		ore = 0;
-		robotics = 12;
-
-
-		foodResource = new Resource(this, ResourceType.Food, 20, 10, 100);
-		energyResource = new Resource(this, ResourceType.Energy, 20, 10, 100);
-		oreResource = new Resource(this, ResourceType.Ore, 20, 10, 100);
-		roboticResource = new Resource(this, ResourceType.Robotic, 20, 10, 100);
-	}
-
-	/**
-	 * Callback function - Get resource count from instance by its type.
-	 * @param type The resource type.
-	 * @return The resource count, or 0 if invalid type.
-	 */
-	public int getResource(ResourceType type) {
-		switch (type) {
-			case Energy:
-				return energy;
-
-			case Food:
-				return food;
-
-			case Ore:
-				return ore;
-
-			case Robotic:
-				return robotics;
-
-			default:
-				return 0;
-		}
-	}
-
-	/**
-	 * Callback function - Set resource amount from instance by its type.
-	 * @param type The resource type.
-	 */
-	public void setResource(ResourceType type, int amount) {
-		switch (type) {
-			case Energy:
-				energy = amount;
-				break;
-
-			case Food:
-				food = amount;
-				break;
-
-			case Ore:
-				ore = amount;
-				break;
-
-			case Robotic:
-				robotics = amount;
-				break;
-
-			default:
-				break;
-		}
-	}
-
-	/**
-	 * Market have infinity amount of money.
-	 * This method has no use.
-	 * @param amount  Amount of cost.
-	 * @return        Action was success or not.
-	 */
-	public boolean costMoney(double amount) {
-		return true;
-	}
-
-	/**
-	 * Market have infinity amount of money.
-	 * This method has no use.
-	 * @param amount  Amount of money to add.
-	 */
-	public void addMoney(double amount) {
-
-	}
-
-	/**
-	 * Purchase robotics from the Market.
-	 * @param player  The Player.
-	 * @param amount  How many of robotics to purchase.
-	 * @return Boolean, purchase success or not.
-	 */
-	public synchronized boolean buyRoboticon(Player player, int amount) {
-		return roboticResource.buyFromMarket(player, amount);
-	}
-
-	/**
-	 * Purchase food from the Market.
-	 * @param player  The Player.
-	 * @param amount  How many of food to purchase.
-	 * @return Boolean, purchase success or not.
-	 */
-	public synchronized boolean buyFood(Player player, int amount) {
-		return foodResource.buyFromMarket(player, amount);
-	}
-
-	/**
-	 * Purchase energy from the Market.
-	 * @param player  The Player.
-	 * @param amount  How many of energy to purchase.
-	 * @return Boolean, purchase success or not.
-	 */
-	public synchronized boolean buyEnergy(Player player, int amount) {
-		return energyResource.buyFromMarket(player, amount);
-	}
-
-	/**
-	 * Purchase ore from the Market.
-	 * @param player  The Player.
-	 * @param amount  How many of ores to purchase.
-	 * @return Boolean, purchase success or not.
-	 */
-	public synchronized boolean buyOre(Player player, int amount) {
-		return oreResource.buyFromMarket(player, amount);
-	}
-	
-	public synchronized boolean sellRoboticon(Player player, int amount) {
-		return roboticResource.sellToMarket(player, amount);
-	}
-	
-	public synchronized boolean sellFood(Player player, int amount) {
-		return foodResource.sellToMarket(player, amount);
-	}
-	
-	public synchronized boolean sellEnergy(Player player, int amount) {
-		return energyResource.sellToMarket(player, amount);
-	}
-	
-	public synchronized boolean sellOre(Player player, int amount) {
-		return oreResource.sellToMarket(player, amount);
-	}
-
-	public int getOre() {
-		return ore;
-	}
-
-	public int getEnergy() {
-		return energy;
-	}
-
-	public int getFood() {
+	int getFood() {
 		return food;
 	}
 
-	public int getRobotic() {
-		return robotics;
+	/**
+	 * Get the amount of energy in the market
+	 * @return The amount of energy in the market.
+	 */
+	int getEnergy() {
+		return energy;
 	}
 
 	/**
-	 * Get ore purchase price
-	 * @return
+	 * Get the amount of ore in the market
+	 * @return The amount of ore in the market.
 	 */
-	public double getOrePrice() {
-		return oreResource.getPurchasePrice();
+	int getOre() {
+		return ore;
 	}
 
-	public void setOre(int ore) {
-		this.ore = ore;
+	/**
+	 * Get the amount of roboticon in the market
+	 * @return The amount of roboticon in the market.
+	 */
+	int getRoboticon() {
+		return roboticon;
+	}
+
+	/**
+	 * Get the total amount of all available resources added together.
+	 * @return   The total amount.
+	 */
+	private synchronized int getTotalResourceCount() {
+		return food + energy + ore + roboticon;
+	}
+
+	/**
+	 * Set the amount of ore in the market
+	 * @param amount                     The amount of new ore count.
+	 * @throws IllegalArgumentException  If the new amount if negative, this exception will be thrown.
+	 */
+	synchronized void setOre(int amount) throws IllegalArgumentException {
+		if (amount < 0) {
+			throw new IllegalArgumentException("Error: Ore can't be negative.");
+		}
+
+		this.ore = amount;
+	}
+
+	/**
+	 * Set the amount of energy in the market
+	 * @param amount                     The amount of new energy count.
+	 * @throws IllegalArgumentException  If the new amount if negative, this exception will be thrown.
+	 */
+	synchronized void setEnergy(int amount) throws IllegalArgumentException {
+		if (amount < 0) {
+			throw new IllegalArgumentException("Error: Energy can't be negative.");
+		}
+
+		this.energy = amount;
+	}
+
+	/**
+	 * Set the amount of food in the market
+	 * @param amount                     The amount of new food amount.
+	 * @throws IllegalArgumentException  If the new amount if negative, this exception will be thrown.
+	 */
+	synchronized void setFood(int amount) throws IllegalArgumentException {
+		if (amount < 0) {
+			throw new IllegalArgumentException("Error: Food can't be negative.");
+		}
+
+		this.food = amount;
+	}
+
+	/**
+	 * Set the amount of roboticon in the market
+	 * @param amount                     The amount of new roboticon count.
+	 * @throws IllegalArgumentException  If the new amount if negative, this exception will be thrown.
+	 */
+	void setRoboticon(int amount) throws IllegalArgumentException {
+		if (amount < 0) {
+			throw new IllegalArgumentException("Error: Roboticon can't be negative.");
+		}
+
+		roboticon = amount;
+	}
+	//</editor-fold>
+
+	/**
+	 * Get the amount of specific resource.
+	 * @param type   The {@link ResourceType}.
+	 * @return       The amount.
+	 */
+	public int getResource(ResourceType type) {
+		switch (type) {
+			case ORE:
+				return getOre();
+
+			case ENERGY:
+				return getEnergy();
+
+			case ROBOTICON:
+				return getRoboticon();
+
+			case FOOD:
+				return getFood();
+				
+			case CUSTOMISATION:
+				return 1000;
+
+			default:
+				throw new NotCommonResourceException(type);
+		}
+	}
+
+
+
+	/**
+	 * Set the amount of specific resource.
+	 * @param type   The {@link ResourceType}.
+	 * @param amount The new resource amount.
+	 * @throws IllegalArgumentException      Will be thrown if the new amount is negative.
+	 * @throws InvalidResourceTypeException  Will be thrown if the resource specified is invalid.
+	 */
+	void setResource(ResourceType type, int amount)
+			throws IllegalArgumentException, InvalidResourceTypeException {
+
+		switch (type) {
+			case ORE:
+				setOre(amount);
+				break;
+
+			case ENERGY:
+				setEnergy(amount);
+				break;
+
+			case ROBOTICON:
+				setRoboticon(amount);
+				break;
+
+			case FOOD:
+				setFood(amount);;
+				break;
+				
+			case CUSTOMISATION:
+				break;
+
+			default:
+				throw new NotCommonResourceException(type);
+		}
+
+	}
+
+	/**
+	 * Method to ensure the market have enough resources for user to purchase.
+	 * @param type    The {@link ResourceType}.
+	 * @param amount  the amount of resource to check.
+	 * @return        If there are enough resources.
+	 * @throws InvalidResourceTypeException  Will be thrown if the resource specified is invalid.
+	 */
+	boolean hasEnoughResources(ResourceType type, int amount)
+			throws InvalidResourceTypeException {
+		int resource = getResource(type);
+		return amount <= resource;
+	}
+
+	/**
+	 * Get the single price for a resource type.
+	 * @param resource   The {@link ResourceType}.
+	 * @return           The buy in price.
+	 */
+	public int getBuyPrice(ResourceType resource) {
+		int price;
+		switch (resource) {
+			case ORE:
+				price = 20;
+				return price;
+
+			case ENERGY:
+				price = 30;
+				return price;
+
+			case FOOD:
+				price = 40;
+				return price;
+
+			case ROBOTICON:
+				price = 100;
+				return price;
+				
+			case CUSTOMISATION:
+				price = 10;
+
+			default:
+				throw new IllegalArgumentException("Error: Resource type is incorrect.");
+		}
+	}
+
+	/**
+	 * Get the single price for a resource type.
+	 * @param resource   The {@link ResourceType}.
+	 * @return           The sell price.
+	 */
+	public int getSellPrice(ResourceType resource) {
+		double max = 50;
+		double min = 10;
+		double price = 1;
+		int total = getTotalResourceCount();
+		double newPrice = price * (1 - getResource(resource) / total);
+		if (newPrice > max) newPrice = max;
+		if (newPrice < min) newPrice = min;
+		return (int)newPrice;
+	}
+
+	/**
+	 * Buy Resource from the market, caller <i>must</i> be doing all the checks.
+	 * For example, take money away from the player.
+	 *
+	 * This method will only increase the amount of specified resource.
+	 *
+	 * @param resource    The {@link ResourceType}
+	 * @param amount      The amount of resource to buy in.
+	 */
+	public synchronized void buyResource(ResourceType resource, int amount){
+		setResource(resource, getResource(resource) + amount);
+	}
+
+	/**
+	 * Sell Resource from the market, caller <i>must</i> be doing all the checks.
+	 * For example, add money in to the player.
+	 *
+	 * This method will only decrease the amount of specified resource.
+	 *
+	 * @param resource    The {@link ResourceType}
+	 * @param amount      The amount of resource to sell out.
+	 */
+	public synchronized void sellResource(ResourceType resource, int amount) {
+		setResource(resource, getResource(resource) - amount);
 	}
 }
+
+
+
+
+
+
+
+
