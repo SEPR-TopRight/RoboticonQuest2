@@ -127,6 +127,10 @@ public class RoboticonMarketActors extends Table{
 			buyCustomisationButton.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
+					if (-1 == currentlySelectedRoboticonPos) {
+						// nothing selected.
+						return ;
+					}
 					HashMap<String, ResourceType> converter = new HashMap<String, ResourceType>();
 					converter.put("Energy", ResourceType.ENERGY);
 					converter.put("Ore", ResourceType.ORE);

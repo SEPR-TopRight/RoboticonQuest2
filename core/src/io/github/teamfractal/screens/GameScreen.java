@@ -130,6 +130,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				// Hide dialog if it has focus.
 				switch(game.getPhase()){
 				case 1:
 					if (actors.getBuyLandPlotBtn().isVisible()) {
@@ -137,10 +138,11 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 						return;
 					}
 				case 3:
-					if (actors.getInstallRoboticonSelect().isVisible() && actors.getDropDownActive()) {
-						actors.getInstallRoboticonSelect().setVisible(false);
-						actors.getInstallRoboticonLabel().setVisible(false);
-						return;
+					// Only click cancel will hide the dialog,
+					// so don't do anything here.
+					if (actors.installRoboticonVisible()) {
+						// actors.hideInstallRoboticon();
+						return ;
 					}
 				}
 

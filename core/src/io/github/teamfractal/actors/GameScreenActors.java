@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -46,15 +47,9 @@ public class GameScreenActors {
 		topText.setAlignment(Align.right);
 		playerStats = new Label("", game.skin);
 
+		createRoboticonMenuItems();
 		nextButton = new TextButton("Next ->", game.skin);
 		buyLandPlotBtn = new TextButton("Buy LandPlot", game.skin);
-		installRoboticonLabel = new Label("Install Roboticon", game.skin);
-
-		installRoboticonSelect = new SelectBox<String>(game.skin);
-		installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
-
-		installRoboticonBtn = new TextButton("Confirm", game.skin);
-		installRoboticonBtnCancel = new TextButton("Cancel", game.skin);
 
 		plotStats = new Label("", game.skin);
 		nextClickNull = false;
@@ -64,10 +59,7 @@ public class GameScreenActors {
 			public void changed(ChangeEvent event, Actor actor) {
 				buyLandPlotBtn.setVisible(false);
 				plotStats.setVisible(false);
-				installRoboticonSelect.setVisible(false);
-				installRoboticonLabel.setVisible(false);
-				installRoboticonBtn.setVisible(false);
-				installRoboticonBtnCancel.setVisible(false);
+				hideInstallRoboticon();
 				game.nextPhase();
 				dropDownActive = true;
 				installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
@@ -98,6 +90,40 @@ public class GameScreenActors {
 		});
 		installRoboticonSelect.setSelected(null);
 		listUpdated = false;
+
+		hideInstallRoboticon();
+		stage.addActor(nextButton);
+		stage.addActor(buyLandPlotBtn);
+		stage.addActor(installRoboticonTable);
+		stage.addActor(topText);
+		stage.addActor(playerStats);
+
+		// Force update of positions.
+		AbstractAnimationScreen.Size size = screen.getScreenSize();
+		resizeScreen(size.Width, size.Height);
+	}
+
+	private Table installRoboticonTable;
+	private void createRoboticonMenuItems() {
+		installRoboticonTable = new Table();
+		Table t = installRoboticonTable;
+
+		installRoboticonSelect = new SelectBox<String>(game.skin);
+		installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
+
+		installRoboticonLabel = new Label("Install Roboticon: ", game.skin);
+		installRoboticonBtn = new TextButton("Confirm", game.skin);
+		installRoboticonBtnCancel = new TextButton("Cancel", game.skin);
+
+		t.add(installRoboticonLabel).colspan(2);
+		t.row();
+		t.add(installRoboticonSelect).colspan(2);
+		t.row();
+		t.add(installRoboticonBtn);
+		t.add(installRoboticonBtnCancel);
+		t.row();
+
+		//////////////////////////////////////////////////////////////////////////////////////////////
 
 		installRoboticonBtn.addListener(new ChangeListener() {
 
@@ -141,10 +167,7 @@ public class GameScreenActors {
 						listUpdated = true;
 						installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
 						dropDownActive = true;
-						installRoboticonSelect.setVisible(false);
-						installRoboticonLabel.setVisible(false);
-						installRoboticonBtn.setVisible(false);
-						installRoboticonBtnCancel.setVisible(false);
+						hideInstallRoboticon();
 						nextClickNull = true;
 
 					} else listUpdated = false;
@@ -157,33 +180,11 @@ public class GameScreenActors {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				dropDownActive = true;
-				installRoboticonSelect.setVisible(false);
-				installRoboticonLabel.setVisible(false);
-				installRoboticonBtn.setVisible(false);
-				installRoboticonBtnCancel.setVisible(false);
+				hideInstallRoboticon();
 				nextClickNull = true;
-
 			}
 
 		});
-
-
-		installRoboticonSelect.setVisible(false);
-		installRoboticonLabel.setVisible(false);
-		installRoboticonBtn.setVisible(false);
-		installRoboticonBtnCancel.setVisible(false);
-		stage.addActor(nextButton);
-		stage.addActor(buyLandPlotBtn);
-		stage.addActor(installRoboticonSelect);
-		stage.addActor(installRoboticonLabel);
-		stage.addActor(installRoboticonBtn);
-		stage.addActor(installRoboticonBtnCancel);
-		stage.addActor(topText);
-		stage.addActor(playerStats);
-
-		// Force update of positions.
-		AbstractAnimationScreen.Size size = screen.getScreenSize();
-		resizeScreen(size.Width, size.Height);
 	}
 
 	/**
@@ -220,39 +221,25 @@ public class GameScreenActors {
 			// Phase 3:
 			// Install Roboticon 
 			case 3:
-				if (!nextClickNull) {
-					dropDownActive = !plot.hasRoboticon();
-
-					if (dropDownActive && !installRoboticonLabel.isVisible()) {
-						installRoboticonLabel.setPosition(x - 70, y);
-						installRoboticonLabel.setVisible(true);
-						installRoboticonSelect.setPosition(x + 40, y);
-						installRoboticonSelect.setVisible(true);
-						installRoboticonBtn.setPosition(x + 70, y);
-						installRoboticonBtn.setVisible(true);
-						installRoboticonBtnCancel.setPosition(x + 120, y);
-						installRoboticonBtnCancel.setVisible(true);
-						dropDownActive = false;
-					}
+				if (player == plot.getOwner()) {
+					installRoboticonTable.setPosition(x, y, Align.center);
+					updateRoboticonList();
+					installRoboticonTable.setVisible(true);
 				} else {
-					nextClickNull = false;
+					hideInstallRoboticon();
 				}
 		}
 
 
 	}
 
+	private void updateRoboticonList() {
+		installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
+	}
+
 
 	public TextButton getBuyLandPlotBtn() {
 		return buyLandPlotBtn;
-	}
-
-	public SelectBox<String> getInstallRoboticonSelect() {
-		return installRoboticonSelect;
-	}
-
-	public Label getInstallRoboticonLabel() {
-		return installRoboticonLabel;
 	}
 
 	public boolean getDropDownActive() {
@@ -298,5 +285,13 @@ public class GameScreenActors {
 
 	public void updateRoboticonSelection() {
 		// TODO: Implement this method
+	}
+
+	public void hideInstallRoboticon() {
+		installRoboticonTable.setVisible(false);
+	}
+
+	public boolean installRoboticonVisible() {
+		return installRoboticonTable.isVisible();
 	}
 }
