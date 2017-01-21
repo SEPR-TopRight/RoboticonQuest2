@@ -133,13 +133,14 @@ public class RoboticonQuest extends Game {
 
 			// Phase 4: Purchase Resource
 			case 4:
-				setScreen(new ResourceMarketScreen(this));
+				generateResources();
 				break;
 
 			// Phase 5: Generate resource for player.
 			case 5:
-				generateResources();
+				setScreen(new ResourceMarketScreen(this));
 				break;
+			
 
 			// End phase - CLean up and move to next player.
 			case 6:
