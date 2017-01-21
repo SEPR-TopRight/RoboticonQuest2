@@ -149,13 +149,14 @@ public class GameScreenActors {
 								type = ResourceType.Unknown;
 								break;
 						}
-						for (int i = 0; i < roboticons.size; i++) {
-							if (type == roboticons.get(i).getCustomisation()) {
-								roboticon = roboticons.get(i);
-								index = i;
+
+						for (Roboticon r : roboticons) {
+							if (!r.isInstalled() && r.getCustomisation() == type) {
+								roboticon = r;
 								break;
 							}
 						}
+
 						if (roboticon != null) {
 							selectedPlot.installRoboticon(roboticon);
 							TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
@@ -163,11 +164,10 @@ public class GameScreenActors {
 							selectedPlot.setHasRoboticon(true);
 							textUpdate();
 						}
-						if (index >= 0 && index < roboticons.size) roboticons.removeIndex(index);
-						listUpdated = true;
-						installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
-						dropDownActive = true;
+
 						hideInstallRoboticon();
+						updateRoboticonList();
+						dropDownActive = true;
 						nextClickNull = true;
 
 					} else listUpdated = false;

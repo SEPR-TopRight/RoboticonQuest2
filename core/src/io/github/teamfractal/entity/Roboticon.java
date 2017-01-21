@@ -24,7 +24,7 @@ public class Roboticon {
 		this.customisation = type;
 	}
 
-	synchronized boolean isInstalled() {
+	public synchronized boolean isInstalled() {
 		return installedLandplot != null;
 	}
 
@@ -34,6 +34,7 @@ public class Roboticon {
 			return true;
 		}
 
+		System.out.println("Already installed to LandPlot! Cancel.");
 		return false;
 	}
 }
