@@ -26,7 +26,6 @@ public class Player {
 	ArrayList<LandPlot> landList = new ArrayList<LandPlot>();
 	Array<Roboticon> roboticonList;
 	private RoboticonQuest game;
-	private PlotMap plotMap;
 
 	public int getMoney() { return money; }
 	public int getOre() { return ore; }

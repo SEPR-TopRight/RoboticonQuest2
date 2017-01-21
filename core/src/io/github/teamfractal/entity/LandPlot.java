@@ -128,6 +128,7 @@ public class LandPlot {
 		if (roboticon.isInstalled()) {
 			return false;
 		}
+
 		if (roboticon.getCustomisation() != ResourceType.Unknown){
 			int index = resourceTypeToIndex(roboticon.getCustomisation());
 			if (roboticon.setInstalledLandplot(this)) {

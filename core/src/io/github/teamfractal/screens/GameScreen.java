@@ -218,7 +218,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		maxDragX = 0.75f * mapLayer.getTileWidth() * (mapLayer.getWidth() + 1);
 		maxDragY = 0.75f * mapLayer.getTileHeight() * (mapLayer.getHeight() + 1);
 
-		game.getPlotManager().setup(tmx.getLayers());
+		game.getPlotManager().setup(tiles, tmx.getLayers());
 		game.nextPhase();
 	}
 
