@@ -151,6 +151,7 @@ public class RoboticonQuest extends Game {
 
 			// Phase 1: Enable of purchase LandPlot
 			case 1:
+				setScreen(gameScreen);
 				landBoughtThisTurn = 0;
 				break;
 		}
@@ -159,7 +160,7 @@ public class RoboticonQuest extends Game {
 	}
 
 	/**
-	 * Phase 5: generate resources.
+	 * Phase 4: generate resources.
 	 */
 	private void generateResources() {
 		// Switch back to purchase to game screen.
