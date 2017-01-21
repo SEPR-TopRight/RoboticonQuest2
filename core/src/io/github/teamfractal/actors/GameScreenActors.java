@@ -17,6 +17,7 @@ import io.github.teamfractal.entity.Roboticon;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.AbstractAnimationScreen;
 import io.github.teamfractal.screens.GameScreen;
+import io.github.teamfractal.util.TileConverter;
 
 public class GameScreenActors {
 	private final Stage stage;
@@ -159,8 +160,8 @@ public class GameScreenActors {
 
 						if (roboticon != null) {
 							selectedPlot.installRoboticon(roboticon);
-							TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
-							playerTile.setTile(screen.getResourcePlayerTile(game.getPlayer(), type));
+							TiledMapTileLayer.Cell roboticonTile = selectedPlot.getRoboticonTile();
+							roboticonTile.setTile(TileConverter.getRoboticonTile(roboticon.getCustomisation()));
 							selectedPlot.setHasRoboticon(true);
 							textUpdate();
 						}

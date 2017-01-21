@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricStaggeredTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -21,6 +18,7 @@ import io.github.teamfractal.actors.GameScreenActors;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.enums.ResourceType;
+import io.github.teamfractal.util.TileConverter;
 
 public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private final RoboticonQuest game;
@@ -42,6 +40,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private LandPlot selectedPlot;
 	private float maxDragX;
 	private float maxDragY;
+	private TiledMapTileSets tiles;
 
 
 	public LandPlot getSelectedPlot() {
@@ -187,18 +186,19 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	}
 
 	public TiledMapTile getPlayerTile(Player player) {
-		return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player));
+		return tiles.getTile(68 + game.getPlayerIndex(player));
 	}
+
 	public TiledMapTile getResourcePlayerTile(Player player, ResourceType type){
 		switch(type){
 		case ORE:
-			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 4);
+			return tiles.getTile(68 + game.getPlayerIndex(player) + 4);
 		case ENERGY:
-			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 8);
+			return tiles.getTile(68 + game.getPlayerIndex(player) + 8);
 		default:
-			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 12);
+			return tiles.getTile(68 + game.getPlayerIndex(player) + 12);
 		}
-		}
+	}
 			
 	/**
 	 * Reset to new game status.
@@ -208,6 +208,8 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		if (tmx != null) tmx.dispose();
 		if (renderer != null) renderer.dispose();
 		this.tmx = new TmxMapLoader().load("tiles/city.tmx");
+		tiles = tmx.getTileSets();
+		TileConverter.setup(tiles, game);
 		renderer = new IsometricStaggeredTiledMapRenderer(tmx);
 		game.reset();
 
@@ -216,7 +218,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		maxDragX = 0.75f * mapLayer.getTileWidth() * (mapLayer.getWidth() + 1);
 		maxDragY = 0.75f * mapLayer.getTileHeight() * (mapLayer.getHeight() + 1);
 
-		game.getPlotManager().setup(mapLayer, playerOverlay);
+		game.getPlotManager().setup(tmx.getLayers());
 		game.nextPhase();
 	}
 

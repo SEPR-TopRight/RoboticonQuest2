@@ -1,5 +1,6 @@
 package io.github.teamfractal.util;
 
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.LandPlot;
@@ -9,6 +10,7 @@ public class PlotManager {
 	private final RoboticonQuest game;
 	private TiledMapTileLayer mapLayer;
 	private TiledMapTileLayer playerOverlay;
+	private TiledMapTileLayer roboticonOverlay;
 	private int width;
 	private int height;
 
@@ -16,9 +18,10 @@ public class PlotManager {
 		this.game = game;
 	}
 
-	public void setup(TiledMapTileLayer mapLayer, TiledMapTileLayer playerOverlay) {
-		this.mapLayer = mapLayer;
-		this.playerOverlay = playerOverlay;
+	public void setup(MapLayers layers) {
+		this.mapLayer = (TiledMapTileLayer)layers.get("MapData");
+		this.playerOverlay = (TiledMapTileLayer)layers.get("PlayerOverlay");
+		this.roboticonOverlay = (TiledMapTileLayer)layers.get("RoboticonOverlay");
 
 		width = mapLayer.getWidth();
 		height = mapLayer.getHeight();
@@ -45,5 +48,9 @@ public class PlotManager {
 
 	public TiledMapTileLayer getPlayerOverlay() {
 		return playerOverlay;
+	}
+
+	public TiledMapTileLayer getRoboticonOverlay() {
+		return roboticonOverlay;
 	}
 }

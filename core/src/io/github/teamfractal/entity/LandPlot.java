@@ -9,6 +9,7 @@ import io.github.teamfractal.util.PlotManager;
 public class LandPlot {
 	private TiledMapTileLayer.Cell mapTile;
 	private TiledMapTileLayer.Cell playerTile;
+	private TiledMapTileLayer.Cell roboticonTile;
 	private Player owner;
 	int x, y;
 
@@ -20,6 +21,10 @@ public class LandPlot {
 
 	public TiledMapTileLayer.Cell getPlayerTile() {
 		return playerTile;
+	}
+
+	public TiledMapTileLayer.Cell getRoboticonTile() {
+		return roboticonTile;
 	}
 
 	public Player getOwner() {
@@ -58,8 +63,6 @@ public class LandPlot {
 	
 	//</editor-fold>
 
-
-
 	private final int IndexOre = 0;
 	private final int IndexEnergy = 1;
 	private final int IndexFood = 2;
@@ -96,6 +99,7 @@ public class LandPlot {
 		this.y = y;
 		this.mapTile = plotManager.getMapLayer().getCell(x, y);
 		this.playerTile = plotManager.getPlayerOverlay().getCell(x, y);
+		this.roboticonTile = plotManager.getRoboticonOverlay().getCell(x, y);
 	}
 
 	/**
