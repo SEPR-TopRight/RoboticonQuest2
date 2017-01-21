@@ -216,13 +216,14 @@ public class GameScreenActors {
 
 				buyLandPlotBtn.setVisible(true);
 				break;
+
 			// Phase 3:
 			// Install Roboticon 
 			case 3:
 				if (!nextClickNull) {
-					dropDownActive = plot.hasRoboticon();
+					dropDownActive = !plot.hasRoboticon();
 
-					if (dropDownActive) {
+					if (dropDownActive && !installRoboticonLabel.isVisible()) {
 						installRoboticonLabel.setPosition(x - 70, y);
 						installRoboticonLabel.setVisible(true);
 						installRoboticonSelect.setPosition(x + 40, y);
