@@ -22,7 +22,7 @@ import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.enums.ResourceType;
 
-public class GameScreen implements Screen {
+public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private final RoboticonQuest game;
 	private final OrthographicCamera camera;
 	private final Stage stage;
@@ -67,7 +67,7 @@ public class GameScreen implements Screen {
 		this.stage = new Stage(new ScreenViewport());
 		this.actors = new GameScreenActors(game, this);
 		actors.initialiseButtons();
-		actors.textUpdate();
+		// actors.textUpdate();
 		
 		
 
@@ -130,6 +130,7 @@ public class GameScreen implements Screen {
 		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				// Hide dialog if it has focus.
 				switch(game.getPhase()){
 				case 1:
 					if (actors.getBuyLandPlotBtn().isVisible()) {
@@ -137,10 +138,11 @@ public class GameScreen implements Screen {
 						return;
 					}
 				case 3:
-					if (actors.getInstallRoboticonSelect().isVisible() && actors.getDropDownActive()) {
-						actors.getInstallRoboticonSelect().setVisible(false);
-						actors.getInstallRoboticonLabel().setVisible(false);
-						return;
+					// Only click cancel will hide the dialog,
+					// so don't do anything here.
+					if (actors.installRoboticonVisible()) {
+						// actors.hideInstallRoboticon();
+						return ;
 					}
 				}
 
@@ -181,7 +183,7 @@ public class GameScreen implements Screen {
 		//</editor-fold>
 
 		// Finally, start a new game and initialise variables.
-		newGame();
+		// newGame();
 	}
 
 	public TiledMapTile getPlayerTile(Player player) {
@@ -207,6 +209,7 @@ public class GameScreen implements Screen {
 		if (renderer != null) renderer.dispose();
 		this.tmx = new TmxMapLoader().load("tiles/city.tmx");
 		renderer = new IsometricStaggeredTiledMapRenderer(tmx);
+		game.reset();
 
 		mapLayer = (TiledMapTileLayer)tmx.getLayers().get("MapData");
 		playerOverlay = (TiledMapTileLayer)tmx.getLayers().get("PlayerOverlay");
@@ -214,6 +217,7 @@ public class GameScreen implements Screen {
 		maxDragY = 0.75f * mapLayer.getTileHeight() * (mapLayer.getHeight() + 1);
 
 		game.getPlotManager().setup(mapLayer, playerOverlay);
+		game.nextPhase();
 	}
 
 	@Override
@@ -226,11 +230,14 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		camera.update();
+
 		renderer.setView(camera);
 		renderer.render();
 
 		stage.act(delta);
 		stage.draw();
+
+		renderAnimation(delta);
 	}
 
 	/**
@@ -240,15 +247,12 @@ public class GameScreen implements Screen {
 	 */
 	@Override
 	public void resize(int width, int height) {
-		// Avoid the viewport update if they are not changed.
-		if (width != oldW && height != oldH) {
-			stage.getViewport().update(width, height, true);
-			camera.setToOrtho(false, width, height);
-			actors.textUpdate();
-			actors.nextUpdate();
-			oldW = width;
-			oldH = height;
-		}
+		stage.getViewport().update(width, height, true);
+		game.getBatch().setProjectionMatrix(stage.getCamera().combined);
+		camera.setToOrtho(false, width, height);
+		actors.resizeScreen(width, height);
+		oldW = width;
+		oldH = height;
 	}
 
 	@Override
@@ -273,8 +277,21 @@ public class GameScreen implements Screen {
 		stage.dispose();
 	}
 
+	@Override
+	public RoboticonQuest getGame() {
+		return game;
+	}
+
 	public Stage getStage() {
 		return stage;
+	}
+
+	@Override
+	public Size getScreenSize() {
+		Size s = new Size();
+		s.Height = oldH;
+		s.Width = oldW;
+		return s;
 	}
 
 	public TiledMap getTmx(){

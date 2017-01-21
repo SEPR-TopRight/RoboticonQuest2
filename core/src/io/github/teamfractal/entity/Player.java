@@ -1,6 +1,9 @@
 package io.github.teamfractal.entity;
 
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.animation.AnimationAddResources;
+import io.github.teamfractal.animation.IAnimation;
+import io.github.teamfractal.animation.IAnimationFinish;
 import io.github.teamfractal.entity.enums.PurchaseStatus;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.NotCommonResourceException;
@@ -119,7 +122,7 @@ public class Player {
 	 * @param type   The {@link ResourceType}
 	 * @return       The amount of specified resource.
 	 */
-	int getResource(ResourceType type) {
+	public int getResource(ResourceType type) {
 		switch (type) {
 			case ENERGY:
 				return getEnergy();
@@ -292,7 +295,7 @@ public class Player {
 			landList.add(landPlot);
 		}
 	}
-	public Array<String> getRoboticonAmounts() {
+	public Array<String> getRoboticonList() {
 		int ore = 0;
 		int energy = 0;
 		int uncustomised = 0;
@@ -317,5 +320,35 @@ public class Player {
 	}
 	public Array<Roboticon> getRoboticons(){
 		return this.roboticonList;
+	}
+
+	/**
+	 * Generate resources produced from each LandPlot
+	 */
+	public void generateResources() {
+		int energy = 0;
+		int food = 0;
+		int ore = 0;
+
+		for (LandPlot land : landList) {
+			energy += land.produceResource(ResourceType.ENERGY);
+			food += land.produceResource(ResourceType.FOOD);
+			ore += land.produceResource(ResourceType.ORE);
+		}
+
+		setEnergy(getEnergy() + energy);
+		setFood(getFood() + food);
+		setOre(getOre() + ore);
+
+		IAnimation animation = new AnimationAddResources(this, energy, food, ore);
+		animation.setAnimationFinish(new IAnimationFinish() {
+			@Override
+			public void OnAnimationFinish() {
+				if (game.getPlayer() == Player.this){
+					game.nextPhase();
+				}
+			}
+		});
+		game.gameScreen.addAnimation(animation);
 	}
 }

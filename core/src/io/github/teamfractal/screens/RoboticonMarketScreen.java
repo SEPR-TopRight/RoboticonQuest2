@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.actors.RoboticonMarketActors;
 
-public class RoboticonMarketScreen implements Screen {
+public class RoboticonMarketScreen extends AbstractAnimationScreen implements Screen {
 
 	final RoboticonQuest game;
 	final Stage stage;
@@ -39,15 +39,17 @@ public class RoboticonMarketScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	
-			stage.act(delta);
-			stage.draw();	
-			
+		stage.act(delta);
+		stage.draw();
+
+		renderAnimation(delta);
 	}
 
 	@Override
 	public void resize(int width, int height) {
-	stage.getViewport().update(width, height, true);	
-	actors.widgetUpdate();
+		stage.getViewport().update(width, height, true);
+		game.getBatch().setProjectionMatrix(stage.getCamera().combined);
+		actors.widgetUpdate();
 	}
 
 	@Override
@@ -74,5 +76,18 @@ public class RoboticonMarketScreen implements Screen {
 	}
 	public Stage getStage(){
 		return this.stage;
+	}
+
+	@Override
+	protected RoboticonQuest getGame() {
+		return game;
+	}
+
+	@Override
+	public Size getScreenSize() {
+		Size s = new Size();
+		s.Width = stage.getViewport().getScreenWidth();
+		s.Height = stage.getViewport().getScreenHeight();
+		return s;
 	}
 }

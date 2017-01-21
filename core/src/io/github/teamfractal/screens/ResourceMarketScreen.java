@@ -18,17 +18,16 @@ public class ResourceMarketScreen implements Screen {
 	private final ResourceMarketActors actors;
 	
 	
-public ResourceMarketScreen(final RoboticonQuest game) {
-			this.game = game;
-			this.stage = new Stage(new ScreenViewport());
-			this.table = new Table();
-			table.setFillParent(true);
-			
-			actors = new ResourceMarketActors(game, this); // generates actors for the screen
-			table.top().left().add(actors); // positions actors
+	public ResourceMarketScreen(final RoboticonQuest game) {
+		this.game = game;
+		this.stage = new Stage(new ScreenViewport());
+		this.table = new Table();
+		table.setFillParent(true);
 
-			stage.addActor(table);
-		
+		actors = new ResourceMarketActors(game, this); // generates actors for the screen
+		table.center().add(actors); // positions actors
+
+		stage.addActor(table);
 	}
 
 	@Override
@@ -39,16 +38,15 @@ public ResourceMarketScreen(final RoboticonQuest game) {
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	
-			stage.act(delta);
-			stage.draw();	
-			
+
+		stage.act(delta);
+		stage.draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-	stage.getViewport().update(width, height, true);	
-	actors.widgetUpdate();
+		stage.getViewport().update(width, height, true);
+		actors.screenResize(width, height);
 	}
 
 	@Override
