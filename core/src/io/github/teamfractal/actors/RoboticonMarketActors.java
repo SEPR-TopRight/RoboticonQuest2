@@ -217,6 +217,13 @@ public class RoboticonMarketActors extends Table{
 			add(buyCustomisationButton).padLeft(-225);
 			
 			row();
+			
+			add();
+			add();
+			add();
+			add();
+			
+			add();
 			add(nextButton).padTop(40);
 			
 			widgetUpdate();
