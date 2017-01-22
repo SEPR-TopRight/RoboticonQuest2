@@ -1,11 +1,14 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.exception.NotEnoughResourceException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +23,8 @@ public class PlayerTest {
 
 	@Before
 	public void setUp() {
-		player = new Player();
+		RoboticonQuest game = new RoboticonQuest();
+		player = new Player(game);
 	}
 
 	//Money Tests
@@ -125,19 +129,22 @@ public class PlayerTest {
 	@Test
 	public void testPlayerCanCustomiseRoboticon() {
 		// Setup
-		Roboticon roboticon = new Roboticon();
+		Roboticon roboticon = new Roboticon(1);
 		player.customiseRoboticon(roboticon, ResourceType.ORE);
 		assertEquals(ResourceType.ORE, roboticon.getCustomisation());
 
-		Roboticon roboticon2 = new Roboticon();
+		Roboticon roboticon2 = new Roboticon(2);
 		player.customiseRoboticon(roboticon2, ResourceType.ENERGY);
 		assertEquals(ResourceType.ENERGY, roboticon2.getCustomisation());
 	}
 
 	@Test
 	public void testPlayerCanCustomiseOwnedRoboticons() {
-		Roboticon[] array = {new Roboticon(), new Roboticon()};
-		player.roboticonList = new ArrayList<Roboticon>(Arrays.asList(array));
+		Roboticon roboticon3 = new Roboticon(3); 
+		Roboticon roboticon4 = new Roboticon(4);
+		player.roboticonList = new Array<Roboticon>();
+		player.roboticonList.add(roboticon3);
+		player.roboticonList.add(roboticon4);
 		player.customiseRoboticon(player.roboticonList.get(0), ResourceType.ORE);
 		player.customiseRoboticon(player.roboticonList.get(1), ResourceType.ENERGY);
 		assertEquals(ResourceType.ORE, player.roboticonList.get(0).getCustomisation());
