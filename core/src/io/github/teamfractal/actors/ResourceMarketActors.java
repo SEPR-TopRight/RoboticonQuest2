@@ -99,7 +99,7 @@ public class ResourceMarketActors extends Table {
 		Stage stage = screen.getStage();
 
 		phaseInfo = new Label("", game.skin);
-		phaseInfo.setAlignment(Align.bottomLeft);
+		phaseInfo.setAlignment(Align.right);
 
 		nextButton = new TextButton("Next ->", game.skin);
 		nextButton.addListener(new ChangeListener() {
@@ -170,7 +170,7 @@ public class ResourceMarketActors extends Table {
 		// update player stats, phase text, and the market stats.
 		String phaseText =
 				"Player " + (game.getPlayerInt() + 1) + "; " +
-				"Phase " + game.getPhaseString();
+				"Phase " + game.getPhase() + " - " + game.getPhaseString();
 
 		String statText =
 				"Ore: "    + game.getPlayer().getOre()    + "  " +
@@ -196,7 +196,8 @@ public class ResourceMarketActors extends Table {
 
 	public void screenResize(float width, float height) {
 		// Bottom Left
-		phaseInfo.setPosition(10, 10);
+		phaseInfo.setPosition(0, height - 20);
+		phaseInfo.setWidth(width - 10);
 
 		// TOP LEFT
 		// playerStats.setPosition(10, height - 20);
@@ -209,5 +210,15 @@ public class ResourceMarketActors extends Table {
 		nextButton.setPosition(width - nextButton.getWidth() - 10, 10);
 
 		setWidth(width);
+	}
+
+	public Actor getPhaseInfoActor() {
+		Table t = new Table();
+		t.setFillParent(true);
+		t.debug();
+
+		// t.add(phaseInfo).right();
+		t.add().left();
+		return t;
 	}
 }

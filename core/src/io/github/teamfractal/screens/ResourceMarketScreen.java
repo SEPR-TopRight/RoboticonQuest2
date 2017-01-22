@@ -28,6 +28,7 @@ public class ResourceMarketScreen implements Screen {
 		table.center().add(actors); // positions actors
 
 		stage.addActor(table);
+		stage.addActor(actors.getPhaseInfoActor());
 	}
 
 	@Override
