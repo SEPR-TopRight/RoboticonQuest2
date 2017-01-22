@@ -103,7 +103,7 @@ public class RoboticonQuest extends Game {
 		this.playerList.add(player2);
 		this.currentPlayer = 0;
 		this.market = new Market();
-		plotManager = new PlotManager(this);
+		plotManager = new PlotManager();
 	}
 
 	public void nextPhase () {

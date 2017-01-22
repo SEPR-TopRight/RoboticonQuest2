@@ -9,7 +9,6 @@ import io.github.teamfractal.entity.LandPlot;
 
 public class PlotManager {
 	private LandPlot[][] plots;
-	private final RoboticonQuest game;
 	private TiledMapTileSets tiles;
 	private TiledMapTileLayer mapLayer;
 	private TiledMapTileLayer playerOverlay;
@@ -24,10 +23,15 @@ public class PlotManager {
 	private TiledMapTile hillTile3;
 	private TiledMapTile hillTile4;
 
-	public PlotManager(RoboticonQuest game) {
-		this.game = game;
+	public PlotManager() {
+
 	}
 
+	/**
+	 * Set up the plot manager.
+	 * @param tiles    Tiles.
+	 * @param layers   Layers.
+	 */
 	public void setup(TiledMapTileSets tiles, MapLayers layers) {
 		this.tiles = tiles;
 		this.mapLayer = (TiledMapTileLayer)layers.get("MapData");
@@ -47,10 +51,17 @@ public class PlotManager {
 		plots = new LandPlot[width][height];
 	}
 
+	/**
+	 * Get {@link LandPlot} at specific position.
+	 * @param x   The x index.
+	 * @param y   The y index.
+	 * @return    The corresponding {@link LandPlot} object.
+	 */
 	public LandPlot getPlot(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= height)
 			return null;
 
+		// Lazy load
 		LandPlot p = plots[x][y];
 		if (p == null) {
 			p = createLandPlot(x, y);
@@ -82,7 +93,6 @@ public class PlotManager {
 			ore = 3;
 			energy = 2;
 			food = 1;
-			
 		}
 		else{
 			ore = 2;
