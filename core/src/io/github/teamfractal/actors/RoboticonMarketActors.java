@@ -230,8 +230,6 @@ public class RoboticonMarketActors extends Table{
 			add();
 			add(nextButton).padTop(40);
 			
-			widgetUpdate();
-			
 		}
 		
 		public void setCurrentlySelectedRoboticon(int roboticonPos) {

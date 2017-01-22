@@ -129,13 +129,14 @@ public class RoboticonQuest extends Game {
 
 			// Phase 4: Purchase Resource
 			case 4:
-				setScreen(new ResourceMarketScreen(this));
+				generateResources();
 				break;
 
 			// Phase 5: Generate resource for player.
 			case 5:
-				generateResources();
+				setScreen(new ResourceMarketScreen(this));
 				break;
+			
 
 			// End phase - CLean up and move to next player.
 			case 6:
@@ -146,6 +147,7 @@ public class RoboticonQuest extends Game {
 
 			// Phase 1: Enable of purchase LandPlot
 			case 1:
+				setScreen(gameScreen);
 				landBoughtThisTurn = 0;
 				break;
 		}
@@ -154,7 +156,7 @@ public class RoboticonQuest extends Game {
 	}
 
 	/**
-	 * Phase 5: generate resources.
+	 * Phase 4: generate resources.
 	 */
 	private void generateResources() {
 		// Switch back to purchase to game screen.
@@ -190,10 +192,10 @@ public class RoboticonQuest extends Game {
 				return "Install Roboticons";
 
 			case 4:
-				return "Resource Auction";
+				return "Resource Generation";
 
 			case 5:
-				return "Resource Generation";
+				return "Resource Auction";
 
 			default:
 				return "Unknown phase";
