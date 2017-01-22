@@ -12,6 +12,7 @@ import io.github.teamfractal.entity.Roboticon;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.RoboticonMarketScreen;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoboticonMarketActors extends Table {
@@ -30,6 +31,8 @@ public class RoboticonMarketActors extends Table {
 	private static final Texture ore_texture;
 	private static final Texture no_robotic_texture;
 
+	private ArrayList<Roboticon> roboticons = new ArrayList<Roboticon>();
+
 	static {
 		no_cust_texture = new Texture(Gdx.files.internal("roboticon_images/robot.png"));
 		energy_texture = new Texture(Gdx.files.internal("roboticon_images/robot_energy.png"));
@@ -44,7 +47,6 @@ public class RoboticonMarketActors extends Table {
 		this.roboticonID = new Label("", game.skin);
 
 		widgetUpdate();
-
 
 		// Buy Roboticon Text: Top Left
 		final Label lblBuyRoboticon = new Label("Purchase Roboticons:", game.skin);
@@ -85,7 +87,6 @@ public class RoboticonMarketActors extends Table {
 				roboticonAmount = 0;
 				lblRoboticonAmount.setText(roboticonAmount.toString());
 				widgetUpdate();
-
 			}
 		});
 
@@ -111,7 +112,7 @@ public class RoboticonMarketActors extends Table {
 		moveRightRoboticonInventoryBtn.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (currentlySelectedRoboticonPos < game.getPlayer().getRoboticons().size - 1) {
+				if (currentlySelectedRoboticonPos < roboticons.size() - 1) {
 					currentlySelectedRoboticonPos++;
 					setCurrentlySelectedRoboticon(currentlySelectedRoboticonPos);
 				}
@@ -139,7 +140,7 @@ public class RoboticonMarketActors extends Table {
 				HashMap<String, ResourceType> converter = new HashMap<String, ResourceType>();
 				converter.put("Energy", ResourceType.ENERGY);
 				converter.put("Ore", ResourceType.ORE);
-				Roboticon roboticonToCustomise = game.getPlayer().getRoboticons().get(currentlySelectedRoboticonPos);
+				Roboticon roboticonToCustomise = roboticons.get(currentlySelectedRoboticonPos);
 
 				game.getPlayer().purchaseCustomisationFromMarket(converter.get(customisationDropDown.getSelected()), roboticonToCustomise, game.market);
 				widgetUpdate();
@@ -248,7 +249,7 @@ public class RoboticonMarketActors extends Table {
 	public void setCurrentlySelectedRoboticon(int roboticonPos) {
 		if (roboticonPos != -1) {
 
-			ResourceType roboticonType = game.getPlayer().getRoboticons().get(roboticonPos).getCustomisation();
+			ResourceType roboticonType = roboticons.get(roboticonPos).getCustomisation();
 
 			switch (roboticonType) {
 				case Unknown:
@@ -264,7 +265,7 @@ public class RoboticonMarketActors extends Table {
 					break;
 			}
 
-			int id = game.getPlayer().getRoboticons().get(roboticonPos).getID();
+			int id = roboticons.get(roboticonPos).getID();
 			this.roboticonID.setText("Roboticon Issue Number: " + padZero(id, 4));
 
 		} else {
@@ -276,6 +277,13 @@ public class RoboticonMarketActors extends Table {
 	}
 
 	public void widgetUpdate() {
+		roboticons.clear();
+		for (Roboticon r : game.getPlayer().getRoboticons()) {
+			if (!r.isInstalled()) {
+				roboticons.add(r);
+			}
+		}
+
 		// Draws turn and phase info on screen
 		if (this.topText != null) this.topText.remove();
 		String phaseText = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
@@ -293,13 +301,14 @@ public class RoboticonMarketActors extends Table {
 		playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
 		screen.getStage().addActor(playerStats);
 
-		if (game.getPlayer().getRoboticons().size == 0) {
+		if (roboticons.size() == 0) {
 			currentlySelectedRoboticonPos = -1;
-		} else {
+		} else if (currentlySelectedRoboticonPos == -1) {
 			currentlySelectedRoboticonPos = 0;
 		}
 
 		setCurrentlySelectedRoboticon(currentlySelectedRoboticonPos);
+
 	}
 
 }
