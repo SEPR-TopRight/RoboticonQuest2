@@ -10,11 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 public class AdjustableActor extends Table {
+	//<editor-fold desc="UI Components">
 	private final TextButton subButton;
 	private final TextButton addButton;
 	private final TextButton actButton;
 	private final Label valueLabel;
 	private final Label titleLabel;
+	//</editor-fold>
 
 	//<editor-fold desc="Getter / Setter">
 	private int value = 0;
@@ -22,41 +24,77 @@ public class AdjustableActor extends Table {
 	private int max   = 9;
 	private ChangeListener actionEvent;
 
+	/**
+	 * Get current title string.
+	 * @return     The title text.
+	 */
 	public String getTitle() {
 		return titleLabel.getText().toString();
 	}
 
+	/**
+	 * Set a new title string.
+	 * @param title  The new Title.
+	 */
 	public void setTitle(String title) {
 		titleLabel.setText(title);
 	}
 
+	/**
+	 * Get current adjusted value
+	 * @return     Current value.
+	 */
 	public int getValue() {
 		return value;
 	}
 
+	/**
+	 * Set a new adjusted value.
+	 * @param value       The new value.
+	 */
 	public void setValue(int value) {
 		this.value = value;
 		ensureValueInRange();
 	}
 
+	/**
+	 * Get current minimum value.
+	 * @return     Currently set minimum value.
+	 */
 	public int getMin() {
 		return min;
 	}
 
+	/**
+	 * Set a new minimum value.
+	 * @param min       The new minimum value.
+	 */
 	public void setMin(int min) {
 		this.min = min;
 		ensureValueInRange();
 	}
 
+	/**
+	 * Get current maximum value.
+	 * @return     Currently set maximum value.
+	 */
 	public int getMax() {
 		return max;
 	}
 
+	/**
+	 * Set a new maximum value.
+	 * @param max       The new maximum value.
+	 */
 	public void setMax(int max) {
 		this.max = max;
 		ensureValueInRange();
 	}
 
+	/**
+	 * Set the new action button event.
+	 * @param actionEvent        The new action button handle event.
+	 */
 	public void setActionEvent(ChangeListener actionEvent) {
 		this.actionEvent = actionEvent;
 	}
