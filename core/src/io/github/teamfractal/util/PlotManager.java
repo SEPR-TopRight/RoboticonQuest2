@@ -37,10 +37,10 @@ public class PlotManager {
 		this.cityTile = tiles.getTile(60);
 		this.waterTile = tiles.getTile(9);
 		this.forestTile = tiles.getTile(61);
-		this.hillTile1 = tiles.getTile(3);
-		this.hillTile2 = tiles.getTile(4);
+		this.hillTile1 = tiles.getTile(4);
 		this.hillTile2 = tiles.getTile(5);
-		this.hillTile2 = tiles.getTile(6);
+		this.hillTile3 = tiles.getTile(6);
+		this.hillTile4 = tiles.getTile(7);
 
 		width = mapLayer.getWidth();
 		height = mapLayer.getHeight();
