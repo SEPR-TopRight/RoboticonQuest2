@@ -7,7 +7,7 @@ import io.github.teamfractal.RoboticonQuest;
 
 import org.junit.*;
 
-public class RoboticonQuestTest {
+public class RoboticonQuestTest extends GdxInitializer {
 	private RoboticonQuest game;
 	
 	@Before

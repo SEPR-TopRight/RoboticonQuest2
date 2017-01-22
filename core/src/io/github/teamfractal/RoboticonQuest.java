@@ -152,7 +152,8 @@ public class RoboticonQuest extends Game {
 				break;
 		}
 
-		gameScreen.getActors().textUpdate();
+		if (gameScreen != null)
+			gameScreen.getActors().textUpdate();
 	}
 
 	/**
