@@ -37,6 +37,10 @@ public class AnimationPhaseTimeout implements IAnimation {
 				&& game.getPlayer() == player;
 	}
 
+	private void barColour() {
+		float r = time / timeout;
+		rect.setColor(r, 1 - r, 0, 0.7f);
+	}
 
 
 	@Override
@@ -54,7 +58,7 @@ public class AnimationPhaseTimeout implements IAnimation {
 		synchronized (rect) {
 			rect.setProjectionMatrix(batch.getProjectionMatrix());
 			rect.begin(ShapeRenderer.ShapeType.Filled);
-			rect.setColor(0, 1, 0, 0.1f);
+			barColour();
 			rect.rect(0, 0, (1 - time / timeout) * size.Width, 3);
 			rect.end();
 		}
