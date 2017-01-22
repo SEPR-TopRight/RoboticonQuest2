@@ -211,14 +211,4 @@ public class ResourceMarketActors extends Table {
 
 		setWidth(width);
 	}
-
-	public Actor getPhaseInfoActor() {
-		Table t = new Table();
-		t.setFillParent(true);
-		t.debug();
-
-		// t.add(phaseInfo).right();
-		t.add().left();
-		return t;
-	}
 }
