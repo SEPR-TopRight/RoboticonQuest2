@@ -82,6 +82,14 @@ public class AdjustableActor extends Table {
 		updateValueDisplay();
 	}
 
+	/**
+	 * The adjustable actor
+	 * For an easy way of adjust values in a step of 1 / -1.
+	 *
+	 * @param skin    The skin file for the UI.
+	 * @param title   The adjustable title.
+	 * @param action  The action button text.
+	 */
 	public AdjustableActor(Skin skin, String title, String action) {
 		subButton = new TextButton("<", skin);
 		addButton = new TextButton(">", skin);
@@ -118,14 +126,28 @@ public class AdjustableActor extends Table {
 		row();
 	}
 
+	/**
+	 * The adjustable actor
+	 * For an easy way of adjust values in a step of 1 / -1.
+	 *
+	 * @param skin    The skin file for the UI.
+	 * @param value   The default value.
+	 * @param min     The minimum value.
+	 * @param max     The maximum value.
+	 * @param title   The adjustable title.
+	 * @param action  The action button text.
+	 */
 	public AdjustableActor(Skin skin, int value, int min, int max, String title, String action) {
 		this(skin, title, action);
 
-		this.value = value;
-		this.min = min;
-		this.max = max;
+		setMax(max);
+		setMin(min);
+		setValue(value);
 	}
 
+	/**
+	 * Binds events to buttons.
+	 */
 	private void bindButtonEvents() {
 		actButton.addListener(new ChangeListener() {
 			@Override
@@ -140,7 +162,6 @@ public class AdjustableActor extends Table {
 			public void changed(ChangeEvent event, Actor actor) {
 				value --;
 				ensureValueInRange();
-				updateValueDisplay();
 			}
 		});
 
@@ -149,11 +170,13 @@ public class AdjustableActor extends Table {
 			public void changed(ChangeEvent event, Actor actor) {
 				value ++;
 				ensureValueInRange();
-				updateValueDisplay();
 			}
 		});
 	}
 
+	/**
+	 * Update label text to current value.
+	 */
 	private void updateValueDisplay() {
 		valueLabel.setText(String.valueOf(value));
 	}
@@ -162,6 +185,6 @@ public class AdjustableActor extends Table {
 	protected void sizeChanged() {
 		super.sizeChanged();
 
-		// TODO: manipulate actor size.
+		// TODO: manipulate actor size?
 	}
 }
