@@ -309,10 +309,10 @@ public class GameScreenActors {
 	}
 
 	/**
-	 *
-	 * @param plot
-	 * @param x
-	 * @param y
+	 * Show plot information about current selected stats.
+	 * @param plot           The land plot to show info.
+	 * @param x              The <i>x</i> position to display the information.
+	 * @param y              The <i>y</i> position to display the information.
 	 */
 	public void showPlotStats(LandPlot plot, float x, float y) {
 		String plotStatText = "Ore: " + plot.getResource(ResourceType.ORE)
@@ -327,15 +327,25 @@ public class GameScreenActors {
 		// TODO: Implement this method
 	}
 
+	/**
+	 * Hide "Buy Land" button and plot information.
+	 */
 	public void hideBuyLand() {
 		buyLandPlotBtn.setVisible(false);
 		plotStats.setVisible(false);
 	}
 
+	/**
+	 * Hide install roboticon dialog.
+	 */
 	public void hideInstallRoboticon() {
 		installRoboticonTable.setVisible(false);
 	}
 
+	/**
+	 * Check if install roboticon dialog is visible.
+	 * @return   <code>true</code> if is visible, <code>false</code> if not visible.
+	 */
 	public boolean installRoboticonVisible() {
 		return installRoboticonTable.isVisible();
 	}

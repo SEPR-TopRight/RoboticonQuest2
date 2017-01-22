@@ -3,11 +3,11 @@ package io.github.teamfractal.actors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import io.github.teamfractal.RoboticonQuest;
@@ -15,39 +15,57 @@ import io.github.teamfractal.RoboticonQuest;
 
 public class HomeMainMenu extends Table {
 	private RoboticonQuest game;
+	private TextButton btnNewGame;
+	private TextButton btnExit;
 
-	public HomeMainMenu(final RoboticonQuest game) {
+	private static Texture titleTexture = new Texture(Gdx.files.internal("roboticon_images/Roboticon_Quest_Title"));
+
+	/**
+	 * Initialise the Home Menu.
+	 * @param game    The game object.
+	 */
+	public HomeMainMenu(RoboticonQuest game) {
 		this.game = game;
 
-		
-		Texture titleTexture = new Texture(Gdx.files.internal("roboticon_images/Roboticon_Quest_Title"));
+		// Create UI Components
 		final Image imgTitle = new Image();
 		imgTitle.setDrawable(new TextureRegionDrawable(new TextureRegion(titleTexture)));
 		
-		final TextButton btnNewGame = new TextButton("New game!", game.skin);
-		btnNewGame.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.setScreen(game.gameScreen);
-				game.gameScreen.newGame();
-			}
-		});
-		
-		final TextButton btnExit = new TextButton("Exit", game.skin);
-		btnExit.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				Gdx.app.exit();
-			}
-		});
+		btnNewGame = new TextButton("New game!", game.skin);
+		btnExit = new TextButton("Exit", game.skin);
 
-		
-		add(imgTitle);
+		// Adjust properties.
 		btnNewGame.pad(10);
 		btnExit.pad(10);
+
+		// Bind events.
+		bindEvents();
+
+		// Add UI Components to table.
+		add(imgTitle);
 		row();
 		add(btnNewGame).pad(5);
 		row();
 		add(btnExit).pad(5);
+	}
+
+	/**
+	 * Bind button events.
+	 */
+	private void bindEvents() {
+		btnNewGame.addListener(new ClickListener() {
+			@Override
+			public void clicked (InputEvent event, float x, float y) {
+				game.setScreen(game.gameScreen);
+				game.gameScreen.newGame();
+			}
+		});
+
+		btnExit.addListener(new ClickListener() {
+			@Override
+			public void clicked (InputEvent event, float x, float y) {
+				Gdx.app.exit();
+			}
+		});
 	}
 }
