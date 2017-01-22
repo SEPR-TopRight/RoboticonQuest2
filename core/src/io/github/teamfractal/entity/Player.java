@@ -137,7 +137,13 @@ public class Player {
 				throw new NotCommonResourceException(type);
 		}
 	}
-	
+
+	/**
+	 * Purchase roboticon from the market.
+	 * @param amount
+	 * @param market
+	 * @return
+	 */
 	public PurchaseStatus purchaseRoboticonsFromMarket(int amount, Market market) {
 		Random random = new Random();
 		
@@ -160,8 +166,16 @@ public class Player {
 		
 		return PurchaseStatus.Success;
 	}
-	
-	public PurchaseStatus purchaseCustomisationFromMarket(ResourceType resource, Roboticon roboticon, Market market) {
+
+	/**
+	 * Purchase roboticon customisation from the market.
+	 * @param resource    The resource type.
+	 * @param roboticon   The roboticon to be customised.
+	 * @param market      The market.
+	 * @return            Purchase status.
+	 */
+	public PurchaseStatus purchaseCustomisationFromMarket(ResourceType resource,
+	                                                      Roboticon roboticon, Market market) {
 		
 		if (!market.hasEnoughResources(ResourceType.CUSTOMISATION, 1)) {
 			return PurchaseStatus.FailMarketNotEnoughResource;
