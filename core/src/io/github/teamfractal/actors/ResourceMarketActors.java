@@ -1,15 +1,16 @@
 package io.github.teamfractal.actors;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import io.github.teamfractal.RoboticonQuest;
-import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.ResourceMarketScreen;
@@ -48,7 +49,15 @@ public class ResourceMarketActors extends Table {
 				+ " Gold";
 	}
 
-	private void updateAdjustable(AdjustableActor adjustableActor, ResourceType resource, boolean bIsSell) {
+	/**
+	 * Sync. information with the adjustable.
+	 * @param adjustableActor     The adjustable to manipulate with.
+	 * @param resource            The resource type.
+	 * @param bIsSell             <code>true</code> if the adjustable is for sell,
+	 *                            <code>false</code> if is for buy.
+	 */
+	private void updateAdjustable(AdjustableActor adjustableActor, ResourceType resource,
+	                              boolean bIsSell) {
 		if (bIsSell) {
 			adjustableActor.setMax(game.getPlayer().getResource(resource));
 		} else {
@@ -66,7 +75,7 @@ public class ResourceMarketActors extends Table {
 	 *                   or <code>false</code> if is for buy in.
 	 * @return           The adjustable actor generated.
 	 */
-	private AdjustableActor addAdjustable(final ResourceType resource, final boolean bIsSell) {
+	private AdjustableActor createAdjustable(final ResourceType resource, final boolean bIsSell) {
 		final Player player = game.getPlayer();
 		final AdjustableActor adjustableActor = new AdjustableActor(game.skin, getPriceString(resource, bIsSell),
 				(bIsSell ? "Sell" : "Buy") + " " + resource.toString());
@@ -85,72 +94,89 @@ public class ResourceMarketActors extends Table {
 				ResourceMarketActors.this.widgetUpdate();
 			}
 		});
-		add(adjustableActor);
 		return adjustableActor;
 	}
 
+	/**
+	 * Initialise market actors.
+	 * @param game       The game object.
+	 * @param screen     The screen object.
+	 */
 	public ResourceMarketActors(final RoboticonQuest game, ResourceMarketScreen screen) {
-		// debug();
 		center();
 
+		Skin skin = game.skin;
 		this.game = game;
 		this.screen = screen;
-
 		Stage stage = screen.getStage();
 
-		phaseInfo = new Label("", game.skin);
-		phaseInfo.setAlignment(Align.right);
 
+		// Create UI Components
+		phaseInfo = new Label("", game.skin);
 		nextButton = new TextButton("Next ->", game.skin);
-		nextButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.nextPhase();
-			}
-		});
+
+		playerStats = new Label("", game.skin);
+		marketStats = new Label("", game.skin);
+		Label buyLabel  = new Label("Buy",  skin);
+		Label sellLabel = new Label("Sell", skin);
+
+		oreBuy = createAdjustable(ResourceType.ORE, false);
+		oreSell = createAdjustable(ResourceType.ORE, true);
+		energyBuy = createAdjustable(ResourceType.ENERGY, false);
+		energySell = createAdjustable(ResourceType.ENERGY, true);
+
+		// Adjust properties.
+		phaseInfo.setAlignment(Align.right);
+		marketStats.setAlignment(Align.right);
+
+		buyLabel.setAlignment(Align.center);
+		sellLabel.setAlignment(Align.center);
+
+
+		// Add UI components to screen.
 		stage.addActor(phaseInfo);
 		stage.addActor(nextButton);
 
 
-
-		// Row: player and market stats.
-		playerStats = new Label("", game.skin);
-		marketStats = new Label("", game.skin);
-		marketStats.setAlignment(Align.right);
-
+		// Setup UI Layout.
+		// Row: Player and Market Stats.
 		add(playerStats);
 		add().spaceRight(20);
 		add(marketStats);
 		rowWithHeight(20);
 
 		// Row: Label of Sell and Buy
-		Market market = game.market;
-		Skin skin = game.skin;
-		Label buyLabel  = new Label("Buy",  skin);
-		Label sellLabel = new Label("Sell", skin);
-
-		buyLabel.setAlignment(Align.center);
-		sellLabel.setAlignment(Align.center);
-
-
 		add(buyLabel);
 		add();
 		add(sellLabel);
 		rowWithHeight(10);
 
 		// Row: Ore buy/sell
-		oreBuy = addAdjustable(ResourceType.ORE, false);
+		add(oreBuy);
 		add();
-		oreSell = addAdjustable(ResourceType.ORE, true);
+		add(oreSell);
 		rowWithHeight(10);
 
 		// Row: Energy buy/sell
-		energyBuy = addAdjustable(ResourceType.ENERGY, false);
+		add(energyBuy);
 		add();
-		energySell = addAdjustable(ResourceType.ENERGY, true);
+		add(energySell);
 		rowWithHeight(10);
 
+		bindEvents();
 		widgetUpdate();
+	}
+
+	/**
+	 * Bind button events.
+	 */
+	private void bindEvents() {
+		nextButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.nextPhase();
+			}
+		});
 	}
 
 	/**
@@ -194,17 +220,16 @@ public class ResourceMarketActors extends Table {
 		updateAdjustable(energySell, ResourceType.ENERGY, true);
 	}
 
+	/**
+	 * Respond to the screen resize event, updates widgets position
+	 * accordingly.
+	 * @param width    The new width.
+	 * @param height   The new Height.
+	 */
 	public void screenResize(float width, float height) {
 		// Bottom Left
 		phaseInfo.setPosition(0, height - 20);
 		phaseInfo.setWidth(width - 10);
-
-		// TOP LEFT
-		// playerStats.setPosition(10, height - 20);
-
-		// TOP RIGHT
-		// marketStats.setWidth(width - 10);
-		// marketStats.setPosition(0, height - 20);
 
 		// Bottom Right
 		nextButton.setPosition(width - nextButton.getWidth() - 10, 10);

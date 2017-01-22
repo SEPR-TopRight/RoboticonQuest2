@@ -7,7 +7,7 @@ import io.github.teamfractal.RoboticonQuest;
 
 import org.junit.*;
 
-public class RoboticonQuestTest {
+public class RoboticonQuestTest extends GdxInitializer {
 	private RoboticonQuest game;
 	
 	@Before
@@ -16,8 +16,8 @@ public class RoboticonQuestTest {
 	}
 	@Test
 	public void phaseTest(){
-		assert(game.getPhase() == 1);  //Test game starts in correct phase
-		for(int i = 2; i < 6; i++){
+		assert(game.getPhase() == 0);  //Test game starts in correct phase
+		for(int i = 1; i < 5; i++){
 			game.nextPhase();
 			assert(i == game.getPhase());  //Test game will move from stages 1 to 5 without problem
 		}
@@ -31,6 +31,6 @@ public class RoboticonQuestTest {
 		game.nextPlayer();
 		assert(game.getPlayerInt() == 1);
 		game.nextPlayer();
-		assert(game.getPlayerInt() == 0);
+		assert(game.getPlayerInt() == 0); //Test game changes players correctly
 	}
 }

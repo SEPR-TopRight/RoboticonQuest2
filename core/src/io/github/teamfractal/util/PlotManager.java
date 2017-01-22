@@ -9,7 +9,6 @@ import io.github.teamfractal.entity.LandPlot;
 
 public class PlotManager {
 	private LandPlot[][] plots;
-	private final RoboticonQuest game;
 	private TiledMapTileSets tiles;
 	private TiledMapTileLayer mapLayer;
 	private TiledMapTileLayer playerOverlay;
@@ -19,11 +18,20 @@ public class PlotManager {
 	private TiledMapTile cityTile;
 	private TiledMapTile waterTile;
 	private TiledMapTile forestTile;
+	private TiledMapTile hillTile1;
+	private TiledMapTile hillTile2;
+	private TiledMapTile hillTile3;
+	private TiledMapTile hillTile4;
 
-	public PlotManager(RoboticonQuest game) {
-		this.game = game;
+	public PlotManager() {
+
 	}
 
+	/**
+	 * Set up the plot manager.
+	 * @param tiles    Tiles.
+	 * @param layers   Layers.
+	 */
 	public void setup(TiledMapTileSets tiles, MapLayers layers) {
 		this.tiles = tiles;
 		this.mapLayer = (TiledMapTileLayer)layers.get("MapData");
@@ -33,16 +41,27 @@ public class PlotManager {
 		this.cityTile = tiles.getTile(60);
 		this.waterTile = tiles.getTile(9);
 		this.forestTile = tiles.getTile(61);
+		this.hillTile1 = tiles.getTile(4);
+		this.hillTile2 = tiles.getTile(5);
+		this.hillTile3 = tiles.getTile(6);
+		this.hillTile4 = tiles.getTile(7);
 
 		width = mapLayer.getWidth();
 		height = mapLayer.getHeight();
 		plots = new LandPlot[width][height];
 	}
 
+	/**
+	 * Get {@link LandPlot} at specific position.
+	 * @param x   The x index.
+	 * @param y   The y index.
+	 * @return    The corresponding {@link LandPlot} object.
+	 */
 	public LandPlot getPlot(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= height)
 			return null;
 
+		// Lazy load
 		LandPlot p = plots[x][y];
 		if (p == null) {
 			p = createLandPlot(x, y);
@@ -69,6 +88,11 @@ public class PlotManager {
 			ore = 3;
 			energy = 1;
 			food = 2;
+		}
+		else if (tile == hillTile1 || tile == hillTile2 ||tile == hillTile3 || tile == hillTile4 ){
+			ore = 3;
+			energy = 2;
+			food = 1;
 		}
 		else{
 			ore = 2;

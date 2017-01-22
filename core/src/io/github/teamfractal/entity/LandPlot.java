@@ -71,7 +71,7 @@ public class LandPlot {
 	 * Saved modifiers for LandPlot.
 	 * [ Ore, Energy, Food ]
 	 */
-	int[] productionModifiers = {0, 0, 0};
+	int[] productionModifiers = {1, 1, 1};
 
 	/**
 	 * The base production amounts.
