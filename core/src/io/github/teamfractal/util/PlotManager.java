@@ -19,6 +19,10 @@ public class PlotManager {
 	private TiledMapTile cityTile;
 	private TiledMapTile waterTile;
 	private TiledMapTile forestTile;
+	private TiledMapTile hillTile1;
+	private TiledMapTile hillTile2;
+	private TiledMapTile hillTile3;
+	private TiledMapTile hillTile4;
 
 	public PlotManager(RoboticonQuest game) {
 		this.game = game;
@@ -33,6 +37,10 @@ public class PlotManager {
 		this.cityTile = tiles.getTile(60);
 		this.waterTile = tiles.getTile(9);
 		this.forestTile = tiles.getTile(61);
+		this.hillTile1 = tiles.getTile(3);
+		this.hillTile2 = tiles.getTile(4);
+		this.hillTile2 = tiles.getTile(5);
+		this.hillTile2 = tiles.getTile(6);
 
 		width = mapLayer.getWidth();
 		height = mapLayer.getHeight();
@@ -69,6 +77,12 @@ public class PlotManager {
 			ore = 3;
 			energy = 1;
 			food = 2;
+		}
+		else if (tile == hillTile1 || tile == hillTile2 ||tile == hillTile3 || tile == hillTile4 ){
+			ore = 3;
+			energy = 2;
+			food = 1;
+			
 		}
 		else{
 			ore = 2;
