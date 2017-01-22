@@ -10,11 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 public class AdjustableActor extends Table {
+	//<editor-fold desc="UI Components">
 	private final TextButton subButton;
 	private final TextButton addButton;
 	private final TextButton actButton;
 	private final Label valueLabel;
 	private final Label titleLabel;
+	//</editor-fold>
 
 	//<editor-fold desc="Getter / Setter">
 	private int value = 0;
@@ -22,41 +24,77 @@ public class AdjustableActor extends Table {
 	private int max   = 9;
 	private ChangeListener actionEvent;
 
+	/**
+	 * Get current title string.
+	 * @return     The title text.
+	 */
 	public String getTitle() {
 		return titleLabel.getText().toString();
 	}
 
+	/**
+	 * Set a new title string.
+	 * @param title  The new Title.
+	 */
 	public void setTitle(String title) {
 		titleLabel.setText(title);
 	}
 
+	/**
+	 * Get current adjusted value
+	 * @return     Current value.
+	 */
 	public int getValue() {
 		return value;
 	}
 
+	/**
+	 * Set a new adjusted value.
+	 * @param value       The new value.
+	 */
 	public void setValue(int value) {
 		this.value = value;
 		ensureValueInRange();
 	}
 
+	/**
+	 * Get current minimum value.
+	 * @return     Currently set minimum value.
+	 */
 	public int getMin() {
 		return min;
 	}
 
+	/**
+	 * Set a new minimum value.
+	 * @param min       The new minimum value.
+	 */
 	public void setMin(int min) {
 		this.min = min;
 		ensureValueInRange();
 	}
 
+	/**
+	 * Get current maximum value.
+	 * @return     Currently set maximum value.
+	 */
 	public int getMax() {
 		return max;
 	}
 
+	/**
+	 * Set a new maximum value.
+	 * @param max       The new maximum value.
+	 */
 	public void setMax(int max) {
 		this.max = max;
 		ensureValueInRange();
 	}
 
+	/**
+	 * Set the new action button event.
+	 * @param actionEvent        The new action button handle event.
+	 */
 	public void setActionEvent(ChangeListener actionEvent) {
 		this.actionEvent = actionEvent;
 	}
@@ -82,6 +120,14 @@ public class AdjustableActor extends Table {
 		updateValueDisplay();
 	}
 
+	/**
+	 * The adjustable actor
+	 * For an easy way of adjust values in a step of 1 / -1.
+	 *
+	 * @param skin    The skin file for the UI.
+	 * @param title   The adjustable title.
+	 * @param action  The action button text.
+	 */
 	public AdjustableActor(Skin skin, String title, String action) {
 		subButton = new TextButton("<", skin);
 		addButton = new TextButton(">", skin);
@@ -118,14 +164,28 @@ public class AdjustableActor extends Table {
 		row();
 	}
 
+	/**
+	 * The adjustable actor
+	 * For an easy way of adjust values in a step of 1 / -1.
+	 *
+	 * @param skin    The skin file for the UI.
+	 * @param value   The default value.
+	 * @param min     The minimum value.
+	 * @param max     The maximum value.
+	 * @param title   The adjustable title.
+	 * @param action  The action button text.
+	 */
 	public AdjustableActor(Skin skin, int value, int min, int max, String title, String action) {
 		this(skin, title, action);
 
-		this.value = value;
-		this.min = min;
-		this.max = max;
+		setMax(max);
+		setMin(min);
+		setValue(value);
 	}
 
+	/**
+	 * Binds events to buttons.
+	 */
 	private void bindButtonEvents() {
 		actButton.addListener(new ChangeListener() {
 			@Override
@@ -140,7 +200,6 @@ public class AdjustableActor extends Table {
 			public void changed(ChangeEvent event, Actor actor) {
 				value --;
 				ensureValueInRange();
-				updateValueDisplay();
 			}
 		});
 
@@ -149,11 +208,13 @@ public class AdjustableActor extends Table {
 			public void changed(ChangeEvent event, Actor actor) {
 				value ++;
 				ensureValueInRange();
-				updateValueDisplay();
 			}
 		});
 	}
 
+	/**
+	 * Update label text to current value.
+	 */
 	private void updateValueDisplay() {
 		valueLabel.setText(String.valueOf(value));
 	}
@@ -162,6 +223,6 @@ public class AdjustableActor extends Table {
 	protected void sizeChanged() {
 		super.sizeChanged();
 
-		// TODO: manipulate actor size.
+		// TODO: manipulate actor size?
 	}
 }

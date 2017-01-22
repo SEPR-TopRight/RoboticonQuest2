@@ -26,7 +26,6 @@ public class Player {
 	ArrayList<LandPlot> landList = new ArrayList<LandPlot>();
 	Array<Roboticon> roboticonList;
 	private RoboticonQuest game;
-	private PlotMap plotMap;
 
 	public int getMoney() { return money; }
 	public int getOre() { return ore; }
@@ -295,27 +294,38 @@ public class Player {
 			landList.add(landPlot);
 		}
 	}
+
+	/**
+	 * Get a string list of roboticons available for the player.
+	 * Mainly for the dropdown selection.
+	 *
+	 * @return  The string list of roboticons.
+	 */
 	public Array<String> getRoboticonList() {
 		int ore = 0;
 		int energy = 0;
 		int uncustomised = 0;
 		Array<String> roboticonAmountList = new Array<String>();
-		for (int i = 0; i < this.roboticonList.size; i++){
-			switch(this.roboticonList.get(i).getCustomisation()){
-				case ORE:
-					ore += 1;
-					break;
-				case ENERGY:
-					energy += 1;
-					break;
-				default:
-					uncustomised += 1;
-					break;
+
+		for (Roboticon r : roboticonList) {
+			if (!r.isInstalled()) {
+				switch (r.getCustomisation()) {
+					case ORE:
+						ore += 1;
+						break;
+					case ENERGY:
+						energy += 1;
+						break;
+					default:
+						uncustomised += 1;
+						break;
+				}
 			}
 		}
-		roboticonAmountList.add("Ore Specific x " + ore);
+
+		roboticonAmountList.add("Ore Specific x "    + ore);
 		roboticonAmountList.add("Energy Specific x " + energy);
-		roboticonAmountList.add("Uncustomised x " + uncustomised);
+		roboticonAmountList.add("Uncustomised x "    + uncustomised);
 		return roboticonAmountList;
 	}
 	public Array<Roboticon> getRoboticons(){

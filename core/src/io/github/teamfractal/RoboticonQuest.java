@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,7 +13,6 @@ import io.github.teamfractal.animation.AnimationPhaseTimeout;
 import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
-import io.github.teamfractal.entity.PlotMap;
 import io.github.teamfractal.util.PlotManager;
 
 /**
@@ -44,7 +42,6 @@ public class RoboticonQuest extends Game {
 	}
 
 	public TiledMap tmx;
-	public PlotMap plotMap;
 	
 	public RoboticonQuest(){
 		_instance = this;
@@ -58,7 +55,6 @@ public class RoboticonQuest extends Game {
 		
 	
 		gameScreen = new GameScreen(this);
-		this.plotMap = new PlotMap(gameScreen.getTmx());
 
 		// Setup other screens.
 		mainMenuScreen = new MainMenuScreen(this);

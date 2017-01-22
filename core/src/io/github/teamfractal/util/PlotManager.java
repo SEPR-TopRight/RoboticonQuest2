@@ -1,24 +1,38 @@
 package io.github.teamfractal.util;
 
+import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.LandPlot;
 
 public class PlotManager {
 	private LandPlot[][] plots;
 	private final RoboticonQuest game;
+	private TiledMapTileSets tiles;
 	private TiledMapTileLayer mapLayer;
 	private TiledMapTileLayer playerOverlay;
+	private TiledMapTileLayer roboticonOverlay;
 	private int width;
 	private int height;
+	private TiledMapTile cityTile;
+	private TiledMapTile waterTile;
+	private TiledMapTile forestTile;
 
 	public PlotManager(RoboticonQuest game) {
 		this.game = game;
 	}
 
-	public void setup(TiledMapTileLayer mapLayer, TiledMapTileLayer playerOverlay) {
-		this.mapLayer = mapLayer;
-		this.playerOverlay = playerOverlay;
+	public void setup(TiledMapTileSets tiles, MapLayers layers) {
+		this.tiles = tiles;
+		this.mapLayer = (TiledMapTileLayer)layers.get("MapData");
+		this.playerOverlay = (TiledMapTileLayer)layers.get("PlayerOverlay");
+		this.roboticonOverlay = (TiledMapTileLayer)layers.get("RoboticonOverlay");
+
+		this.cityTile = tiles.getTile(60);
+		this.waterTile = tiles.getTile(9);
+		this.forestTile = tiles.getTile(61);
 
 		width = mapLayer.getWidth();
 		height = mapLayer.getHeight();
@@ -31,11 +45,41 @@ public class PlotManager {
 
 		LandPlot p = plots[x][y];
 		if (p == null) {
-			p = new LandPlot(0, 0, 0);
-			p.setupTile(this, x, y);
-			plots[x][y] = p;
+			p = createLandPlot(x, y);
 		}
 
+		return p;
+	}
+
+	private LandPlot createLandPlot(int x, int y) {
+		int ore, energy, food;
+		TiledMapTile tile = mapLayer.getCell(x, y).getTile();
+
+		if (tile == cityTile){
+			ore = 1;
+			energy = 2;
+			food = 3;
+		}
+		else if (tile == forestTile){
+			ore = 2;
+			energy = 3;
+			food = 1;
+		}
+		else if (tile == waterTile){
+			ore = 3;
+			energy = 1;
+			food = 2;
+		}
+		else{
+			ore = 2;
+			energy = 2;
+			food = 2;
+		}
+
+
+		LandPlot p = new LandPlot(ore, energy, food);
+		p.setupTile(this, x, y);
+		plots[x][y] = p;
 		return p;
 	}
 
@@ -45,5 +89,9 @@ public class PlotManager {
 
 	public TiledMapTileLayer getPlayerOverlay() {
 		return playerOverlay;
+	}
+
+	public TiledMapTileLayer getRoboticonOverlay() {
+		return roboticonOverlay;
 	}
 }
