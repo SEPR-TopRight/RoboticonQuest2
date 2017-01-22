@@ -97,9 +97,11 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 			 */
 			@Override
 			public void drag(InputEvent event, float x, float y, int pointer) {
-				// TODO: control of pausing the drag.
 				// Prevent drag if the button is visible.
-				if (actors.getBuyLandPlotBtn().isVisible()) return;
+				if (actors.getBuyLandPlotBtn().isVisible()
+						|| actors.installRoboticonVisible()) {
+					return;
+				}
 
 				float deltaX = x - oldX;
 				float deltaY = y - oldY;
@@ -129,20 +131,25 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				if (event.isStopped()) {
+					return ;
+				}
+
 				// Hide dialog if it has focus.
 				switch(game.getPhase()){
 				case 1:
 					if (actors.getBuyLandPlotBtn().isVisible()) {
-						actors.getBuyLandPlotBtn().setVisible(false);
+						actors.hideBuyLand();
 						return;
 					}
+					break;
 				case 3:
 					// Only click cancel will hide the dialog,
 					// so don't do anything here.
 					if (actors.installRoboticonVisible()) {
-						// actors.hideInstallRoboticon();
 						return ;
 					}
+					break;
 				}
 
 				// The Y from screen starts from bottom left.
@@ -173,10 +180,11 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 				if (tileIndexY % 2 == 0) {
 					tileIndexX --;
 				}
-				if (game.getPhase() != 3) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
-				else if (actors.getDropDownActive()) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
+
+				selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
 				if (selectedPlot != null) {
-					actors.tileClicked(selectedPlot, x, y);}
+					actors.tileClicked(selectedPlot, x, y);
+				}
 			}
 		});
 		//</editor-fold>

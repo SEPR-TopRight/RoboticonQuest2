@@ -72,6 +72,7 @@ public class TileConverter {
 				break;
 
 			case Unknown:
+				rt = RoboticonType.NO_CUST;
 				break;
 		}
 

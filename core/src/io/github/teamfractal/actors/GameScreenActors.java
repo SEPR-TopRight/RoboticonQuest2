@@ -2,12 +2,14 @@ package io.github.teamfractal.actors;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import io.github.teamfractal.RoboticonQuest;
@@ -23,7 +25,7 @@ public class GameScreenActors {
 	private final Stage stage;
 	private RoboticonQuest game;
 	private GameScreen screen;
-	private Label topText;
+	private Label phaseInfo;
 	private Label playerStats;
 	private TextButton buyLandPlotBtn;
 	private TextButton installRoboticonBtn;
@@ -34,78 +36,61 @@ public class GameScreenActors {
 	private TextButton nextButton;
 	private boolean dropDownActive;
 	private boolean listUpdated;
-	private boolean nextClickNull;
 
-
+	/**
+	 * Initialise the main game screen components.
+	 * @param game         The game manager {@link RoboticonQuest}
+	 * @param screen       Current screen to display on.
+	 */
 	public GameScreenActors(final RoboticonQuest game, GameScreen screen) {
 		this.game = game;
 		this.screen = screen;
 		this.stage = screen.getStage();
 	}
 
+	/**
+	 * Setup buttons.
+	 */
 	public void initialiseButtons() {
-		topText = new Label("", game.skin);
-		topText.setAlignment(Align.right);
+		// Create UI components
+		phaseInfo = new Label("", game.skin);
+		plotStats = new Label("", game.skin);
 		playerStats = new Label("", game.skin);
-
-		createRoboticonMenuItems();
 		nextButton = new TextButton("Next ->", game.skin);
 		buyLandPlotBtn = new TextButton("Buy LandPlot", game.skin);
+		createRoboticonInstallMenu();
 
-		plotStats = new Label("", game.skin);
-		nextClickNull = false;
-
-		nextButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				buyLandPlotBtn.setVisible(false);
-				plotStats.setVisible(false);
-				hideInstallRoboticon();
-				game.nextPhase();
-				dropDownActive = true;
-				installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
-				textUpdate();
-			}
-		});
-
-
+		// Adjust properties.
+		listUpdated = false;
+		hideInstallRoboticon();
 		buyLandPlotBtn.setVisible(false);
 		buyLandPlotBtn.pad(2, 10, 2, 10);
-		buyLandPlotBtn.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				LandPlot selectedPlot = screen.getSelectedPlot();
-
-				// TODO: purchase land
-				if (selectedPlot.hasOwner()) {
-					return;
-				}
-
-				Player player = game.getPlayer();
-				if (player.purchaseLandPlot(selectedPlot)) {
-					TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
-					playerTile.setTile(screen.getPlayerTile(player));
-					textUpdate();
-				}
-			}
-		});
+		phaseInfo.setAlignment(Align.right);
+		plotStats.setAlignment(Align.topLeft);
 		installRoboticonSelect.setSelected(null);
-		listUpdated = false;
 
-		hideInstallRoboticon();
+		// Bind events
+		bindEvents();
+
+		// Add to the stage for rendering.
 		stage.addActor(nextButton);
 		stage.addActor(buyLandPlotBtn);
 		stage.addActor(installRoboticonTable);
-		stage.addActor(topText);
+		stage.addActor(phaseInfo);
+		stage.addActor(plotStats);
 		stage.addActor(playerStats);
 
-		// Force update of positions.
+		// Update UI positions.
 		AbstractAnimationScreen.Size size = screen.getScreenSize();
 		resizeScreen(size.Width, size.Height);
 	}
 
 	private Table installRoboticonTable;
-	private void createRoboticonMenuItems() {
+
+	/**
+	 * Create the roboticon installation menu.
+	 */
+	private void createRoboticonInstallMenu() {
 		installRoboticonTable = new Table();
 		Table t = installRoboticonTable;
 
@@ -123,18 +108,65 @@ public class GameScreenActors {
 		t.add(installRoboticonBtn);
 		t.add(installRoboticonBtnCancel);
 		t.row();
+	}
 
-		//////////////////////////////////////////////////////////////////////////////////////////////
 
-		installRoboticonBtn.addListener(new ChangeListener() {
+	/**
+	 * Bind all button events.
+	 */
+	private void bindEvents() {
+		buyLandPlotBtn.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				event.stop();
+				hideBuyLand();
+				if (buyLandPlotBtn.isDisabled()) {
+					return ;
+				}
+				LandPlot selectedPlot = screen.getSelectedPlot();
+
+				if (selectedPlot.hasOwner()) {
+					return;
+				}
+
+				Player player = game.getPlayer();
+				if (player.purchaseLandPlot(selectedPlot)) {
+					TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
+					playerTile.setTile(screen.getPlayerTile(player));
+					textUpdate();
+				}
+			}
+		});
+
+		nextButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				event.stop();
+				if (nextButton.isDisabled()) {
+					return ;
+				}
+				buyLandPlotBtn.setVisible(false);
+				plotStats.setVisible(false);
+				hideInstallRoboticon();
+				game.nextPhase();
+				dropDownActive = true;
+				installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
+				textUpdate();
+			}
+		});
+
+		installRoboticonBtn.addListener(new ClickListener() {
 
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
+			public void clicked(InputEvent event, float x, float y) {
+				event.stop();
+				if (installRoboticonBtn.isDisabled()) {
+					return ;
+				}
 				if (!listUpdated) { //prevents updating selection list from updating change listener
 					LandPlot selectedPlot = screen.getSelectedPlot();
 					if (selectedPlot.getOwner() == game.getPlayer() && !selectedPlot.hasRoboticon()) {
 						Roboticon roboticon = null;
-						int index = -1;
 						ResourceType type = ResourceType.Unknown;
 						int selection = installRoboticonSelect.getSelectedIndex();
 
@@ -169,22 +201,19 @@ public class GameScreenActors {
 						hideInstallRoboticon();
 						updateRoboticonList();
 						dropDownActive = true;
-						nextClickNull = true;
 
 					} else listUpdated = false;
 				}
 			}
 		});
 
-		installRoboticonBtnCancel.addListener(new ChangeListener() {
-
+		installRoboticonBtnCancel.addListener(new ClickListener() {
 			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				dropDownActive = true;
+			public void clicked(InputEvent event, float x, float y) {
+				event.stop();
+				dropDownActive = false;
 				hideInstallRoboticon();
-				nextClickNull = true;
 			}
-
 		});
 	}
 
@@ -198,12 +227,11 @@ public class GameScreenActors {
 	public void tileClicked(LandPlot plot, float x, float y) {
 		Player player = game.getPlayer();
 
-		// TODO: Need proper event callback
 		switch (game.getPhase()) {
 			// Phase 1:
 			// Purchase LandPlot.
 			case 1:
-				buyLandPlotBtn.setPosition(x, y);
+				buyLandPlotBtn.setPosition(x + 10, y);
 				if (game.canPurchaseLandThisTurn()
 						&& !plot.hasOwner()
 						&& player.haveEnoughMoney(plot)) {
@@ -213,7 +241,7 @@ public class GameScreenActors {
 				}
 
 				if (plot.hasOwner()) {
-					showPlotStats(plot, x, y + 25);
+					showPlotStats(plot, x + 10, y);
 				}
 
 				buyLandPlotBtn.setVisible(true);
@@ -234,25 +262,27 @@ public class GameScreenActors {
 
 	}
 
+	/**
+	 * Update the dropdown list of roboticon available.
+	 */
 	private void updateRoboticonList() {
 		installRoboticonSelect.setItems(game.getPlayer().getRoboticonList());
 	}
 
-
+	/**
+	 * Get the "Buy Land" button.
+	 * @return "Buy Land" button.
+	 */
 	public TextButton getBuyLandPlotBtn() {
 		return buyLandPlotBtn;
 	}
 
-	public boolean getDropDownActive() {
-		return dropDownActive;
-	}
-
 	/**
-	 * Updates Textfield widgets
+	 * Updates the UI display.
 	 */
 	public void textUpdate() {
 		String phaseText = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase() + " - " + game.getPhaseString();
-		topText.setText(phaseText);
+		phaseInfo.setText(phaseText);
 
 		String statText = "Ore: " + game.getPlayer().getOre()
 				+ " Energy: " + game.getPlayer().getEnergy()
@@ -262,19 +292,28 @@ public class GameScreenActors {
 		playerStats.setText(statText);
 	}
 
+	/**
+	 * Callback event on window updates,
+	 * to adjust the UI components position relative to the screen.
+	 *
+	 * @param width    The new Width.
+	 * @param height   The new Height.
+	 */
 	public void resizeScreen(float width, float height) {
 		float topBarY = height - 20;
-		topText.setWidth(width - 10);
-		topText.setPosition(0, topBarY);
+		phaseInfo.setWidth(width - 10);
+		phaseInfo.setPosition(0, topBarY);
 
 		playerStats.setPosition(10, topBarY);
 		nextButton.setPosition(width - nextButton.getWidth() - 10, 10);
 	}
 
-	public Label getPlotStats() {
-		return plotStats;
-	}
-
+	/**
+	 *
+	 * @param plot
+	 * @param x
+	 * @param y
+	 */
 	public void showPlotStats(LandPlot plot, float x, float y) {
 		String plotStatText = "Ore: " + plot.getResource(ResourceType.ORE)
 				+ "  Energy: " + plot.getResource(ResourceType.ENERGY);
@@ -286,6 +325,11 @@ public class GameScreenActors {
 
 	public void updateRoboticonSelection() {
 		// TODO: Implement this method
+	}
+
+	public void hideBuyLand() {
+		buyLandPlotBtn.setVisible(false);
+		plotStats.setVisible(false);
 	}
 
 	public void hideInstallRoboticon() {
