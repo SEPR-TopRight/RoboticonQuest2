@@ -239,10 +239,7 @@ public class GameScreenActors {
 				} else {
 					buyLandPlotBtn.setDisabled(true);
 				}
-
-				if (plot.hasOwner()) {
-					showPlotStats(plot, x + 10, y);
-				}
+				showPlotStats(plot, x + 10, y);
 
 				buyLandPlotBtn.setVisible(true);
 				break;
