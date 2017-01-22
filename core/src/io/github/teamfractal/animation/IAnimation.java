@@ -9,7 +9,8 @@ public interface IAnimation {
 	 *
 	 * @param delta     Time change since last call.
 	 * @param screen    The screen to draw on.
-	 * @return          return <code>true</code> for animation complete.
+	 * @param batch     The Batch for drawing stuff.
+	 * @return          return <code>true</code> if the animation has completed.
 	 */
 	boolean tick(float delta, AbstractAnimationScreen screen, Batch batch);
 
