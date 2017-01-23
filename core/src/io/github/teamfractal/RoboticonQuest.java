@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,7 +13,6 @@ import io.github.teamfractal.animation.AnimationPhaseTimeout;
 import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
-import io.github.teamfractal.entity.PlotMap;
 import io.github.teamfractal.util.PlotManager;
 
 /**
@@ -44,7 +42,6 @@ public class RoboticonQuest extends Game {
 	}
 
 	public TiledMap tmx;
-	public PlotMap plotMap;
 	
 	public RoboticonQuest(){
 		_instance = this;
@@ -58,7 +55,6 @@ public class RoboticonQuest extends Game {
 		
 	
 		gameScreen = new GameScreen(this);
-		this.plotMap = new PlotMap(gameScreen.getTmx());
 
 		// Setup other screens.
 		mainMenuScreen = new MainMenuScreen(this);
@@ -107,7 +103,7 @@ public class RoboticonQuest extends Game {
 		this.playerList.add(player2);
 		this.currentPlayer = 0;
 		this.market = new Market();
-		plotManager = new PlotManager(this);
+		plotManager = new PlotManager();
 	}
 
 	public void nextPhase () {
@@ -133,13 +129,14 @@ public class RoboticonQuest extends Game {
 
 			// Phase 4: Purchase Resource
 			case 4:
-				setScreen(new ResourceMarketScreen(this));
+				generateResources();
 				break;
 
 			// Phase 5: Generate resource for player.
 			case 5:
-				generateResources();
+				setScreen(new ResourceMarketScreen(this));
 				break;
+			
 
 			// End phase - CLean up and move to next player.
 			case 6:
@@ -150,15 +147,17 @@ public class RoboticonQuest extends Game {
 
 			// Phase 1: Enable of purchase LandPlot
 			case 1:
+				setScreen(gameScreen);
 				landBoughtThisTurn = 0;
 				break;
 		}
 
-		gameScreen.getActors().textUpdate();
+		if (gameScreen != null)
+			gameScreen.getActors().textUpdate();
 	}
 
 	/**
-	 * Phase 5: generate resources.
+	 * Phase 4: generate resources.
 	 */
 	private void generateResources() {
 		// Switch back to purchase to game screen.
@@ -194,10 +193,10 @@ public class RoboticonQuest extends Game {
 				return "Install Roboticons";
 
 			case 4:
-				return "Resource Auction";
+				return "Resource Generation";
 
 			case 5:
-				return "Resource Generation";
+				return "Resource Auction";
 
 			default:
 				return "Unknown phase";

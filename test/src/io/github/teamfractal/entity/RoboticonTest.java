@@ -9,7 +9,7 @@ public class RoboticonTest {
 	
 	@Before
 	public void setup() {
-		roboticon = new Roboticon();
+		roboticon = new Roboticon(1);
 	}
 
 	

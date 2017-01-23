@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricStaggeredTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -21,6 +18,7 @@ import io.github.teamfractal.actors.GameScreenActors;
 import io.github.teamfractal.entity.LandPlot;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.enums.ResourceType;
+import io.github.teamfractal.util.TileConverter;
 
 public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private final RoboticonQuest game;
@@ -42,6 +40,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private LandPlot selectedPlot;
 	private float maxDragX;
 	private float maxDragY;
+	private TiledMapTileSets tiles;
 
 
 	public LandPlot getSelectedPlot() {
@@ -98,9 +97,11 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 			 */
 			@Override
 			public void drag(InputEvent event, float x, float y, int pointer) {
-				// TODO: control of pausing the drag.
 				// Prevent drag if the button is visible.
-				if (actors.getBuyLandPlotBtn().isVisible()) return;
+				if (actors.getBuyLandPlotBtn().isVisible()
+						|| actors.installRoboticonVisible()) {
+					return;
+				}
 
 				float deltaX = x - oldX;
 				float deltaY = y - oldY;
@@ -130,20 +131,25 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		stage.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				if (event.isStopped()) {
+					return ;
+				}
+
 				// Hide dialog if it has focus.
 				switch(game.getPhase()){
 				case 1:
 					if (actors.getBuyLandPlotBtn().isVisible()) {
-						actors.getBuyLandPlotBtn().setVisible(false);
+						actors.hideBuyLand();
 						return;
 					}
+					break;
 				case 3:
 					// Only click cancel will hide the dialog,
 					// so don't do anything here.
 					if (actors.installRoboticonVisible()) {
-						// actors.hideInstallRoboticon();
 						return ;
 					}
+					break;
 				}
 
 				// The Y from screen starts from bottom left.
@@ -174,10 +180,11 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 				if (tileIndexY % 2 == 0) {
 					tileIndexX --;
 				}
-				if (game.getPhase() != 3) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
-				else if (actors.getDropDownActive()) selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
+
+				selectedPlot = game.getPlotManager().getPlot(tileIndexX, tileIndexY);
 				if (selectedPlot != null) {
-					actors.tileClicked(selectedPlot, x, y);}
+					actors.tileClicked(selectedPlot, x, y);
+				}
 			}
 		});
 		//</editor-fold>
@@ -187,18 +194,19 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	}
 
 	public TiledMapTile getPlayerTile(Player player) {
-		return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player));
+		return tiles.getTile(68 + game.getPlayerIndex(player));
 	}
+
 	public TiledMapTile getResourcePlayerTile(Player player, ResourceType type){
 		switch(type){
 		case ORE:
-			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 4);
+			return tiles.getTile(68 + game.getPlayerIndex(player) + 4);
 		case ENERGY:
-			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 8);
+			return tiles.getTile(68 + game.getPlayerIndex(player) + 8);
 		default:
-			return tmx.getTileSets().getTile(68 + game.getPlayerIndex(player) + 12);
+			return tiles.getTile(68 + game.getPlayerIndex(player) + 12);
 		}
-		}
+	}
 			
 	/**
 	 * Reset to new game status.
@@ -208,6 +216,8 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		if (tmx != null) tmx.dispose();
 		if (renderer != null) renderer.dispose();
 		this.tmx = new TmxMapLoader().load("tiles/city.tmx");
+		tiles = tmx.getTileSets();
+		TileConverter.setup(tiles, game);
 		renderer = new IsometricStaggeredTiledMapRenderer(tmx);
 		game.reset();
 
@@ -216,7 +226,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		maxDragX = 0.75f * mapLayer.getTileWidth() * (mapLayer.getWidth() + 1);
 		maxDragY = 0.75f * mapLayer.getTileHeight() * (mapLayer.getHeight() + 1);
 
-		game.getPlotManager().setup(mapLayer, playerOverlay);
+		game.getPlotManager().setup(tiles, tmx.getLayers());
 		game.nextPhase();
 	}
 

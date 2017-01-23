@@ -15,7 +15,7 @@ public class AnimationPhaseTimeout implements IAnimation {
 	private final float timeout;
 	private float time;
 	private IAnimationFinish callback;
-	boolean callbackDone;
+	private boolean callbackDone;
 	private static BitmapFont font = new BitmapFont();
 	private static ShapeRenderer rect = new ShapeRenderer();
 	private static GlyphLayout glyphLayout = new GlyphLayout();
@@ -24,6 +24,13 @@ public class AnimationPhaseTimeout implements IAnimation {
 		rect.setAutoShapeType(true);
 	}
 
+	/**
+	 * Initialise the animation.
+	 * @param player         Current player.
+	 * @param game           The game object.
+	 * @param currentPhase   Current phase number.
+	 * @param timeout        Timeout length, in seconds.
+	 */
 	public AnimationPhaseTimeout(Player player, RoboticonQuest game, int currentPhase, float timeout) {
 		this.player = player;
 		this.game = game;
@@ -31,14 +38,33 @@ public class AnimationPhaseTimeout implements IAnimation {
 		this.timeout = timeout;
 	}
 
+	/**
+	 * Check if the animation should continue or not.
+	 * @return  <code>true</code> if the animation should continue.
+	 */
 	private boolean continueAnimation() {
 		return !callbackDone
 				&& game.getPhase() == currentPhase
 				&& game.getPlayer() == player;
 	}
 
+	/**
+	 * Count down bar colour changes from green to red overtime.
+	 */
+	private void barColour() {
+		float r = time / timeout;
+		rect.setColor(r, 1 - r, 0, 0.7f);
+	}
 
 
+	/**
+	 * Draw animation on screen.
+	 *
+	 * @param delta     Time change since last call.
+	 * @param screen    The screen to draw on.
+	 * @param batch     The Batch for drawing stuff.
+	 * @return          return <code>true</code> if the animation has completed.
+	 */
 	@Override
 	public boolean tick(float delta, AbstractAnimationScreen screen, Batch batch) {
 		if (!continueAnimation()) return true;
@@ -54,7 +80,7 @@ public class AnimationPhaseTimeout implements IAnimation {
 		synchronized (rect) {
 			rect.setProjectionMatrix(batch.getProjectionMatrix());
 			rect.begin(ShapeRenderer.ShapeType.Filled);
-			rect.setColor(0, 1, 0, 0.1f);
+			barColour();
 			rect.rect(0, 0, (1 - time / timeout) * size.Width, 3);
 			rect.end();
 		}
