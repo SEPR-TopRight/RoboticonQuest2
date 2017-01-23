@@ -5,7 +5,7 @@ import io.github.teamfractal.entity.enums.ResourceType;
 public class Roboticon {
 	private int ID;
 	private ResourceType customisation;
-	private LandPlot installedLandplot;
+	private LandPlot installedLandPlot;
 	
 	Roboticon(int ID) {
 		this.ID = ID;
@@ -25,12 +25,16 @@ public class Roboticon {
 	}
 
 	public synchronized boolean isInstalled() {
-		return installedLandplot != null;
+		return installedLandPlot != null;
 	}
-
+	/**
+	 * 
+	 * @param sets land plot which roboticon is installed to
+	 * @return true if roboticon is installed, false if not
+	 */
 	public synchronized boolean setInstalledLandplot(LandPlot landplot) {
 		if (!isInstalled()) {
-			installedLandplot = landplot;
+			installedLandPlot = landplot;
 			return true;
 		}
 

@@ -192,11 +192,20 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		// Finally, start a new game and initialise variables.
 		// newGame();
 	}
-
+	/**
+	 * gets the players tile to put over a tile they own
+	 * @param player player to buy plot
+	 * @return tile that has the coloure doutline acossiated with the player
+	 */
 	public TiledMapTile getPlayerTile(Player player) {
 		return tiles.getTile(68 + game.getPlayerIndex(player));
 	}
-
+	/**
+	 * gets the tile with the players colour and the roboticon specified to mine that resource
+	 * @param player player who's colour you want
+	 * @param type type of resource roboticon is specified for
+	 * @return
+	 */
 	public TiledMapTile getResourcePlayerTile(Player player, ResourceType type){
 		switch(type){
 		case ORE:

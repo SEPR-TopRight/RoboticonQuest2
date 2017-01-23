@@ -69,7 +69,12 @@ public class PlotManager {
 
 		return p;
 	}
-
+	/**
+	 * Creates a landplot from a tile tile on the tiled map
+	 * @param x - x coordinate on tiled map
+	 * @param y - y coordinate on tiled map
+	 * @return new Landplot with statistics determined by tile on tiled map
+	 */
 	private LandPlot createLandPlot(int x, int y) {
 		int ore, energy, food;
 		TiledMapTile tile = mapLayer.getCell(x, y).getTile();
