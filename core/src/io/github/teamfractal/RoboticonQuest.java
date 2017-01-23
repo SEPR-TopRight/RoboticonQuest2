@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.animation.AnimationPhaseTimeout;
 import io.github.teamfractal.animation.AnimationShowPlayer;
+import io.github.teamfractal.animation.IAnimationFinish;
 import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
@@ -123,7 +124,14 @@ public class RoboticonQuest extends Game {
 
 			// Phase 3: Roboticon Customisation
 			case 3:
-				gameScreen.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30));
+				AnimationPhaseTimeout timeoutAnimation = new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30);
+				gameScreen.addAnimation(timeoutAnimation);
+				timeoutAnimation.setAnimationFinish(new IAnimationFinish() {
+					@Override
+					public void OnAnimationFinish() {
+						gameScreen.getActors().hideInstallRoboticon();
+					}
+				});
 				gameScreen.getActors().updateRoboticonSelection();
 				setScreen(gameScreen);
 				break;
