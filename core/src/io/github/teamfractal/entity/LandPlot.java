@@ -155,7 +155,7 @@ public class LandPlot {
 	public int[] produceResources() {
 		int[] produced = new int[3];
 		if (this.hasRoboticon) {
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 2; i++) {
 				produced[i] = productionAmounts[i] * productionModifiers[i];
 			}
 			return produced;

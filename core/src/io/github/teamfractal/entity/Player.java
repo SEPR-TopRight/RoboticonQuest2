@@ -270,7 +270,6 @@ public class Player {
 	public void produceResources(){
 		for (LandPlot plot : landList) {
 			energy += plot.produceResource(ResourceType.ENERGY);
-			food += plot.produceResource(ResourceType.FOOD);
 			ore += plot.produceResource(ResourceType.ORE);
 		}
 	}
@@ -356,7 +355,6 @@ public class Player {
 
 		for (LandPlot land : landList) {
 			energy += land.produceResource(ResourceType.ENERGY);
-			food += land.produceResource(ResourceType.FOOD);
 			ore += land.produceResource(ResourceType.ORE);
 		}
 
