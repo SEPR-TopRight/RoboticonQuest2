@@ -77,7 +77,7 @@ public class LandPlot {
 	 * The base production amounts.
 	 * [ Ore, Energy, Food ]
 	 */
-	private int[] productionAmounts = {0, 0, 0};
+	private int[] productionAmounts;
 	private boolean owned;
 	private Roboticon installedRoboticon;
 	private boolean hasRoboticon;
