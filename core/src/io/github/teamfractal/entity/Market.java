@@ -198,30 +198,7 @@ public class Market {
 	 * @return           The buy in price.
 	 */
 	public int getBuyPrice(ResourceType resource) {
-		int price;
-		switch (resource) {
-			case ORE:
-				price = 20;
-				return price;
-
-			case ENERGY:
-				price = 30;
-				return price;
-
-			case FOOD:
-				price = 40;
-				return price;
-
-			case ROBOTICON:
-				price = 100;
-				return price;
-				
-			case CUSTOMISATION:
-				price = 10;
-
-			default:
-				throw new IllegalArgumentException("Error: Resource type is incorrect.");
-		}
+		return (int)(getSellPrice(resource) * 0.9f);
 	}
 
 	/**
@@ -230,14 +207,31 @@ public class Market {
 	 * @return           The sell price.
 	 */
 	public int getSellPrice(ResourceType resource) {
-		double max = 50;
-		double min = 10;
-		double price = 1;
-		int total = getTotalResourceCount();
-		double newPrice = price * (1 - getResource(resource) / total);
-		if (newPrice > max) newPrice = max;
-		if (newPrice < min) newPrice = min;
-		return (int)newPrice;
+		int price;
+		switch (resource) {
+			case ORE:
+				price = 10;
+				return price;
+
+			case ENERGY:
+				price = 20;
+				return price;
+
+			case FOOD:
+				price = 30;
+				return price;
+
+			case ROBOTICON:
+				price = 40;
+				return price;
+
+			case CUSTOMISATION:
+				price = 10;
+				return price;
+
+			default:
+				throw new IllegalArgumentException("Error: Resource type is incorrect.");
+		}
 	}
 
 	/**

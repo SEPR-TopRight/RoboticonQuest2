@@ -23,6 +23,7 @@ public class RoboticonMarketActors extends Table {
 	private Texture roboticonTexture;
 	private Label topText;
 	private Label playerStats;
+	private Label marketStats;
 	private Label roboticonID;
 	private Image roboticonImage = new Image();
 
@@ -45,6 +46,7 @@ public class RoboticonMarketActors extends Table {
 		this.screen = screen;
 
 		this.roboticonID = new Label("", game.skin);
+		this.marketStats = new Label("", game.skin);
 
 		widgetUpdate();
 
@@ -89,6 +91,9 @@ public class RoboticonMarketActors extends Table {
 				widgetUpdate();
 			}
 		});
+		
+		final Label marketStatistics = new Label("Market Statistics:", game.skin);
+		
 
 		// Current Roboticon Text: Top Right
 		String playerRoboticonText = "Player " + (game.getPlayerInt() + 1) + "'s Roboticons:";
@@ -159,15 +164,15 @@ public class RoboticonMarketActors extends Table {
 		add(lblBuyRoboticon).padTop(40).padLeft(68);
 		add();
 		add();
-		add(lblCurrentRoboticon).padTop(40).padLeft(200);
+		add(lblCurrentRoboticon).padTop(40).padLeft(150);
 
 		row();
 
 		// Roboticon inc & dec buttons,
 		add(lblRoboticons).padTop(40);
 		add(subRoboticonButton).padTop(40).padLeft(-90);
-		add(lblRoboticonAmount).padTop(40);
-		add(addRoboticonButton).padTop(40).padLeft(-260);
+		add(lblRoboticonAmount).padTop(40).padLeft(-80);
+		add(addRoboticonButton).padTop(40).padLeft(-320);
 
 		add();
 		add();
@@ -188,21 +193,22 @@ public class RoboticonMarketActors extends Table {
 		row();
 
 		add();
-		add();
+		add(marketStatistics).padLeft(-100).padTop(-170);
 		add();
 		add();
 
 		add();
-		add(roboticonID).padLeft(-225).padTop(-170);
-
+		add(roboticonID).padLeft(-235).padTop(-170);
+		
+		row();
 		// Purchase customisation label
 		add();
-		add();
+		add(marketStats).padLeft(-100).padTop(-100);
 		add();
 		add();
 
 		add();
-		add(lblPurchaseCustomisation).padLeft(-300).padTop(-100);
+		add(lblPurchaseCustomisation).padLeft(-235).padTop(-100);
 
 		row();
 
@@ -213,7 +219,7 @@ public class RoboticonMarketActors extends Table {
 		add();
 
 		add();
-		add(customisationDropDown).padLeft(-225).padTop(-50);
+		add(customisationDropDown).padLeft(-235).padTop(-50);
 
 		row();
 
@@ -224,7 +230,7 @@ public class RoboticonMarketActors extends Table {
 		add();
 
 		add();
-		add(buyCustomisationButton).padLeft(-225);
+		add(buyCustomisationButton).padLeft(-235);
 
 		row();
 
@@ -308,6 +314,8 @@ public class RoboticonMarketActors extends Table {
 		}
 
 		setCurrentlySelectedRoboticon(currentlySelectedRoboticonPos);
+		
+		marketStats.setText("Market - Roboticons: " + game.market.getResource(ResourceType.ROBOTICON));
 
 	}
 
