@@ -282,9 +282,15 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 
 	@Override
 	public void dispose() {
-		tmx.dispose();
-		renderer.dispose();
-		stage.dispose();
+		if(tmx != null){
+			tmx.dispose();
+		}
+		if(renderer != null) {
+			renderer.dispose();
+		}
+		if(stage != null) {
+			stage.dispose();
+		}
 	}
 
 	@Override
