@@ -154,10 +154,19 @@ public class LandPlot {
 	 */
 	public int[] produceResources() {
 		int[] produced = new int[3];
-		for (int i = 0; i < 3; i++) {
-			produced[i] = productionAmounts[i] * productionModifiers[i];
+		if (this.hasRoboticon) {
+			for (int i = 0; i < 3; i++) {
+				produced[i] = productionAmounts[i] * productionModifiers[i];
+			}
+			return produced;
 		}
-		return produced;
+		else{
+			produced[0] = 0;
+			produced[1] = 0;
+			produced[2] = 0;
+			return produced;
+		}
+		
 	}
 
 	/**
@@ -166,8 +175,12 @@ public class LandPlot {
 	 * @return          Calculated amount of resource to be generated.
 	 */
 	public int produceResource(ResourceType resource) {
-		int resIndex = resourceTypeToIndex(resource);
-		return productionAmounts[resIndex] * productionModifiers[resIndex];
+		if (this.hasRoboticon){
+			int resIndex = resourceTypeToIndex(resource);
+			return productionAmounts[resIndex] * productionModifiers[resIndex];
+		}
+		else return 0;
+		
 	}
 
 	public int getResource(ResourceType resource) {
