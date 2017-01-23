@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.animation.AnimationPhaseTimeout;
+import io.github.teamfractal.animation.AnimationShowPlayer;
 import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
@@ -149,6 +150,7 @@ public class RoboticonQuest extends Game {
 			case 1:
 				setScreen(gameScreen);
 				landBoughtThisTurn = 0;
+				gameScreen.addAnimation(new AnimationShowPlayer(getPlayerInt() + 1));
 				break;
 		}
 
