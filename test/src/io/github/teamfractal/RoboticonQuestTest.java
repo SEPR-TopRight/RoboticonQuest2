@@ -13,16 +13,17 @@ public class RoboticonQuestTest extends GdxInitializer {
 	@Before
 	public void setUp(){
 		game = new RoboticonQuest();
+		game.create();
 	}
 	@Test
 	public void phaseTest(){
-		assert(game.getPhase() == 0);  //Test game starts in correct phase
+		assertEquals(0, game.getPhase());  //Test game starts in correct phase
 		for(int i = 1; i < 5; i++){
 			game.nextPhase();
-			assert(i == game.getPhase());  //Test game will move from stages 1 to 5 without problem
+			assertEquals(i, game.getPhase());  //Test game will move from stages 1 to 5 without problem
 		}
 		game.nextPhase(); 
-		assert(game.getPhase() == 1); //Test phase resets
+		assertEquals(1, game.getPhase()); //Test phase resets
 	}
 	
 	@Test

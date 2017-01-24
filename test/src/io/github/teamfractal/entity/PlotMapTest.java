@@ -4,8 +4,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+//import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+//import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import io.github.teamfractal.GdxInitializer;
@@ -21,7 +21,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class PlotMapTest extends GdxInitializer {
 	private PlotManager plotMap;
-	LwjglApplication app;
+	//LwjglApplication app;
 
 	@Before
 	public void setUp() {
