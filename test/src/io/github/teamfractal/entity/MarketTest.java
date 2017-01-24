@@ -58,26 +58,22 @@ public class MarketTest {
 	/**
 	 * test: getBuyPrice()
 	 * The market should start with correct price for player to buy.
-	 * Prices listed here are subjected for change in later development.
-	 *
-	 * Ore: $10
-	 * Food: $10
-	 * Energy: $10
-	 * Roboticon: $10
+	 * The price is 90% of the sell price.
+	 * This could change in later development.
 	 */
 	@Test
 	public void marketShouldHaveCorrectPricesForResources() throws Exception {
-		assertEquals(20, market.getBuyPrice(ResourceType.ORE));
-		assertEquals(30, market.getBuyPrice(ResourceType.ENERGY));
-		assertEquals(40, market.getBuyPrice(ResourceType.FOOD));
-		assertEquals(100, market.getBuyPrice(ResourceType.ROBOTICON));
+		assertEquals(9, market.getBuyPrice(ResourceType.ORE));
+		assertEquals(18, market.getBuyPrice(ResourceType.ENERGY));
+		assertEquals(27, market.getBuyPrice(ResourceType.FOOD));
+		assertEquals(36, market.getBuyPrice(ResourceType.ROBOTICON));
 	}
 
 
 	/**
 	 * test: hasEnoughResources
 	 * player class can use this method to find out that the amount of resource
-	 * player want to buy is avaliable in the market, if the amount of resource
+	 * player want to buy is available in the market, if the amount of resource
 	 * in the market is less than the amount of resources player want to buy then
 	 * throw exception
 	 */
@@ -103,9 +99,9 @@ public class MarketTest {
 		market.setFood(valueToTest1);
 		market.setRoboticon(valueToTest1);
 
-		assertEquals(20,market.getSellPrice(ResourceType.FOOD));
-		assertEquals(20,market.getSellPrice(ResourceType.ORE));
-		assertEquals(20,market.getSellPrice(ResourceType.ROBOTICON));
+		assertEquals(30,market.getSellPrice(ResourceType.FOOD));
+		assertEquals(10,market.getSellPrice(ResourceType.ORE));
+		assertEquals(40,market.getSellPrice(ResourceType.ROBOTICON));
 		assertEquals(20,market.getSellPrice(ResourceType.ENERGY));
 	}
 

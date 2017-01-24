@@ -71,7 +71,7 @@ public class LandPlot {
 	 * Saved modifiers for LandPlot.
 	 * [ Ore, Energy, Food ]
 	 */
-	int[] productionModifiers = {1, 1, 1};
+	int[] productionModifiers = {0, 0, 0};
 
 	/**
 	 * The base production amounts.
@@ -154,19 +154,10 @@ public class LandPlot {
 	 */
 	public int[] produceResources() {
 		int[] produced = new int[3];
-		if (this.hasRoboticon) {
-			for (int i = 0; i < 2; i++) {
-				produced[i] = productionAmounts[i] * productionModifiers[i];
-			}
-			return produced;
+		for (int i = 0; i < 2; i++) {
+			produced[i] = productionAmounts[i] * productionModifiers[i];
 		}
-		else{
-			produced[0] = 0;
-			produced[1] = 0;
-			produced[2] = 0;
-			return produced;
-		}
-		
+		return produced;
 	}
 
 	/**
