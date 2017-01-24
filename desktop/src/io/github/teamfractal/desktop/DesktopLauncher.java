@@ -1,3 +1,5 @@
+//Location  of executable: https://github.com/TeamFractal/Roboticon-Quest/releases/download/v1.0/RoboticonQuest-1.0.zip
+
 package io.github.teamfractal.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
