@@ -54,7 +54,7 @@ public class PlayerTest {
 
 
 		playerMoney = player.getMoney();
-		int energyPrice = market.getSellPrice(ResourceType.ORE);
+		int energyPrice = market.getSellPrice(ResourceType.ENERGY);
 		//purchase 10 energy
 		player.purchaseResourceFromMarket(10, market, ResourceType.ENERGY);
 		assertEquals(playerMoney - 10 * energyPrice, player.getMoney());
