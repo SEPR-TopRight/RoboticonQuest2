@@ -21,7 +21,7 @@ public class ResourceMarketActors extends Table {
 	private final AdjustableActor energyBuy;
 	private final AdjustableActor energySell;
 	private RoboticonQuest game;
-	private Integer buyOreAmount;
+	private Integer buyOreAmount; // TODO figure out if these are needed
 	private Integer sellOreAmount;
 	private Integer buyEnergyAmount;
 	private Label phaseInfo;

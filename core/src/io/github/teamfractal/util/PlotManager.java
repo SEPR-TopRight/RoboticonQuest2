@@ -4,12 +4,11 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
-import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.LandPlot;
 
 public class PlotManager {
 	private LandPlot[][] plots;
-	private TiledMapTileSets tiles;
+	private TiledMapTileSets tiles; // TODO figure out if this is needed
 	private TiledMapTileLayer mapLayer;
 	private TiledMapTileLayer playerOverlay;
 	private TiledMapTileLayer roboticonOverlay;

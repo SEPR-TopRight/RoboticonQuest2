@@ -6,7 +6,7 @@ import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.screens.AbstractAnimationScreen;
 
 public class AnimationAddResources implements IAnimation {
-	private final Player player;
+	private final Player player; // TODO figure out if this is needed
 	private final int energy;
 	private final int food;
 	private final int ore;

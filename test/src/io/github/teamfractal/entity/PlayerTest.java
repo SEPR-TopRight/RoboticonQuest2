@@ -10,9 +10,6 @@ import org.junit.rules.ExpectedException;
 
 import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import static org.junit.Assert.assertEquals;
 
 public class PlayerTest {

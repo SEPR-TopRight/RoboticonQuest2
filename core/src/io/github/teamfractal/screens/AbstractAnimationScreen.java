@@ -1,7 +1,6 @@
 package io.github.teamfractal.screens;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.animation.IAnimation;
 

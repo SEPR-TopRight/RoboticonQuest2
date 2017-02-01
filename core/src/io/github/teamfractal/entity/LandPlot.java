@@ -78,7 +78,7 @@ public class LandPlot {
 	 * [ Ore, Energy, Food ]
 	 */
 	private int[] productionAmounts;
-	private boolean owned;
+	private boolean owned; // TODO figure out if this is needed
 	private Roboticon installedRoboticon;
 	private boolean hasRoboticon;
 

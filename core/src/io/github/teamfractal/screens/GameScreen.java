@@ -28,7 +28,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 
 	private TiledMap tmx;
 	private TiledMapTileLayer mapLayer;
-	private TiledMapTileLayer playerOverlay;
+	private TiledMapTileLayer playerOverlay; // TODO figure out if this is needed
 
 	private float oldX;
 	private float oldY;

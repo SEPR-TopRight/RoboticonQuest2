@@ -1,7 +1,6 @@
 package io.github.teamfractal;
 
 import java.util.Random;
-import java.util.Scanner;
 
 public class MiniGame {
 	private static final Random rand = new Random();
