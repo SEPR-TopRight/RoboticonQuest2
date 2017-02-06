@@ -117,7 +117,7 @@ public class RoboticonQuest extends Game {
 		switch (newPhaseState) {
 			// Phase 2: Purchase Roboticon
 			case 2:
-				RoboticonMarketScreen roboticonMarket = new RoboticonMarketScreen(this);
+				RoboticonMinigameScreen roboticonMarket = new RoboticonMinigameScreen(this);
 				roboticonMarket.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30));
 				setScreen(roboticonMarket);
 				break;

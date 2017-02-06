@@ -369,4 +369,12 @@ public class Player {
 		});
 		game.gameScreen.addAnimation(animation);
 	}
+	public void gambleResult(boolean win, int amount){
+		if(win){
+			this.setMoney(amount+this.getMoney());	
+		}
+		else{
+			this.setMoney(this.getMoney()-amount);
+		}
+	}
 }
