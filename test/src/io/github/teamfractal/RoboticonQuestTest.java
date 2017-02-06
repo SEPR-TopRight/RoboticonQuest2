@@ -1,5 +1,8 @@
 package io.github.teamfractal;
 
+// Slight cargo-culting to attempt to fix errors
+import org.junit.runner.RunWith; // May be superfluous
+import de.tomgrill.gdxtesting.GdxTestRunner; // May be superfluous
 
 import static org.junit.Assert.*;
 
@@ -7,6 +10,7 @@ import io.github.teamfractal.RoboticonQuest;
 
 import org.junit.*;
 
+@RunWith(GdxTestRunner.class) // May be superfluous
 public class RoboticonQuestTest extends GdxInitializer {
 	private RoboticonQuest game;
 	
