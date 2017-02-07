@@ -11,16 +11,15 @@ import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.screens.RoboticonMinigameScreen;
 
 import java.util.Random;
-
+//@author jormandr
 public class RoboticonMinigameActors extends Table {
 	private RoboticonQuest game;
 	private RoboticonMinigameScreen screen;
-	private Integer roboticonAmount = 0;
+	private Integer betAmount = 0;
 	private Texture texture;
 	private Label topText;
 	private Label playerStats;
 	private boolean multiplier= false;
-	private boolean betSet;
 	private static final Texture win;
 	private static final Texture lose;
 	private static final Texture unknown;
@@ -44,39 +43,39 @@ public class RoboticonMinigameActors extends Table {
 		
 		widgetUpdate();
 
-		// random.nextBoolean();
+		
 		final Label lblBet = new Label("Bet:", game.skin);
 		
-		final Label lblRoboticonAmount = new Label(roboticonAmount.toString(), game.skin);
+		final Label lblbetAmount = new Label(betAmount.toString(), game.skin);
 		
-		// Button to increase number of roboticons bought
+		// Button to increase bet amount
 		final TextButton addRoboticonButton = new TextButton("+", game.skin);
 		addRoboticonButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				roboticonAmount += 10;
-				lblRoboticonAmount.setText(roboticonAmount.toString());
+				betAmount += 10;
+				lblbetAmount.setText(betAmount.toString());
 			}
 		});
 
-		// Button to decrease number of roboticons bought
+		// Button to decrease bet amount
 		final TextButton subRoboticonButton = new TextButton("-", game.skin);
 		subRoboticonButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (roboticonAmount > 0) {
-					roboticonAmount -= 10;
-					lblRoboticonAmount.setText(roboticonAmount.toString());
+				if (betAmount > 0) {
+					betAmount -= 10;
+					lblbetAmount.setText(betAmount.toString());
 				}
 			}
 		});
 
-		// Button to buy the selected amount of roboticons from the market
+		// Button to start the gamble
 		final TextButton buyRoboticonsButton = new TextButton("GAMBLE!", game.skin);
 		buyRoboticonsButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if(roboticonAmount<game.getPlayer().getMoney()){
+				if(betAmount<game.getPlayer().getMoney()){
 					multiplier=random.nextBoolean();
 					if(multiplier){
 						texture=win;
@@ -84,7 +83,7 @@ public class RoboticonMinigameActors extends Table {
 					else{
 						texture=lose;
 					}
-					game.getPlayer().gambleResult(multiplier, roboticonAmount);	
+					game.getPlayer().gambleResult(multiplier, betAmount);	
 				}
 				else{
 					texture=broke;
@@ -95,7 +94,8 @@ public class RoboticonMinigameActors extends Table {
 		});
 				
 
-		/*final ImageButton card = new ImageButton(texDrawable); //Set the button up
+		/*imagebutton try, wasnt working
+		 * final ImageButton card = new ImageButton(texDrawable); //Set the button up
 		card.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -133,10 +133,10 @@ public class RoboticonMinigameActors extends Table {
 
 		row();
 
-		// Roboticon inc & dec buttons,
+		// bet inc & dec buttons,
 		add(lblBet).padTop(40).padLeft(10);
 		add(subRoboticonButton).padTop(40);
-		add(lblRoboticonAmount).padTop(40);
+		add(lblbetAmount).padTop(40);
 		add(addRoboticonButton).padTop(40);
 
 		add();
@@ -145,7 +145,7 @@ public class RoboticonMinigameActors extends Table {
 
 		row();
 
-		// Roboticon in inventory selection (moved to different row to preserve position of other buttons)
+		// button to start the bet (moved to different row to preserve position of other buttons)
 		add();
 		add(buyRoboticonsButton).padLeft(250).padBottom(160);
 		add();
@@ -164,7 +164,7 @@ public class RoboticonMinigameActors extends Table {
 		add();
 		
 		row();
-		// Purchase customisation label
+		// image of the card
 		add();
 		add();
 		add();

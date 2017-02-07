@@ -51,7 +51,7 @@ public class RoboticonMarketActors extends Table {
 		widgetUpdate();
 
 		// Buy Roboticon Text: Top Left
-		final Label lblBuyRoboticon = new Label("Purchase Roboticons:", game.skin);
+		final Label lblBuyRoboticon = new Label("Purchase Roboticons : 30G", game.skin);
 
 		//Roboticon text to go next to + and - buttons
 		final Label lblRoboticons = new Label("Roboticons:", game.skin);
@@ -134,7 +134,7 @@ public class RoboticonMarketActors extends Table {
 		customisationDropDown.setItems(customisations);
 
 		// Button to buy the selected customisation and customise the selected roboticon
-		final TextButton buyCustomisationButton = new TextButton("Buy Roboticon Customisation", game.skin);
+		final TextButton buyCustomisationButton = new TextButton("Buy Roboticon Customisation : "+Integer.toString(game.market.getSellPrice(ResourceType.CUSTOMISATION)), game.skin);
 		buyCustomisationButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
