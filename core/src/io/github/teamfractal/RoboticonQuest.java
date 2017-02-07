@@ -141,14 +141,21 @@ public class RoboticonQuest extends Game {
 				generateResources();
 				break;
 
-			// Phase 5: Generate resource for player.
+			//Phase 5: Gambling
 			case 5:
-				setScreen(new ResourceMarketScreen(this));
+				RoboticonMinigameScreen minigame = new RoboticonMinigameScreen(this);
+				minigame.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30));
+				setScreen(minigame);
 				break;
 			
+			// Phase 6: Generate resource for player.
+			case 6:
+				setScreen(new ResourceMarketScreen(this));
+				break;
+										
 
 			// End phase - CLean up and move to next player.
-			case 6:
+			case 7:
 				phase = newPhaseState = 1;
 				this.nextPlayer();
 				// No "break;" here!
@@ -206,6 +213,9 @@ public class RoboticonQuest extends Game {
 				return "Resource Generation";
 
 			case 5:
+				return "Gambling";
+			
+			case 6:
 				return "Resource Auction";
 
 			default:
