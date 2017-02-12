@@ -134,14 +134,10 @@ public class RoboticonMinigameActors extends Table {
 		row();
 
 		// bet inc & dec buttons,
-		add(lblBet).padTop(40).padLeft(10);
-		add(subRoboticonButton).padTop(40);
-		add(lblbetAmount).padTop(40);
-		add(addRoboticonButton).padTop(40);
-
-		add();
-		add();
-		add();
+		add(lblBet).padTop(100).padLeft(10);
+		add(subRoboticonButton).padTop(100).padLeft(100);
+		add(lblbetAmount).padTop(100).padLeft(-50);
+		add(addRoboticonButton).padTop(100).padLeft(-100);
 
 		row();
 
@@ -168,7 +164,7 @@ public class RoboticonMinigameActors extends Table {
 		add();
 		add();
 		add();
-		add(card).padLeft(-250).padRight(50).padBottom(10).padTop(-50);
+		add(card).padLeft(-250).padRight(50).padBottom(10).padTop(-150);
 		add();
 		add();
 

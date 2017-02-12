@@ -74,8 +74,8 @@ public class RoboticonQuest extends Game {
 	 */
 	private void setupSkin() {
 		skin = new Skin(
-			Gdx.files.internal("skin/skin.json"),
-			new TextureAtlas(Gdx.files.internal("skin/skin.atlas"))
+			Gdx.files.internal("skin/neon-ui.json"),
+			new TextureAtlas(Gdx.files.internal("skin/neon-ui.atlas"))
 		);
 	}
 

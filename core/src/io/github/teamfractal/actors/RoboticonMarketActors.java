@@ -51,10 +51,10 @@ public class RoboticonMarketActors extends Table {
 		widgetUpdate();
 
 		// Buy Roboticon Text: Top Left
-		final Label lblBuyRoboticon = new Label("Purchase Roboticons : 30G", game.skin);
+		final Label lblBuyRoboticon = new Label("Purchase Roboticons", game.skin);
 
 		//Roboticon text to go next to + and - buttons
-		final Label lblRoboticons = new Label("Roboticons:", game.skin);
+		final Label lblRoboticons = new Label("Quantity:", game.skin);
 
 		final Label lblRoboticonAmount = new Label(roboticonAmount.toString(), game.skin);
 
@@ -81,7 +81,7 @@ public class RoboticonMarketActors extends Table {
 		});
 
 		// Button to buy the selected amount of roboticons from the market
-		final TextButton buyRoboticonsButton = new TextButton("Buy Roboticons", game.skin);
+		final TextButton buyRoboticonsButton = new TextButton("BUY: "+Integer.toString(game.market.getSellPrice(ResourceType.ROBOTICON)), game.skin);
 		buyRoboticonsButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -134,7 +134,7 @@ public class RoboticonMarketActors extends Table {
 		customisationDropDown.setItems(customisations);
 
 		// Button to buy the selected customisation and customise the selected roboticon
-		final TextButton buyCustomisationButton = new TextButton("Buy Roboticon Customisation : "+Integer.toString(game.market.getSellPrice(ResourceType.CUSTOMISATION)), game.skin);
+		final TextButton buyCustomisationButton = new TextButton("CUSTOMIZE: "+Integer.toString(game.market.getSellPrice(ResourceType.CUSTOMISATION)), game.skin);
 		buyCustomisationButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -161,18 +161,18 @@ public class RoboticonMarketActors extends Table {
 		});
 
 		// Top Row Text
-		add(lblBuyRoboticon).padTop(40).padLeft(68);
+		add(lblBuyRoboticon).padTop(40).padLeft(80);
 		add();
 		add();
-		add(lblCurrentRoboticon).padTop(40).padLeft(150);
+		add(lblCurrentRoboticon).padTop(40).padLeft(100);
 
 		row();
 
 		// Roboticon inc & dec buttons,
-		add(lblRoboticons).padTop(40);
-		add(subRoboticonButton).padTop(40).padLeft(-90);
-		add(lblRoboticonAmount).padTop(40).padLeft(-80);
-		add(addRoboticonButton).padTop(40).padLeft(-320);
+		add(lblRoboticons).padTop(20).padLeft(-132);
+		add(subRoboticonButton).padTop(20).padLeft(-232);
+		add(lblRoboticonAmount).padTop(20).padLeft(-142);
+		add(addRoboticonButton).padTop(20).padLeft(-342);
 
 		add();
 		add();
@@ -182,33 +182,33 @@ public class RoboticonMarketActors extends Table {
 
 		// Roboticon in inventory selection (moved to different row to preserve position of other buttons)
 		add();
-		add(buyRoboticonsButton).padLeft(-100).padBottom(160);
+		add(buyRoboticonsButton).padLeft(-200).padBottom(230);
 		add();
 		add();
 
-		add(moveLeftRoboticonInventoryBtn).padTop(40).padLeft(-350).padBottom(200);
-		add(roboticonImage).padLeft(-150).padRight(75).padBottom(100).padTop(-50);
-		add(moveRightRoboticonInventoryBtn).padTop(40).padLeft(-100).padBottom(200);
+		add(moveLeftRoboticonInventoryBtn).padTop(40).padLeft(-400).padBottom(200);
+		add(roboticonImage).padLeft(-180).padRight(125).padBottom(180).padTop(-50);
+		add(moveRightRoboticonInventoryBtn).padTop(40).padLeft(-200).padBottom(200);
 
 		row();
 
 		add();
-		add(marketStatistics).padLeft(-100).padTop(-170);
+		add(marketStatistics).padLeft(-300).padTop(-270);
 		add();
 		add();
 
 		add();
-		add(roboticonID).padLeft(-235).padTop(-170);
+		add(roboticonID).padLeft(-305).padTop(-270);
 		
 		row();
 		// Purchase customisation label
 		add();
-		add(marketStats).padLeft(-100).padTop(-100);
+		add(marketStats).padLeft(-300).padTop(-200);
 		add();
 		add();
 
 		add();
-		add(lblPurchaseCustomisation).padLeft(-235).padTop(-100);
+		add(lblPurchaseCustomisation).padLeft(-300).padTop(-220);
 
 		row();
 
@@ -219,7 +219,7 @@ public class RoboticonMarketActors extends Table {
 		add();
 
 		add();
-		add(customisationDropDown).padLeft(-235).padTop(-50);
+		add(customisationDropDown).padLeft(-300).padTop(-160);
 
 		row();
 
@@ -230,7 +230,7 @@ public class RoboticonMarketActors extends Table {
 		add();
 
 		add();
-		add(buyCustomisationButton).padLeft(-235);
+		add(buyCustomisationButton).padLeft(-300).padTop(-80);
 
 		row();
 
@@ -240,7 +240,7 @@ public class RoboticonMarketActors extends Table {
 		add();
 
 		add();
-		add(nextButton).padTop(40);
+		add(nextButton).padLeft(0).padTop(-20);
 
 	}
 
@@ -315,7 +315,7 @@ public class RoboticonMarketActors extends Table {
 
 		setCurrentlySelectedRoboticon(currentlySelectedRoboticonPos);
 		
-		marketStats.setText("Market - Roboticons: " + game.market.getResource(ResourceType.ROBOTICON));
+		marketStats.setText("Available: " + game.market.getResource(ResourceType.ROBOTICON));
 
 	}
 
