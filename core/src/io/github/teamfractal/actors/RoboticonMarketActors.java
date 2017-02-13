@@ -130,7 +130,7 @@ public class RoboticonMarketActors extends Table {
 
 		// Drop down menu to select how to customise the selected roboticion
 		final SelectBox<String> customisationDropDown = new SelectBox<String>(game.skin);
-		String[] customisations = {"Energy", "Ore"};
+		String[] customisations = {"Energy", "Ore", "Food"};
 		customisationDropDown.setItems(customisations);
 
 		// Button to buy the selected customisation and customise the selected roboticon
@@ -266,6 +266,9 @@ public class RoboticonMarketActors extends Table {
 					roboticonTexture = energy_texture;
 					break;
 				case ORE:
+					roboticonTexture = ore_texture;
+					break;
+				case FOOD:
 					roboticonTexture = ore_texture;
 					break;
 				default:

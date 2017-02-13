@@ -20,6 +20,8 @@ public class ResourceMarketActors extends Table {
 	private final AdjustableActor oreSell;
 	private final AdjustableActor energyBuy;
 	private final AdjustableActor energySell;
+	private final AdjustableActor foodBuy;
+	private final AdjustableActor foodSell;
 	private RoboticonQuest game;
 	private Integer buyOreAmount; // TODO figure out if these are needed
 	private Integer sellOreAmount;
@@ -124,6 +126,8 @@ public class ResourceMarketActors extends Table {
 		oreSell = createAdjustable(ResourceType.ORE, true);
 		energyBuy = createAdjustable(ResourceType.ENERGY, false);
 		energySell = createAdjustable(ResourceType.ENERGY, true);
+		foodBuy = createAdjustable(ResourceType.FOOD, false);
+		foodSell = createAdjustable(ResourceType.FOOD, true);
 
 		// Adjust properties.
 		phaseInfo.setAlignment(Align.right);
@@ -141,28 +145,34 @@ public class ResourceMarketActors extends Table {
 		// Setup UI Layout.
 		// Row: Player and Market Stats.
 		add(playerStats);
-		add().spaceRight(20);
+		add().spaceRight(70);
 		add(marketStats);
-		rowWithHeight(20);
+		rowWithHeight(1);
 
 		// Row: Label of Sell and Buy
 		add(buyLabel);
 		add();
 		add(sellLabel);
-		rowWithHeight(10);
+		rowWithHeight(1);
 
 		// Row: Ore buy/sell
 		add(oreBuy);
 		add();
 		add(oreSell);
-		rowWithHeight(10);
+		rowWithHeight(1);
 
 		// Row: Energy buy/sell
 		add(energyBuy);
 		add();
 		add(energySell);
-		rowWithHeight(10);
+		rowWithHeight(1);
 
+		// Row: Food buy/sell
+		add(foodBuy);
+		add();
+		add(foodSell);
+		rowWithHeight(1);
+		
 		bindEvents();
 		widgetUpdate();
 	}
@@ -218,6 +228,9 @@ public class ResourceMarketActors extends Table {
 
 		updateAdjustable(energyBuy, ResourceType.ENERGY, false);
 		updateAdjustable(energySell, ResourceType.ENERGY, true);
+		
+		updateAdjustable(foodBuy, ResourceType.FOOD, false);
+		updateAdjustable(foodSell, ResourceType.FOOD, true);
 	}
 
 	/**
