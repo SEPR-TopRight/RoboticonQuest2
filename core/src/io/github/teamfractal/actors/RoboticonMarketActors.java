@@ -145,6 +145,7 @@ public class RoboticonMarketActors extends Table {
 				HashMap<String, ResourceType> converter = new HashMap<String, ResourceType>();
 				converter.put("Energy", ResourceType.ENERGY);
 				converter.put("Ore", ResourceType.ORE);
+				converter.put("Food", ResourceType.FOOD);
 				Roboticon roboticonToCustomise = roboticons.get(currentlySelectedRoboticonPos);
 
 				game.getPlayer().purchaseCustomisationFromMarket(converter.get(customisationDropDown.getSelected()), roboticonToCustomise, game.market);
