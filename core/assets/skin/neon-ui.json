@@ -24,9 +24,9 @@ com.badlogic.gdx.graphics.Color: {
 		a: 1
 	}
 	text: {
-		r: .580392156
-		g: 1
-		b: 1
+		r: 1
+		g: .1
+		b: .3
 		a: 1
 	}
 	text-selected: {
