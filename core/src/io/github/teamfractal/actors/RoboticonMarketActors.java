@@ -130,7 +130,7 @@ public class RoboticonMarketActors extends Table {
 
 		// Drop down menu to select how to customise the selected roboticion
 		final SelectBox<String> customisationDropDown = new SelectBox<String>(game.skin);
-		String[] customisations = {"Energy", "Ore"};
+		String[] customisations = {"Energy", "Ore", "Food"};
 		customisationDropDown.setItems(customisations);
 
 		// Button to buy the selected customisation and customise the selected roboticon
@@ -145,6 +145,7 @@ public class RoboticonMarketActors extends Table {
 				HashMap<String, ResourceType> converter = new HashMap<String, ResourceType>();
 				converter.put("Energy", ResourceType.ENERGY);
 				converter.put("Ore", ResourceType.ORE);
+				converter.put("Food", ResourceType.FOOD);
 				Roboticon roboticonToCustomise = roboticons.get(currentlySelectedRoboticonPos);
 
 				game.getPlayer().purchaseCustomisationFromMarket(converter.get(customisationDropDown.getSelected()), roboticonToCustomise, game.market);
@@ -265,6 +266,9 @@ public class RoboticonMarketActors extends Table {
 					roboticonTexture = energy_texture;
 					break;
 				case ORE:
+					roboticonTexture = ore_texture;
+					break;
+				case FOOD:
 					roboticonTexture = ore_texture;
 					break;
 				default:
