@@ -39,10 +39,10 @@ public class RoboticonMinigameActors extends Table {
 		unknown = new Texture(Gdx.files.internal("cards/unknown.png"));
 		win = new Texture(Gdx.files.internal("cards/win.png"));
 		lose = new Texture(Gdx.files.internal("cards/lose.png"));
-		tie=new Texture(Gdx.files.internal("cards/unknown.png"));
-		irock = new Texture(Gdx.files.internal("cards/win.png"));
-		ipaper = new Texture(Gdx.files.internal("cards/lose.png"));
-		iscissors = new Texture(Gdx.files.internal("cards/bankrupt.png"));
+		tie=new Texture(Gdx.files.internal("cards/tie.png"));
+		irock = new Texture(Gdx.files.internal("cards/rock.png"));
+		ipaper = new Texture(Gdx.files.internal("cards/paper.png"));
+		iscissors = new Texture(Gdx.files.internal("cards/scissors.png"));
 	}
 	private enum rps{
 		ROCK,PAPER,SCISSORS,INIT
