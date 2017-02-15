@@ -299,34 +299,10 @@ public class RoboticonMinigameActors extends Table {
 		screen.getStage().addActor(playerStats);
 		
 	}
+
 	private int rpsCheck(rps playerChoice, int multiplier) {
-		int result=0;
-		multiplier-=1;
-		if(playerChoice==rps.ROCK){
-			if(multiplier==0){
-				result=-1;
-			}
-			else if(multiplier==-1){
-				result=1;
-			}
-		}
-			
-		else if(playerChoice==rps.PAPER){
-		if(multiplier==-1){
-			result=-1;
-		}
-		else if(multiplier==1){
-			result=1;
-		}
-	}
-		else if(playerChoice==rps.SCISSORS){
-		if(multiplier==1){
-			result=-1;
-		}
-		else if(multiplier==0){
-			result=1;
-		}
-	}	
-		return result;
+		return (playerChoice == rps.INIT || multiplier < 0 || multiplier > 2)
+				? 0
+				: ((multiplier + playerChoice.ordinal()) % 3) - 1;
 	}
 }
