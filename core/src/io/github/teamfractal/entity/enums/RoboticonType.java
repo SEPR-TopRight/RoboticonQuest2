@@ -4,5 +4,6 @@ public enum RoboticonType {
 	NONE,
 	NO_CUST,
 	ORE,
-	ENERGY
+	ENERGY,
+	FOOD
 }

@@ -33,6 +33,7 @@ public class RoboticonMinigameActors extends Table {
 	private Image card = new Image();
 	private Image rpspl = new Image();
 	private Image rpscom = new Image();
+
 	Random rand = new Random();
 	private final int BET_CHANGE_STEP = 10;
 
