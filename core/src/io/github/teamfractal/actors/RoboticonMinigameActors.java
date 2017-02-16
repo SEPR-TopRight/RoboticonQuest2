@@ -24,12 +24,12 @@ public class RoboticonMinigameActors extends Table {
 	private Label playerStats;
 	private static final Texture TEXTURE_WIN = new Texture(Gdx.files.internal("cards/win.png"));
 	private static final Texture TEXTURE_LOSE = new Texture(Gdx.files.internal("cards/lose.png"));
-	private static final Texture TEXTURE_TIE = new Texture(Gdx.files.internal("cards/tie.jpg"));
+	private static final Texture TEXTURE_TIE = new Texture(Gdx.files.internal("cards/tie.png"));
 	private static final Texture TEXTURE_UNKNOWN = new Texture(Gdx.files.internal("cards/unknown.png"));
 	private static final Texture TEXTURE_BANKRUPT = new Texture(Gdx.files.internal("cards/bankrupt.png"));
-	private static final Texture TEXTURE_ROCK = new Texture(Gdx.files.internal("cards/rock.jpg"));
-	private static final Texture TEXTURE_PAPER = new Texture(Gdx.files.internal("cards/paper.jpg"));
-	private static final Texture TEXTURE_SCISSORS = new Texture(Gdx.files.internal("cards/scissors.jpg"));;
+	private static final Texture TEXTURE_ROCK = new Texture(Gdx.files.internal("cards/rock.png"));
+	private static final Texture TEXTURE_PAPER = new Texture(Gdx.files.internal("cards/paper.png"));
+	private static final Texture TEXTURE_SCISSORS = new Texture(Gdx.files.internal("cards/scissors.png"));;
 	private Image card = new Image();
 	private Image rpspl = new Image();
 	private Image rpscom = new Image();
