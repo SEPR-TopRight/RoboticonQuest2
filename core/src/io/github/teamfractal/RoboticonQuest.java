@@ -153,9 +153,12 @@ public class RoboticonQuest extends Game {
 				setScreen(new ResourceMarketScreen(this));
 				break;
 										
-
-			// End phase - CLean up and move to next player.
 			case 7:
+				//RANDOM EVENT
+				setScreen(new RoboticonRandomScreen(this));
+				break;
+			// End phase - CLean up and move to next player.
+			case 8:
 				phase = newPhaseState = 1;
 				this.nextPlayer();
 				// No "break;" here!
@@ -217,7 +220,10 @@ public class RoboticonQuest extends Game {
 			
 			case 6:
 				return "Resource Auction";
-
+			
+			case 7:
+				return "Random Event";
+				
 			default:
 				return "Unknown phase";
 		}
