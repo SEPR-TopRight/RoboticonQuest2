@@ -11,65 +11,53 @@ import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.screens.RoboticonMinigameScreen;
 
 import java.util.Random;
+
 //@author jormandr
 public class RoboticonMinigameActors extends Table {
 	private RoboticonQuest game;
 	private RoboticonMinigameScreen screen;
 	private Integer betAmount = 0;
-	private Texture texture;
-	private Texture texturepl;
-	private Texture texturecom;
+	private Texture resultTexture;
+	private Texture playerTexture;
+	private Texture AITexture;
 	private Label topText;
 	private Label playerStats;
-	private int multiplier= 0;
-	private static final Texture win;
-	private static final Texture lose;
-	private static final Texture tie;
-	private static final Texture unknown;
-	private static final Texture broke;
-	private static final Texture irock;
-	private static final Texture ipaper;
-	private static final Texture iscissors;
+	private static final Texture TEXTURE_WIN = new Texture(Gdx.files.internal("cards/win.png"));
+	private static final Texture TEXTURE_LOSE = new Texture(Gdx.files.internal("cards/lose.png"));
+	private static final Texture TEXTURE_TIE = new Texture(Gdx.files.internal("cards/tie.jpg"));
+	private static final Texture TEXTURE_UNKNOWN = new Texture(Gdx.files.internal("cards/unknown.png"));
+	private static final Texture TEXTURE_BANKRUPT = new Texture(Gdx.files.internal("cards/bankrupt.png"));
+	private static final Texture TEXTURE_ROCK = new Texture(Gdx.files.internal("cards/rock.jpg"));
+	private static final Texture TEXTURE_PAPER = new Texture(Gdx.files.internal("cards/paper.jpg"));
+	private static final Texture TEXTURE_SCISSORS = new Texture(Gdx.files.internal("cards/scissors.jpg"));;
 	private Image card = new Image();
 	private Image rpspl = new Image();
 	private Image rpscom = new Image();
-	Random random = new Random();
-	static {
-		broke = new Texture(Gdx.files.internal("cards/bankrupt.png"));
-		unknown = new Texture(Gdx.files.internal("cards/unknown.png"));
-		win = new Texture(Gdx.files.internal("cards/win.png"));
-		lose = new Texture(Gdx.files.internal("cards/lose.png"));
-		tie=new Texture(Gdx.files.internal("cards/tie.png"));
-		irock = new Texture(Gdx.files.internal("cards/rock.png"));
-		ipaper = new Texture(Gdx.files.internal("cards/paper.png"));
-		iscissors = new Texture(Gdx.files.internal("cards/scissors.png"));
-	}
-	private enum rps{
-		ROCK,PAPER,SCISSORS,INIT
-	}
-	private rps playerChoice=rps.INIT;
+
+	Random rand = new Random();
+	private final int BET_CHANGE_STEP = 10;
+
 	public RoboticonMinigameActors(final RoboticonQuest game, RoboticonMinigameScreen roboticonMinigameScreen) {
 		this.game = game;
 		this.screen = roboticonMinigameScreen;
-	    
+
 		new Label("", game.skin);
 		new Label("", game.skin);
-		texture=unknown;
-		texturepl=unknown;
-		texturecom=unknown;
+		resultTexture = TEXTURE_UNKNOWN;
+		playerTexture = TEXTURE_UNKNOWN;
+		AITexture = TEXTURE_UNKNOWN;
 		widgetUpdate();
-		
-		
+
 		final Label lblBet = new Label("Bet:", game.skin);
-		
+
 		final Label lblbetAmount = new Label(betAmount.toString(), game.skin);
-		
+
 		// Button to increase bet amount
 		final TextButton addRoboticonButton = new TextButton("+", game.skin);
 		addRoboticonButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				betAmount += 10;
+				betAmount += BET_CHANGE_STEP;
 				lblbetAmount.setText(betAmount.toString());
 			}
 		});
@@ -80,9 +68,17 @@ public class RoboticonMinigameActors extends Table {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (betAmount > 0) {
-					betAmount -= 10;
+					betAmount -= BET_CHANGE_STEP;
 					lblbetAmount.setText(betAmount.toString());
 				}
+			}
+		});
+		
+		final TextButton nextButton = new TextButton("Next ->", game.skin);
+		nextButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.nextPhase();
 			}
 		});
 
@@ -91,65 +87,15 @@ public class RoboticonMinigameActors extends Table {
 		rock.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if(betAmount<game.getPlayer().getMoney()){
-					playerChoice=rps.ROCK;
-					texturepl=irock;
-					multiplier=random.nextInt(3);
-					if(rpsCheck(playerChoice,multiplier)==1){
-						texture=win;
-						texturecom=iscissors;
-						game.getPlayer().gambleResult(true, betAmount);
-					}
-					else if(rpsCheck(playerChoice,multiplier)==0){
-						texture=lose;
-						texturecom=ipaper;
-						game.getPlayer().gambleResult(false, betAmount);
-					}
-					else{
-						texture=tie;
-						texturecom=irock;
-					}
-						
-				}
-				else{
-					texture=broke;
-				}
-				
-				widgetUpdate();
+				playRPS(0);
 			}
-
-
 		});
 
 		final TextButton paper = new TextButton("PAPER", game.skin);
 		paper.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if(betAmount<game.getPlayer().getMoney()){
-					playerChoice=rps.PAPER;
-					texturepl=ipaper;
-					multiplier=random.nextInt(3);
-					if(rpsCheck(playerChoice,multiplier)==1){
-						texture=win;
-						texturecom=irock;
-						game.getPlayer().gambleResult(true, betAmount);
-					}
-					else if(rpsCheck(playerChoice,multiplier)==-1){
-						texture=lose;
-						texturecom=iscissors;
-						game.getPlayer().gambleResult(false, betAmount);
-					}
-					else{
-						texture=tie;
-						texturecom=ipaper;
-					}
-						
-				}
-				else{
-					texture=broke;
-				}
-				
-				widgetUpdate();
+				playRPS(1);
 			}
 		});
 
@@ -157,63 +103,7 @@ public class RoboticonMinigameActors extends Table {
 		scissors.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if(betAmount<game.getPlayer().getMoney()){
-					playerChoice=rps.SCISSORS;
-					texturepl=iscissors;
-					multiplier=random.nextInt(3);
-					if(rpsCheck(playerChoice,multiplier)==1){
-						texture=win;
-						texturecom=ipaper;
-						game.getPlayer().gambleResult(true, betAmount);
-					}
-					else if(rpsCheck(playerChoice,multiplier)==0){
-						texture=lose;
-						texturecom=irock;
-						game.getPlayer().gambleResult(false, betAmount);
-					}
-					else{
-						texture=tie;
-						texturecom=iscissors;
-					}
-						
-				}
-				else{
-					texture=broke;
-				}
-				
-				widgetUpdate();
-			}
-		});
-				
-
-		/*imagebutton try, wasnt working
-		 * final ImageButton card = new ImageButton(texDrawable); //Set the button up
-		card.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-					multiplier=random.nextBoolean();
-					if(multiplier){
-						texture=win;
-					}
-					else{
-						texture=lose;
-					}
-					
-					widgetUpdate();
-			}
-		});
-*/
-
-
-
-
-		
-
-		final TextButton nextButton = new TextButton("Next ->", game.skin);
-		nextButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				game.nextPhase();
+				playRPS(2);
 			}
 		});
 
@@ -233,16 +123,17 @@ public class RoboticonMinigameActors extends Table {
 
 		row();
 
-		// button to start the bet (moved to different row to preserve position of other buttons)
+		// button to start the bet (moved to different row to preserve position
+		// of other buttons)
 		add();
 		add(rock).padLeft(0).padBottom(160);
 		add(paper).padLeft(50).padBottom(160);
 		add(scissors).padLeft(150).padBottom(160);
 		add();
-		
+
 		add();
 		row();
-		
+
 		add();
 		add();
 		add();
@@ -250,7 +141,7 @@ public class RoboticonMinigameActors extends Table {
 
 		add();
 		add();
-		
+
 		row();
 		// image of the card
 		add();
@@ -261,8 +152,6 @@ public class RoboticonMinigameActors extends Table {
 		add();
 
 		row();
-
-
 
 		row();
 
@@ -276,57 +165,79 @@ public class RoboticonMinigameActors extends Table {
 
 	}
 
+	private void playRPS(int playerChoice) {
+		if (betAmount < game.getPlayer().getMoney()) {
+			// Find result
+			int AIChoice = rand.nextInt(3);
+			// % doesn't handle negatives like we want
+			int result = Math.floorMod((playerChoice - AIChoice), 3);
 
+			// Set textures and update money
+			switch (playerChoice) {
+			case 0:
+				playerTexture = TEXTURE_ROCK;
+				break;
+			case 1:
+				playerTexture = TEXTURE_PAPER;
+				break;
+			case 2:
+				playerTexture = TEXTURE_SCISSORS;
+				break;
+			}
+
+			switch (AIChoice) {
+			case 0:
+				AITexture = TEXTURE_ROCK;
+				break;
+			case 1:
+				AITexture = TEXTURE_PAPER;
+				break;
+			case 2:
+				AITexture = TEXTURE_SCISSORS;
+				break;
+			}
+
+			switch (result) {
+			case 0:
+				resultTexture = TEXTURE_TIE;
+				break;
+			case 1:
+				resultTexture = TEXTURE_WIN;
+				game.getPlayer().gambleResult(true, betAmount);
+				break;
+			case 2:
+				resultTexture = TEXTURE_LOSE;
+				game.getPlayer().gambleResult(false, betAmount);
+				break;
+			}
+		} else {
+			resultTexture = TEXTURE_BANKRUPT;
+		}
+		widgetUpdate();
+	}
 
 	public void widgetUpdate() {
-		
+
 		// Draws turn and phase info on screen
-		if (this.topText != null) this.topText.remove();
+		if (this.topText != null)
+			this.topText.remove();
 		String phaseText = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
 		this.topText = new Label(phaseText, game.skin);
 		topText.setWidth(120);
-		topText.setPosition(screen.getStage().getWidth() / 2 - 40, screen.getStage().getViewport().getWorldHeight() - 20);
+		topText.setPosition(screen.getStage().getWidth() / 2 - 40,
+				screen.getStage().getViewport().getWorldHeight() - 20);
 		screen.getStage().addActor(topText);
-		card.setDrawable(new TextureRegionDrawable(new TextureRegion(texture)));
-		rpspl.setDrawable(new TextureRegionDrawable(new TextureRegion(texturepl)));
-		rpscom.setDrawable(new TextureRegionDrawable(new TextureRegion(texturecom)));
+		card.setDrawable(new TextureRegionDrawable(new TextureRegion(resultTexture)));
+		rpspl.setDrawable(new TextureRegionDrawable(new TextureRegion(playerTexture)));
+		rpscom.setDrawable(new TextureRegionDrawable(new TextureRegion(AITexture)));
 		// Draws player stats on screen
-		if (this.playerStats != null) this.playerStats.remove();
+		if (this.playerStats != null)
+			this.playerStats.remove();
 		String statText = "Money: " + game.getPlayer().getMoney();
 		this.playerStats = new Label(statText, game.skin);
 		playerStats.setWidth(250);
 		playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
 		screen.getStage().addActor(playerStats);
-		
-	}
-	private int rpsCheck(rps playerChoice, int multiplier) {
-		int result=0;
-		multiplier-=1;
-		if(playerChoice==rps.ROCK){
-			if(multiplier==0){
-				result=-1;
-			}
-			else if(multiplier==-1){
-				result=1;
-			}
-		}
-			
-		else if(playerChoice==rps.PAPER){
-		if(multiplier==-1){
-			result=-1;
-		}
-		else if(multiplier==1){
-			result=1;
-		}
-	}
-		else if(playerChoice==rps.SCISSORS){
-		if(multiplier==1){
-			result=-1;
-		}
-		else if(multiplier==0){
-			result=1;
-		}
-	}	
-		return result;
+
 	}
 }
