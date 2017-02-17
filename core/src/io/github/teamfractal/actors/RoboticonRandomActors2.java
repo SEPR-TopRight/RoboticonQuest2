@@ -29,39 +29,19 @@ public class RoboticonRandomActors2 extends Table {
 	private Label playerStats;
 	private RoboticonRandomScreen screen;
 	private TextButton nextButton;
-	private Texture texture;
-	private Label marketStats;
 	private static final Texture event[]=new Texture[9];
 	private Image bg = new Image();
 	private Random random = new Random();
 	static {
 		event[0] = new Texture(Gdx.files.internal("events/landscape.png"));
-		event[1] = new Texture(Gdx.files.internal("cards/bankrupt.png"));
-		event[2] = new Texture(Gdx.files.internal("cards/unknown.png"));
-		event[3] = new Texture(Gdx.files.internal("cards/win.png"));
-		event[4] = new Texture(Gdx.files.internal("cards/lose.png"));
+		event[1] = new Texture(Gdx.files.internal("events/moneymin.png"));
+		event[2] = new Texture(Gdx.files.internal("events/foodpl.png"));
+		event[3] = new Texture(Gdx.files.internal("events/foodmin.png"));
+		event[4] = new Texture(Gdx.files.internal("events/orepl.png"));
 		event[5]=new Texture(Gdx.files.internal("cards/tie.png"));
 		event[6] = new Texture(Gdx.files.internal("cards/rock.png"));
 		event[7] = new Texture(Gdx.files.internal("cards/paper.png"));
 		event[8] = new Texture(Gdx.files.internal("cards/scissors.png"));
-	}
-
-	/**
-	 * Get price in string format
-	 *
-	 * @param resource   The resource type.
-	 * @param bIsSell    <code>true</code> if is for sell,
-	 *                   or <code>false</code> if is for buy in.
-	 * @return           The formatted string for the resource.
-	 */
-	private String getPriceString(ResourceType resource, boolean bIsSell) {
-		// getBuyPrice: market buy-in price (user sell price)
-		// getSellPrice: market sell price (user buy price)
-		return resource.toString() + ": "
-				+ (bIsSell
-					? game.market.getBuyPrice(resource)
-					: game.market.getSellPrice(resource))
-				+ " Gold";
 	}
 
 	/**
@@ -83,14 +63,13 @@ public class RoboticonRandomActors2 extends Table {
 		this.game = game;
 		this.screen = screen;
 		Stage stage = screen.getStage();
-		texture=event[0];
 		// Create UI Components
 		phaseInfo = new Label("", game.skin);
 		nextButton = new TextButton("Next ->", game.skin);
 
 		playerStats = new Label("", game.skin);
-		marketStats = new Label("", game.skin);
-		Label eventText  = new Label("TRIAL",  skin);
+		new Label("", game.skin);
+		new Label("TRIAL",  skin);
 		
 		// Adjust properties.
 		phaseInfo.setAlignment(Align.right);
@@ -156,9 +135,9 @@ public class RoboticonRandomActors2 extends Table {
 	public void widgetUpdate() {
 		// update player stats, phase text, and the market stats.
 		int eventInd = random.nextInt(8)+1;
-		String phaseText =
-				"Player " + (game.getPlayerInt() + 1) + "; " +
-				"Phase " + game.getPhase() + " - " + game.getPhaseString();
+		game.getPlayerInt();
+		game.getPhase();
+		game.getPhaseString();
 		
 		bg.setDrawable(new TextureRegionDrawable(new TextureRegion(event[eventInd])));
 		execEv(eventInd);

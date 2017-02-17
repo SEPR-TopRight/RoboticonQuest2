@@ -8,8 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.teamfractal.RoboticonQuest;
-import io.github.teamfractal.actors.ResourceMarketActors;
-import io.github.teamfractal.actors.RoboticonRandomActors;
 import io.github.teamfractal.actors.RoboticonRandomActors2;
 
 
