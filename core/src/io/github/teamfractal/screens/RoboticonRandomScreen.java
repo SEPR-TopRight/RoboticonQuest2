@@ -8,14 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.teamfractal.RoboticonQuest;
-import io.github.teamfractal.actors.RoboticonRandomActors2;
+import io.github.teamfractal.actors.RoboticonRandomActors;
 
 
 public class RoboticonRandomScreen implements Screen {
 	final RoboticonQuest game;
 	final Stage stage;
 	final Table table;
-	private final RoboticonRandomActors2 actors;
+	private final RoboticonRandomActors actors;
 	
 	
 	public RoboticonRandomScreen(final RoboticonQuest game) {
@@ -24,7 +24,7 @@ public class RoboticonRandomScreen implements Screen {
 		this.table = new Table();
 		table.setFillParent(true);
 
-		actors = new RoboticonRandomActors2(game, this); // generates actors for the screen
+		actors = new RoboticonRandomActors(game, this); // generates actors for the screen
 		table.center().add(actors); // positions actors
 
 		stage.addActor(table);

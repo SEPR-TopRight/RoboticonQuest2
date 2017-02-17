@@ -233,13 +233,9 @@ public class GameScreenActors {
 			// Purchase LandPlot.
 			case 1:
 				buyLandPlotBtn.setPosition(x + 10, y);
-				if (game.canPurchaseLandThisTurn()
-						&& !plot.hasOwner()
-						&& player.haveEnoughMoney(plot)) {
-					buyLandPlotBtn.setDisabled(false);
-				} else {
-					buyLandPlotBtn.setDisabled(true);
-				}
+				buyLandPlotBtn.setDisabled(!(game.canPurchaseLandThisTurn()
+						                  && !plot.hasOwner()
+						                  && player.haveEnoughMoney(plot)));
 				showPlotStats(plot, x + 10, y);
 
 				buyLandPlotBtn.setVisible(true);
