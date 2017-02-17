@@ -23,15 +23,11 @@ public class ResourceMarketActors extends Table {
 	private final AdjustableActor foodBuy;
 	private final AdjustableActor foodSell;
 	private RoboticonQuest game;
-	private Integer buyOreAmount; // TODO figure out if these are needed
-	private Integer sellOreAmount;
-	private Integer buyEnergyAmount;
 	private Label phaseInfo;
 	private Label playerStats;
 	private ResourceMarketScreen screen;
 	private TextButton nextButton;
 	private Label marketStats;
-	private Integer sellEnergyAmount;
 
 	/**
 	 * Get price in string format

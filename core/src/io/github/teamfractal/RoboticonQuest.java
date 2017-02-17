@@ -22,14 +22,14 @@ import io.github.teamfractal.util.PlotManager;
  * It will set up all the necessary classes.
  */
 public class RoboticonQuest extends Game {
-	static RoboticonQuest _instance;
+	static RoboticonQuest instance;
 	public static RoboticonQuest getInstance() {
-		return _instance;
+		return instance;
 	}
 
 
 	private PlotManager plotManager;
-	SpriteBatch batch;
+	private SpriteBatch batch;
 	public Skin skin;
 	public MainMenuScreen mainMenuScreen;
 	public GameScreen gameScreen;
@@ -46,7 +46,7 @@ public class RoboticonQuest extends Game {
 	public TiledMap tmx;
 	
 	public RoboticonQuest(){
-		_instance = this;
+		instance = this;
 		reset();
 	}
 	
@@ -55,13 +55,11 @@ public class RoboticonQuest extends Game {
 		batch = new SpriteBatch();
 		setupSkin();
 		
-	
 		gameScreen = new GameScreen(this);
 
 		// Setup other screens.
 		mainMenuScreen = new MainMenuScreen(this);
 		
-
 		setScreen(mainMenuScreen);
 	}
 
@@ -199,6 +197,7 @@ public class RoboticonQuest extends Game {
 		return landBoughtThisTurn < 1;
 	}
 
+	// TODO: Would a lookup array be better?
 	public String getPhaseString () {
 		int phase = getPhase();
 
@@ -237,13 +236,9 @@ public class RoboticonQuest extends Game {
 	public int getPlayerInt(){
 		return this.currentPlayer;
 	}
-	public void nextPlayer(){
-		if (this.currentPlayer == playerList.size() - 1){
-			this.currentPlayer = 0; 
-		}
-		else{
-			this.currentPlayer ++;
-		}
+	
+	public void nextPlayer() {
+		this.currentPlayer = (this.currentPlayer + 1) % playerList.size();
 	}
 
 	public PlotManager getPlotManager() {

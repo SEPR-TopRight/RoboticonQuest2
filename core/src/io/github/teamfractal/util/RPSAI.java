@@ -12,6 +12,7 @@ public class RPSAI {
 	
 	private static Random rand = new Random();
 	
+	// TODO: Do we need a constructor? Should this whole class be static?
 	public RPSAI() {
 		humanMove = null;
 		AIMove = null;
@@ -54,6 +55,7 @@ public class RPSAI {
 		 * would be necessary, but people want to see the computer's "choice" on
 		 * screen
 		 ************************************************************************/
+		// Math.floorMod handles negatives correctly, unlike %
 		return humanMove == null ? null : results.values()[Math.floorMod((humanMove.ordinal() - AIMove.ordinal()), 3)];
 	}
 

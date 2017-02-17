@@ -5,7 +5,6 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -13,35 +12,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import io.github.teamfractal.RoboticonQuest;
-import io.github.teamfractal.entity.Player;
-import io.github.teamfractal.entity.enums.ResourceType;
-import io.github.teamfractal.screens.ResourceMarketScreen;
 import io.github.teamfractal.screens.RoboticonRandomScreen;
 
-public class RoboticonRandomActors2 extends Table {
+public class RoboticonRandomActors extends Table {
 	private RoboticonQuest game;
 	private Label phaseInfo;
 	private Label playerStats;
 	private RoboticonRandomScreen screen;
 	private TextButton nextButton;
-	private static final Texture event[]=new Texture[9];
+	private static final Texture EVENT_TEXTURES[] = new Texture[9];
 	private Image bg = new Image();
 	private Random random = new Random();
 	static {
-		event[0] = new Texture(Gdx.files.internal("events/landscape.png"));
-		event[1] = new Texture(Gdx.files.internal("events/moneymin.png"));
-		event[2] = new Texture(Gdx.files.internal("events/foodpl.png"));
-		event[3] = new Texture(Gdx.files.internal("events/foodmin.png"));
-		event[4] = new Texture(Gdx.files.internal("events/orepl.png"));
-		event[5]=new Texture(Gdx.files.internal("cards/tie.png"));
-		event[6] = new Texture(Gdx.files.internal("cards/rock.png"));
-		event[7] = new Texture(Gdx.files.internal("cards/paper.png"));
-		event[8] = new Texture(Gdx.files.internal("cards/scissors.png"));
+		EVENT_TEXTURES[0] = new Texture(Gdx.files.internal("events/landscape.png"));
+		EVENT_TEXTURES[1] = new Texture(Gdx.files.internal("events/moneymin.png"));
+		EVENT_TEXTURES[2] = new Texture(Gdx.files.internal("events/foodpl.png"));
+		EVENT_TEXTURES[3] = new Texture(Gdx.files.internal("events/foodmin.png"));
+		EVENT_TEXTURES[4] = new Texture(Gdx.files.internal("events/orepl.png"));
+		EVENT_TEXTURES[5] = new Texture(Gdx.files.internal("cards/tie.png"));
+		EVENT_TEXTURES[6] = new Texture(Gdx.files.internal("cards/rock.png"));
+		EVENT_TEXTURES[7] = new Texture(Gdx.files.internal("cards/paper.png"));
+		EVENT_TEXTURES[8] = new Texture(Gdx.files.internal("cards/scissors.png"));
 	}
 
 	/**
@@ -56,7 +51,7 @@ public class RoboticonRandomActors2 extends Table {
 	 * @param game       The game object.
 	 * @param screen     The screen object.
 	 */
-	public RoboticonRandomActors2(final RoboticonQuest game, RoboticonRandomScreen screen) {
+	public RoboticonRandomActors(final RoboticonQuest game, RoboticonRandomScreen screen) {
 		center();
 
 		Skin skin = game.skin;
@@ -139,7 +134,7 @@ public class RoboticonRandomActors2 extends Table {
 		game.getPhase();
 		game.getPhaseString();
 		
-		bg.setDrawable(new TextureRegionDrawable(new TextureRegion(event[eventInd])));
+		bg.setDrawable(new TextureRegionDrawable(new TextureRegion(EVENT_TEXTURES[eventInd])));
 		execEv(eventInd);
 		// Draws player stats on screen
 		if (this.playerStats != null) this.playerStats.remove();
@@ -154,6 +149,7 @@ public class RoboticonRandomActors2 extends Table {
 	}
 
 	private void execEv(int Ind) {
+		// TODO: simplify (try DivMod)
 		switch(Ind){
 		case 1:	game.getPlayer().event(50,0,0,0);
 				break;
