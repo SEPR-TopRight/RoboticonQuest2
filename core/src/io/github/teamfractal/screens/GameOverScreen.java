@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.actors.GameOverActors;
-import io.github.teamfractal.actors.RoboticonRandomActors;
 
 
 public class GameOverScreen implements Screen {

@@ -1,7 +1,5 @@
 package io.github.teamfractal.actors;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.screens.GameOverScreen;
-import io.github.teamfractal.screens.RoboticonRandomScreen;
 
 public class GameOverActors extends Table {
 	private RoboticonQuest game;
@@ -28,7 +25,6 @@ public class GameOverActors extends Table {
 	private TextButton btnNewGame;
 	private static final Texture END_TEXTURES[] = new Texture[4];
 	private Image bg = new Image();
-	private Random random = new Random();
 	static {
 		END_TEXTURES[0] = new Texture(Gdx.files.internal("events/landscape.png"));
 		END_TEXTURES[1] = new Texture(Gdx.files.internal("events/win1.png"));
