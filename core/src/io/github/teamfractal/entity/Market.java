@@ -70,11 +70,12 @@ public class Market {
 		if (amount < 0) {
 			throw new IllegalArgumentException("Error: Ore can't be negative.");
 		}
-		this.ore = amount;
-		int temp=(Integer)(this.ore/5);
-		this.roboticon+=temp;
-		this.ore = amount-temp*5;
-		
+
+		// Roboticons cost 5 ore
+		// As many Roboticons as can be made are, and the overflow remains
+		this.roboticon += amount / 5; // Integer division rounds down
+		this.ore = amount % 5;
+
 	}
 
 	/**
