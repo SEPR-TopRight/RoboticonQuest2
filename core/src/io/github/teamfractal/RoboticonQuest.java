@@ -15,7 +15,6 @@ import io.github.teamfractal.animation.IAnimationFinish;
 import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
-import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.util.PlotManager;
 
 /**
@@ -28,8 +27,7 @@ public class RoboticonQuest extends Game {
 		return instance;
 	}
 
-	private int turn=0;
-	private int endturn=1;
+
 	private PlotManager plotManager;
 	private SpriteBatch batch;
 	public Skin skin;
@@ -97,7 +95,7 @@ public class RoboticonQuest extends Game {
 	public void reset() {
 		this.currentPlayer = 0;
 		this.phase = 0;
-		
+
 		Player player1 = new Player(this);
 		Player player2 = new Player(this);
 		this.playerList = new ArrayList<Player>();
@@ -160,15 +158,7 @@ public class RoboticonQuest extends Game {
 			// End phase - CLean up and move to next player.
 			case 8:
 				phase = newPhaseState = 1;
-				this.turn+=1;
-				System.out.println(this.turn);
 				this.nextPlayer();
-				if (this.turn>=endturn){
-					setScreen(new GameOverScreen(this));
-					System.out.println("win cond");
-					break;
-				}
-				
 				// No "break;" here!
 				// Let the game to do phase 1 preparation.
 
@@ -182,21 +172,6 @@ public class RoboticonQuest extends Game {
 
 		if (gameScreen != null)
 			gameScreen.getActors().textUpdate();
-	}
-
-
-	public int[] scoreCalc(ArrayList<Player> pl) {
-		// score is tot money after selling all resources
-		int[] score=new int[3];
-		score[1]=pl.get(0).getMoney()+pl.get(0).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(0).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(0).getFood()*this.market.getSellPrice(ResourceType.FOOD);
-		score[2]=pl.get(1).getMoney()+pl.get(1).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(1).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(1).getFood()*this.market.getSellPrice(ResourceType.FOOD);
-		if(score[1]>score[2])
-			score[0]=1;
-		else if(score[2]>score[1])
-			score[0]=2;
-		else
-			score[0]=3;
-		return score;
 	}
 
 	/**
