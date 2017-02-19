@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -31,6 +32,12 @@ public class HomeMainMenu extends Table {
 		final Image imgTitle = new Image();
 		imgTitle.setDrawable(new TextureRegionDrawable(new TextureRegion(titleTexture)));
 		
+		//Roboticon text to go next to + and - buttons
+		final Label lblCredits = new Label("Song Credits: 'Floating Cities' \n Kevin MacLeod\n licensed: CC-BY",game.skin);
+
+
+		
+		
 		btnNewGame = new TextButton("New game!", game.skin);
 		btnExit = new TextButton("Exit", game.skin);
 
@@ -47,6 +54,9 @@ public class HomeMainMenu extends Table {
 		add(btnNewGame).pad(5);
 		row();
 		add(btnExit).pad(5);
+		row();
+		row();
+		add(lblCredits);
 	}
 
 	/**
