@@ -133,6 +133,9 @@ public class LandPlot {
 			int index = resourceTypeToIndex(roboticon.getCustomisation());
 			if (roboticon.setInstalledLandplot(this)) {
 				productionModifiers[index] += 1;
+				productionModifiers[0] += 1;
+				productionModifiers[1] += 1;
+				productionModifiers[2] += 1;
 				this.installedRoboticon = roboticon;
 				return true;
 			}
@@ -140,6 +143,9 @@ public class LandPlot {
 		else{
 			if (roboticon.setInstalledLandplot(this)) {
 				this.installedRoboticon = roboticon;
+				productionModifiers[0] += 1;
+				productionModifiers[1] += 1;
+				productionModifiers[2] += 1;
 				return true;
 			}
 		}
