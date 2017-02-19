@@ -29,7 +29,7 @@ public class RoboticonQuest extends Game {
 	}
 
 	private int turn=0;
-	private int endturn=1;
+	private int endturn=20;
 	private PlotManager plotManager;
 	private SpriteBatch batch;
 	public Skin skin;
