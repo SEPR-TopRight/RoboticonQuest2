@@ -2,6 +2,7 @@ package io.github.teamfractal.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.*;
@@ -29,6 +30,8 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private TiledMap tmx;
 	private TiledMapTileLayer mapLayer;
 	private TiledMapTileLayer playerOverlay; // TODO figure out if this is needed
+	
+	private Music music = Gdx.audio.newMusic(Gdx.files.internal("song.mp3"));
 
 	private float oldX;
 	private float oldY;
@@ -58,6 +61,8 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, oldW, oldH);
 		camera.update();
+		
+		music.play();
 
 
 		this.game = game;
