@@ -27,9 +27,10 @@ public class RoboticonQuest extends Game {
 	public static RoboticonQuest getInstance() {
 		return instance;
 	}
-
+	private int tilemax=84;
+	private int counter=0;
 	private int turn=0;
-	private int endturn=1;
+	private int endturn=20;
 	private PlotManager plotManager;
 	private SpriteBatch batch;
 	public Skin skin;
@@ -40,7 +41,12 @@ public class RoboticonQuest extends Game {
 	public ArrayList<Player> playerList;
 	public Market market;
 	private int landBoughtThisTurn;
-
+	
+	public void incCount(){
+		counter+=1;
+		System.out.println(counter);
+	}
+	
 	public int getPlayerIndex (Player player) {
 		return playerList.indexOf(player);
 	}
@@ -163,7 +169,7 @@ public class RoboticonQuest extends Game {
 				this.turn+=1;
 				System.out.println(this.turn);
 				this.nextPlayer();
-				if (this.turn>=endturn){
+				if (this.turn>=endturn || counter>=tilemax){
 					setScreen(new GameOverScreen(this));
 					System.out.println("win cond");
 					break;
