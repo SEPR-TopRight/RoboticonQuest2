@@ -29,14 +29,14 @@ public class RoboticonRandomActors extends Table {
 	private Random random = new Random();
 	static {
 		EVENT_TEXTURES[0] = new Texture(Gdx.files.internal("events/landscape.png"));
-		EVENT_TEXTURES[1] = new Texture(Gdx.files.internal("events/moneymin.png"));
-		EVENT_TEXTURES[2] = new Texture(Gdx.files.internal("events/foodpl.png"));
-		EVENT_TEXTURES[3] = new Texture(Gdx.files.internal("events/foodmin.png"));
-		EVENT_TEXTURES[4] = new Texture(Gdx.files.internal("events/orepl.png"));
-		EVENT_TEXTURES[5] = new Texture(Gdx.files.internal("cards/tie.png"));
-		EVENT_TEXTURES[6] = new Texture(Gdx.files.internal("cards/rock.png"));
-		EVENT_TEXTURES[7] = new Texture(Gdx.files.internal("cards/paper.png"));
-		EVENT_TEXTURES[8] = new Texture(Gdx.files.internal("cards/scissors.png"));
+		EVENT_TEXTURES[1] = new Texture(Gdx.files.internal("events/moneypl.png"));
+		EVENT_TEXTURES[2] = new Texture(Gdx.files.internal("events/moneymin.png"));
+		EVENT_TEXTURES[3] = new Texture(Gdx.files.internal("events/foodpl.png"));
+		EVENT_TEXTURES[4] = new Texture(Gdx.files.internal("events/foodmin.png"));
+		EVENT_TEXTURES[5] = new Texture(Gdx.files.internal("events/orepl.png"));
+		EVENT_TEXTURES[6] = new Texture(Gdx.files.internal("events/oremin.png"));
+		EVENT_TEXTURES[7] = new Texture(Gdx.files.internal("events/enepl.png"));
+		EVENT_TEXTURES[8] = new Texture(Gdx.files.internal("events/enemin.png"));
 	}
 
 	/**
