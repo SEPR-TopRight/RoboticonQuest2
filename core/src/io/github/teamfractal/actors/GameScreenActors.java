@@ -233,12 +233,20 @@ public class GameScreenActors {
 			// Purchase LandPlot.
 			case 1:
 				buyLandPlotBtn.setPosition(x + 10, y);
+				if(!(game.canPurchaseLandThisTurn()
+		                  && !plot.hasOwner())){
+					buyLandPlotBtn.setVisible(false);
+					showUnavailable(x + 10, y);
+				}
+				else{
+					buyLandPlotBtn.setVisible(true);
+					showPlotStats(plot, x + 10, y);
+				    }
 				buyLandPlotBtn.setDisabled(!(game.canPurchaseLandThisTurn()
 						                  && !plot.hasOwner()
 						                  && player.haveEnoughMoney(plot)));
-				showPlotStats(plot, x + 10, y);
+				
 
-				buyLandPlotBtn.setVisible(true);
 				break;
 
 			// Phase 3:
@@ -316,7 +324,14 @@ public class GameScreenActors {
 		plotStats.setPosition(x, y);
 		plotStats.setVisible(true);
 	}
+	
+	public void showUnavailable(float x, float y) {
+		String plotStatText = "Not Available";
 
+		plotStats.setText(plotStatText);
+		plotStats.setPosition(x, y);
+		plotStats.setVisible(true);
+	}
 	public void updateRoboticonSelection() {
 		// TODO: Implement this method
 	}
