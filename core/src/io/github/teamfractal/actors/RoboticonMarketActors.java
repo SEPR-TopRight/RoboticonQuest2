@@ -10,14 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.Roboticon;
 import io.github.teamfractal.entity.enums.ResourceType;
-import io.github.teamfractal.screens.RoboticonMarketScreen;
+import io.github.teamfractal.screens.TimedMenuScreen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoboticonMarketActors extends Table {
 	private RoboticonQuest game;
-	private RoboticonMarketScreen screen;
+	private TimedMenuScreen screen;
 	private Integer roboticonAmount = 0;
 	private int currentlySelectedRoboticonPos;
 	private Texture roboticonTexture;
@@ -41,7 +41,7 @@ public class RoboticonMarketActors extends Table {
 		TEXTURE_NO_ROBOTICONS = new Texture(Gdx.files.internal("roboticon_images/no_roboticons.png"));
 	}
 
-	public RoboticonMarketActors(final RoboticonQuest game, RoboticonMarketScreen screen) {
+	public RoboticonMarketActors(final RoboticonQuest game, TimedMenuScreen screen) {
 		this.game = game;
 		this.screen = screen;
 

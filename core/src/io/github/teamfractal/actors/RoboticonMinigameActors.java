@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.teamfractal.RoboticonQuest;
-import io.github.teamfractal.screens.RoboticonMinigameScreen;
+import io.github.teamfractal.screens.TimedMenuScreen;
 import io.github.teamfractal.util.RPSAI;
 import static io.github.teamfractal.util.RPSAI.moves;
 import static io.github.teamfractal.util.RPSAI.results;
@@ -18,7 +18,7 @@ import java.util.Random;
 //@author jormandr
 public class RoboticonMinigameActors extends Table {
 	private RoboticonQuest game;
-	private RoboticonMinigameScreen screen;
+	private TimedMenuScreen screen;
 	private Integer betAmount = 0;
 	private Texture resultTexture;
 	private Texture playerTexture;
@@ -41,7 +41,7 @@ public class RoboticonMinigameActors extends Table {
 	Random rand = new Random();
 	private final int BET_CHANGE_STEP = 10;
 
-	public RoboticonMinigameActors(final RoboticonQuest game, RoboticonMinigameScreen roboticonMinigameScreen) {
+	public RoboticonMinigameActors(final RoboticonQuest game, TimedMenuScreen roboticonMinigameScreen) {
 		this.game = game;
 		this.screen = roboticonMinigameScreen;
 

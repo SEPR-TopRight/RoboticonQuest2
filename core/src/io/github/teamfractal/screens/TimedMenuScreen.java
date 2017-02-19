@@ -8,23 +8,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.actors.RoboticonMarketActors;
 import io.github.teamfractal.actors.RoboticonMinigameActors;
 
-public class RoboticonMinigameScreen extends AbstractAnimationScreen implements Screen {
+public class TimedMenuScreen extends AbstractAnimationScreen implements Screen {
 
 	final RoboticonQuest game;
 	final Stage stage;
 	final Table table;
-	private RoboticonMinigameActors actors;
+	private Table actors;
+	private boolean mode=true;
 	
-	
-	public RoboticonMinigameScreen(final RoboticonQuest game) {
+	public TimedMenuScreen(final RoboticonQuest game,boolean mod) {
 		this.game = game;
 		this.stage = new Stage(new ScreenViewport());
 		this.table = new Table();
+		this.mode=mod;
 		table.setFillParent(true);
-		
-		actors = new RoboticonMinigameActors(game, this);
+		if(mode)
+			actors = new RoboticonMinigameActors(game, this);
+		else
+			actors = new RoboticonMarketActors(game, this);
 		table.top().left().add(actors);
 		
 		stage.addActor(table);
@@ -49,7 +53,11 @@ public class RoboticonMinigameScreen extends AbstractAnimationScreen implements 
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
 		game.getBatch().setProjectionMatrix(stage.getCamera().combined);
-		actors.widgetUpdate();
+		if(mode)
+			((RoboticonMinigameActors) actors).widgetUpdate();
+		else
+			((RoboticonMarketActors) actors).widgetUpdate();
+		
 	}
 
 	@Override
