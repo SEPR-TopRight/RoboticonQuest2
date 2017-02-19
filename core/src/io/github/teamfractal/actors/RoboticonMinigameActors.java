@@ -173,7 +173,7 @@ public class RoboticonMinigameActors extends Table {
 	}
 	
 	private void handleRPSResult() {
-		if (betAmount < game.getPlayer().getMoney()) {
+		if (betAmount <= game.getPlayer().getMoney()) {
 			moves humanMove   = rpsai.getHumanMove();
 			moves AIMove      = rpsai.getAIMove();
 			results RPSResult = rpsai.getResult();
