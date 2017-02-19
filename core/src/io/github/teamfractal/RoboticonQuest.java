@@ -218,9 +218,6 @@ public class RoboticonQuest extends Game {
 		landBoughtThisTurn ++;
 	}
 
-	public boolean canPurchaseLandThisTurn () {
-		return landBoughtThisTurn < 1;
-	}
 
 	// TODO: Would a lookup array be better?
 	public String getPhaseString () {
