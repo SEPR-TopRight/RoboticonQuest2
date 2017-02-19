@@ -62,6 +62,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		camera.setToOrtho(false, oldW, oldH);
 		camera.update();
 		
+		music.setLooping(true);
 		music.play();
 
 
