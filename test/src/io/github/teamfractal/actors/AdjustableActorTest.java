@@ -10,16 +10,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.actors.AdjustableActor;
 
 public class AdjustableActorTest {
-	
+
 	private Skin skin;
 	private String title, action;
 	private int value, min, max;
-	
+
 	private AdjustableActor actor;
-	
+
 	@Test
 	public void mainTest() {
-		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"),new TextureAtlas(Gdx.files.internal("skin/neon-ui.atlas")));
+		// Ugly hack due to failure to change Gradle testing working dir
+		skin = new Skin(Gdx.files.internal("../core/assets/skin/neon-ui.json"),
+				new TextureAtlas(Gdx.files.internal("../core/assets/skin/neon-ui.atlas")));
 		title = "test";
 		action = "action";
 		value = 0;
@@ -28,12 +30,12 @@ public class AdjustableActorTest {
 		actor = new AdjustableActor(skin, title, action);
 		verifyMembers();
 	}
-	
+
 	private void verifyMembers() {
-				assertEquals(actor.getTitle(), title);
-				assertEquals(actor.getValue(), value);
-				assertEquals(actor.getMin(), min);
-				assertEquals(actor.getMax(), max);
+		assertEquals(actor.getTitle(), title);
+		assertEquals(actor.getValue(), value);
+		assertEquals(actor.getMin(), min);
+		assertEquals(actor.getMax(), max);
 	}
 
 }
