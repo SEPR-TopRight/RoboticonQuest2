@@ -19,7 +19,7 @@ import java.util.Random;
 public class RoboticonMinigameActors extends Table {
 	private RoboticonQuest game;
 	private TimedMenuScreen screen;
-	private Integer betAmount = 0;
+	private Integer betAmount = 10;
 	private Texture resultTexture;
 	private Texture playerTexture;
 	private Texture AITexture;
