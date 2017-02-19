@@ -39,7 +39,7 @@ public class RoboticonMarketActors extends Table {
 		TEXTURE_UNCUSTOMISED = new Texture(Gdx.files.internal("roboticon_images/robot.png"));
 		TEXTURE_ENERGY = new Texture(Gdx.files.internal("roboticon_images/robot_energy.png"));
 		TEXTURE_ORE = new Texture(Gdx.files.internal("roboticon_images/robot_ore.png"));
-		TEXTURE_FOOD = new Texture(Gdx.files.internal("roboticon_images/robot_ore.png"));
+		TEXTURE_FOOD = new Texture(Gdx.files.internal("roboticon_images/robot_food.png"));
 		TEXTURE_NO_ROBOTICONS = new Texture(Gdx.files.internal("roboticon_images/no_roboticons.png"));
 	}
 

@@ -161,7 +161,7 @@
    <image width="100" height="65" source="city/raw/sport village placeholder.png"/>
   </tile>
  </tileset>
- <tileset firstgid="67" name="player1 tiles" tilewidth="104" tileheight="69" tilecount="17" columns="0">
+ <tileset firstgid="67" name="player1 tiles" tilewidth="104" tileheight="69" tilecount="21" columns="0">
   <tile id="0">
    <image width="100" height="65" source="city/Player1/empty.png"/>
   </tile>
@@ -213,8 +213,20 @@
   <tile id="16">
    <image width="100" height="65" source="city/Player1/player4Uncustomised.png"/>
   </tile>
+    <tile id="17">
+   <image width="104" height="69" source="city/Player1/player1Food.png"/>
+  </tile>
+  <tile id="18">
+   <image width="100" height="65" source="city/Player1/player2Food.png"/>
+  </tile>
+  <tile id="19">
+   <image width="100" height="65" source="city/Player1/player3Food.png"/>
+  </tile>
+  <tile id="20">
+   <image width="100" height="65" source="city/Player1/player4Food.png"/>
+  </tile>
  </tileset>
- <tileset firstgid="100" name="roboticon" tilewidth="104" tileheight="69" tilecount="3" columns="0">
+ <tileset firstgid="100" name="roboticon" tilewidth="104" tileheight="69" tilecount="5" columns="0">
   <tile id="0">
    <image width="100" height="65" source="city/roboticon/blank.png"/>
   </tile>
@@ -227,6 +239,9 @@
   <tile id="3">
    <image width="100" height="65" source="city/roboticon/ore.png"/>
   </tile>
+   <tile id="4">
+   <image width="100" height="65" source="city/roboticon/food.png"/>
+  </tile> 
  </tileset>
  <layer name="MapData" width="7" height="12">
   <data encoding="csv">
