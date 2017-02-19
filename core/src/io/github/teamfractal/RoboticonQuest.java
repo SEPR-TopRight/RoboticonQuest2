@@ -113,7 +113,6 @@ public class RoboticonQuest extends Game {
 		phase = newPhaseState;
 		// phase = newPhaseState = 4;
 
-		System.out.println("RoboticonQuest::nextPhase -> newPhaseState: " + newPhaseState);
 		switch (newPhaseState) {
 			// Phase 2: Purchase Roboticon
 			case 2:
