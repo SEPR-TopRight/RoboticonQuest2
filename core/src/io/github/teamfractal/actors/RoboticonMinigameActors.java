@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.screens.RoboticonMinigameScreen;
+import io.github.teamfractal.util.RPSAI;
+import static io.github.teamfractal.util.RPSAI.moves;
+import static io.github.teamfractal.util.RPSAI.results;
 
 import java.util.Random;
 
@@ -33,6 +36,7 @@ public class RoboticonMinigameActors extends Table {
 	private Image card = new Image();
 	private Image rpspl = new Image();
 	private Image rpscom = new Image();
+	private RPSAI rpsai = new RPSAI();
 
 	Random rand = new Random();
 	private final int BET_CHANGE_STEP = 10;
@@ -87,7 +91,8 @@ public class RoboticonMinigameActors extends Table {
 		rock.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				playRPS(0);
+				rpsai.setHumanMove(moves.ROCK);
+				handleRPSResult();
 			}
 		});
 
@@ -95,7 +100,8 @@ public class RoboticonMinigameActors extends Table {
 		paper.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				playRPS(1);
+				rpsai.setHumanMove(moves.PAPER);
+				handleRPSResult();
 			}
 		});
 
@@ -103,7 +109,8 @@ public class RoboticonMinigameActors extends Table {
 		scissors.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				playRPS(2);
+				rpsai.setHumanMove(moves.SCISSORS);
+				handleRPSResult();
 			}
 		});
 
@@ -164,57 +171,46 @@ public class RoboticonMinigameActors extends Table {
 		add(nextButton).padTop(40);
 
 	}
-
-	private void playRPS(int playerChoice) {
+	
+	private void handleRPSResult() {
 		if (betAmount < game.getPlayer().getMoney()) {
-			// Find result
-			int AIChoice = rand.nextInt(3);
-			// % doesn't handle negatives like we want
-			int result = Math.floorMod((playerChoice - AIChoice), 3);
+			moves humanMove   = rpsai.getHumanMove();
+			moves AIMove      = rpsai.getAIMove();
+			results RPSResult = rpsai.getResult();
 
-			// Set textures and update money
-			switch (playerChoice) {
-			case 0:
-				playerTexture = TEXTURE_ROCK;
-				break;
-			case 1:
-				playerTexture = TEXTURE_PAPER;
-				break;
-			case 2:
-				playerTexture = TEXTURE_SCISSORS;
-				break;
-			}
+			// ?: is more concise than switch
 
-			switch (AIChoice) {
-			case 0:
-				AITexture = TEXTURE_ROCK;
-				break;
-			case 1:
-				AITexture = TEXTURE_PAPER;
-				break;
-			case 2:
-				AITexture = TEXTURE_SCISSORS;
-				break;
-			}
+			playerTexture = humanMove == moves.ROCK     ? TEXTURE_ROCK
+					      : humanMove == moves.PAPER    ? TEXTURE_PAPER
+						  : humanMove == moves.SCISSORS ? TEXTURE_SCISSORS
+						  : TEXTURE_UNKNOWN;
 
-			switch (result) {
-			case 0:
-				resultTexture = TEXTURE_TIE;
-				break;
-			case 1:
-				resultTexture = TEXTURE_WIN;
+			// Duplicated code, but deduplication would probably be more complex
+
+			AITexture = AIMove == moves.ROCK     ? TEXTURE_ROCK
+					  : AIMove == moves.PAPER    ? TEXTURE_PAPER
+					  : AIMove == moves.SCISSORS ? TEXTURE_SCISSORS
+					  : TEXTURE_UNKNOWN;
+
+			resultTexture = RPSResult == results.WIN  ? TEXTURE_WIN
+					      : RPSResult == results.LOSE ? TEXTURE_LOSE
+						  : RPSResult == results.TIE  ? TEXTURE_TIE
+						  : TEXTURE_UNKNOWN;
+
+			if (RPSResult == results.WIN) {
 				game.getPlayer().gambleResult(true, betAmount);
-				break;
-			case 2:
-				resultTexture = TEXTURE_LOSE;
+			} else if (RPSResult == results.LOSE) {
 				game.getPlayer().gambleResult(false, betAmount);
-				break;
 			}
 		} else {
+			playerTexture = TEXTURE_UNKNOWN;
+			AITexture     = TEXTURE_UNKNOWN;
 			resultTexture = TEXTURE_BANKRUPT;
 		}
+		
 		widgetUpdate();
 	}
+	
 
 	public void widgetUpdate() {
 

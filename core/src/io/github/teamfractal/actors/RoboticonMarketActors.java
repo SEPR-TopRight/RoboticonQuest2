@@ -27,18 +27,18 @@ public class RoboticonMarketActors extends Table {
 	private Label roboticonID;
 	private Image roboticonImage = new Image();
 
-	private static final Texture no_cust_texture;
-	private static final Texture energy_texture;
-	private static final Texture ore_texture;
-	private static final Texture no_robotic_texture;
+	private static final Texture TEXTURE_UNCUSTOMISED;
+	private static final Texture TEXTURE_ENERGY;
+	private static final Texture TEXTURE_ORE;
+	private static final Texture TEXTURE_NO_ROBOTICONS;
 
 	private ArrayList<Roboticon> roboticons = new ArrayList<Roboticon>();
 
 	static {
-		no_cust_texture = new Texture(Gdx.files.internal("roboticon_images/robot.png"));
-		energy_texture = new Texture(Gdx.files.internal("roboticon_images/robot_energy.png"));
-		ore_texture = new Texture(Gdx.files.internal("roboticon_images/robot_ore.png"));
-		no_robotic_texture = new Texture(Gdx.files.internal("roboticon_images/no_roboticons.png"));
+		TEXTURE_UNCUSTOMISED = new Texture(Gdx.files.internal("roboticon_images/robot.png"));
+		TEXTURE_ENERGY = new Texture(Gdx.files.internal("roboticon_images/robot_energy.png"));
+		TEXTURE_ORE = new Texture(Gdx.files.internal("roboticon_images/robot_ore.png"));
+		TEXTURE_NO_ROBOTICONS = new Texture(Gdx.files.internal("roboticon_images/no_roboticons.png"));
 	}
 
 	public RoboticonMarketActors(final RoboticonQuest game, RoboticonMarketScreen screen) {
@@ -260,16 +260,16 @@ public class RoboticonMarketActors extends Table {
 
 			switch (roboticonType) {
 				case Unknown:
-					roboticonTexture = no_cust_texture;
+					roboticonTexture = TEXTURE_UNCUSTOMISED;
 					break;
 				case ENERGY:
-					roboticonTexture = energy_texture;
+					roboticonTexture = TEXTURE_ENERGY;
 					break;
 				case ORE:
-					roboticonTexture = ore_texture;
+					roboticonTexture = TEXTURE_ORE;
 					break;
 				case FOOD:
-					roboticonTexture = ore_texture;
+					roboticonTexture = TEXTURE_ORE;
 					break;
 				default:
 					break;
@@ -279,7 +279,7 @@ public class RoboticonMarketActors extends Table {
 			this.roboticonID.setText("Roboticon Issue Number: " + padZero(id, 4));
 
 		} else {
-			roboticonTexture = no_robotic_texture;
+			roboticonTexture = TEXTURE_NO_ROBOTICONS;
 			this.roboticonID.setText("Roboticon Issue Number: ####");
 		}
 
