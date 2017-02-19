@@ -132,6 +132,7 @@ public class GameScreenActors {
 					TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
 					playerTile.setTile(screen.getPlayerTile(player));
 					textUpdate();
+					game.incCount();
 				}
 			}
 		});
