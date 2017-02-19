@@ -13,6 +13,8 @@ public class DesktopLauncher {
 
 		config.backgroundFPS = 1;
 		config.vSyncEnabled = true;
+		config.title = "Roboticon Quest - by Jormandr Games";
+		config.resizable = false;
 
 		new LwjglApplication(new RoboticonQuest(), config);
 	}
