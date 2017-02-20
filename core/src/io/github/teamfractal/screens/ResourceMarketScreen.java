@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.actors.ResourceMarketActors;
 
-
 public class ResourceMarketScreen implements Screen {
+	
 	final RoboticonQuest game;
 	final Stage stage;
 	final Table table;

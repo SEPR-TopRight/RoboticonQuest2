@@ -33,6 +33,10 @@ public class TileConverter {
 			case ORE:
 				resourceIndex = 3;
 				break;
+				
+			case FOOD:
+				resourceIndex = 4;
+				break;
 
 			case NO_CUST:
 				resourceIndex = 1;
@@ -61,6 +65,7 @@ public class TileConverter {
 				break;
 
 			case FOOD:
+				rt = RoboticonType.FOOD;
 				break;
 
 			case ROBOTICON:
