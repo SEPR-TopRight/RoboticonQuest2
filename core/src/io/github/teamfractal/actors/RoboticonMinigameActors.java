@@ -37,6 +37,8 @@ public class RoboticonMinigameActors extends Table {
 	private Image rpspl = new Image();
 	private Image rpscom = new Image();
 	private RPSAI rpsai = new RPSAI();
+	private Image background;
+	private float backgroundX, backgroundY;
 
 	Random rand = new Random();
 	private final int BET_CHANGE_STEP = 10;
@@ -55,6 +57,8 @@ public class RoboticonMinigameActors extends Table {
 		final Label lblBet = new Label("Bet:", game.skin);
 
 		final Label lblbetAmount = new Label(betAmount.toString(), game.skin);
+
+		background = new Image(new Texture(Gdx.files.internal("background/iceland.jpg")));
 
 		// Button to increase bet amount
 		final TextButton addRoboticonButton = new TextButton("+", game.skin);
@@ -114,6 +118,7 @@ public class RoboticonMinigameActors extends Table {
 			}
 		});
 
+		addActor(background);
 		// Top Row Text
 		add();
 		add();
@@ -235,5 +240,11 @@ public class RoboticonMinigameActors extends Table {
 		playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
 		screen.getStage().addActor(playerStats);
 
+	}
+
+	public void resizeScreen(float width, float height) {
+		backgroundX = width/background.getWidth();
+		backgroundY = height/background.getHeight();
+		background.setScale(backgroundX, backgroundY);
 	}
 }

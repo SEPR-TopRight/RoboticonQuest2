@@ -21,7 +21,7 @@ public class MainMenuScreen implements Screen {
 		this.table = new Table();
 		table.setFillParent(true);
 
-		homeMainMenu = new HomeMainMenu(game);
+		homeMainMenu = new HomeMainMenu(game, this);
 		table.center().center().add(homeMainMenu);
 
 		stage.addActor(table);
@@ -55,6 +55,7 @@ public class MainMenuScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+		homeMainMenu.resizeScreen(width, height);
 	}
 
 	@Override
@@ -76,4 +77,6 @@ public class MainMenuScreen implements Screen {
 	public void dispose() {
 		stage.dispose();
 	}
+
+	public Stage getStage() { return this.stage;}
 }

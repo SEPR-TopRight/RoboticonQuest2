@@ -53,11 +53,13 @@ public class TimedMenuScreen extends AbstractAnimationScreen implements Screen {
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
 		game.getBatch().setProjectionMatrix(stage.getCamera().combined);
-		if(mode)
+		if (mode) {
 			((RoboticonMinigameActors) actors).widgetUpdate();
-		else
+			((RoboticonMinigameActors) actors).resizeScreen(width, height);
+		} else {
 			((RoboticonMarketActors) actors).widgetUpdate();
-		
+			((RoboticonMarketActors) actors).resizeScreen(width, height);
+		}
 	}
 
 	@Override
