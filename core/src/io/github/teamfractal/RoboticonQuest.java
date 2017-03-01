@@ -41,6 +41,7 @@ public class RoboticonQuest extends Game {
 	public ArrayList<Player> playerList;
 	public Market market;
 	private int landBoughtThisTurn;
+	private int numberOfPlayers = 2; // Added by Josh Neil
 	
 	public void incCount(){
 		counter+=1;
@@ -79,10 +80,11 @@ public class RoboticonQuest extends Game {
 	 * Setup the default skin for GUI components.
 	 */
 	private void setupSkin() {
+		// Josh Neil moved back to the default skin because we didn't like the pink text
 		skin = new Skin(
-			Gdx.files.internal("skin/neon-ui.json"),
-			new TextureAtlas(Gdx.files.internal("skin/neon-ui.atlas"))
-		);
+				Gdx.files.internal("skin/skin.json"),
+				new TextureAtlas(Gdx.files.internal("skin/skin.atlas"))
+			);
 	}
 
 	/**
@@ -99,16 +101,21 @@ public class RoboticonQuest extends Game {
 	public int getPhase(){
 		return this.phase;
 	}
+	
+	// Added by Josh Neil so that we can have between 2 and 4 players
+	public void setNumberOfPlayers(int numberOfPlayers){
+		this.numberOfPlayers = numberOfPlayers;
+	}
 
 	public void reset() {
 		this.currentPlayer = 0;
 		this.phase = 0;
-		
-		Player player1 = new Player(this);
-		Player player2 = new Player(this);
 		this.playerList = new ArrayList<Player>();
-		this.playerList.add(player1);
-		this.playerList.add(player2);
+		// Modified by Josh Neil to support an aribitary number of players
+		for(int player =0; player<numberOfPlayers; player++){
+			Player p = new Player(this);
+			this.playerList.add(p);
+		}
 		this.currentPlayer = 0;
 		this.market = new Market();
 		plotManager = new PlotManager();

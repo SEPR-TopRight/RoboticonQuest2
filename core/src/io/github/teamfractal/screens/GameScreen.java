@@ -232,7 +232,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		// Setup the game board.
 		if (tmx != null) tmx.dispose();
 		if (renderer != null) renderer.dispose();
-		this.tmx = new TmxMapLoader().load("tiles/city.tmx");
+		this.tmx = new TmxMapLoader().load("tiles/city 2.tmx");
 		tiles = tmx.getTileSets();
 		TileConverter.setup(tiles, game);
 		renderer = new IsometricStaggeredTiledMapRenderer(tmx);

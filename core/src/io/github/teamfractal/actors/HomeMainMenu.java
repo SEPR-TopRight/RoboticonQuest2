@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -18,6 +19,9 @@ public class HomeMainMenu extends Table {
 	private RoboticonQuest game;
 	private TextButton btnNewGame;
 	private TextButton btnExit;
+	
+	// Added by Josh Neil to allow the user to select the number of players that are playing the game
+	private SelectBox<String> numberOfPlayersDropDown;
 
 	private static Texture titleTexture = new Texture(Gdx.files.internal("roboticon_images/Roboticon_Quest_Title"));
 
@@ -35,8 +39,8 @@ public class HomeMainMenu extends Table {
 		//Roboticon text to go next to + and - buttons
 		final Label lblCredits = new Label("Song Credits: 'Floating Cities' \n Kevin MacLeod\n licensed: CC-BY",game.skin);
 
-
-		
+		// Added by Josh Neil
+		createNumberOfPlayersDropDown();	
 		
 		btnNewGame = new TextButton("New game!", game.skin);
 		btnExit = new TextButton("Exit", game.skin);
@@ -51,12 +55,24 @@ public class HomeMainMenu extends Table {
 		// Add UI Components to table.
 		add(imgTitle);
 		row();
+		// Added by Josh Neil
+		add(numberOfPlayersDropDown);
+		row();
 		add(btnNewGame).pad(5);
 		row();
 		add(btnExit).pad(5);
 		row();
 		row();
 		add(lblCredits);
+	}
+	
+	// Added by Josh Neil to create the drop down required so that users may select the number of players that they want to play the game
+	private void createNumberOfPlayersDropDown(){
+		
+		numberOfPlayersDropDown = new SelectBox<String>(game.skin);
+		String options[] = {"2 players","3 players","4 players"};
+		numberOfPlayersDropDown.setItems(options);
+		numberOfPlayersDropDown.setSelectedIndex(0);
 	}
 
 	/**
@@ -67,6 +83,10 @@ public class HomeMainMenu extends Table {
 			@Override
 			public void clicked (InputEvent event, float x, float y) {
 				game.setScreen(game.gameScreen);
+				
+				// Added by Josh to set the correct number of players
+				game.setNumberOfPlayers(numberOfPlayersDropDown.getSelectedIndex()+2);
+				
 				game.gameScreen.newGame();
 			}
 		});
