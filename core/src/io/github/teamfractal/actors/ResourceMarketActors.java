@@ -1,12 +1,11 @@
 package io.github.teamfractal.actors;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -14,6 +13,7 @@ import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.ResourceMarketScreen;
+import io.github.teamfractal.util.SoundEffects;
 
 public class ResourceMarketActors extends Table {
 	private final AdjustableActor oreBuy;
@@ -28,6 +28,8 @@ public class ResourceMarketActors extends Table {
 	private ResourceMarketScreen screen;
 	private TextButton nextButton;
 	private Label marketStats;
+	private Image background;
+	private float backgroundX, backgroundY;
 
 	/**
 	 * Get price in string format
@@ -112,6 +114,7 @@ public class ResourceMarketActors extends Table {
 		// Create UI Components
 		phaseInfo = new Label("", game.skin);
 		nextButton = new TextButton("Next ->", game.skin);
+		background = new Image(new Texture(Gdx.files.internal("background/facility.jpg")));
 
 		playerStats = new Label("", game.skin);
 		marketStats = new Label("", game.skin);
@@ -134,8 +137,10 @@ public class ResourceMarketActors extends Table {
 
 
 		// Add UI components to screen.
+		stage.addActor(background);
 		stage.addActor(phaseInfo);
 		stage.addActor(nextButton);
+
 
 
 		// Setup UI Layout.
@@ -180,6 +185,7 @@ public class ResourceMarketActors extends Table {
 		nextButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				SoundEffects.click();
 				game.nextPhase();
 			}
 		});
@@ -244,5 +250,9 @@ public class ResourceMarketActors extends Table {
 		nextButton.setPosition(width - nextButton.getWidth() - 10, 10);
 
 		setWidth(width);
+
+		backgroundX = width/background.getWidth();
+		backgroundY = height/background.getHeight();
+		background.setScale(backgroundX, backgroundY);
 	}
 }

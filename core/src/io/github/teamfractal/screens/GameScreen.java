@@ -258,9 +258,14 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 
 		camera.update();
 
+		actors.addBackground(stage);
+		stage.act(delta);
+		stage.draw();
+
 		renderer.setView(camera);
 		renderer.render();
 
+		actors.removeBackground(stage);
 		stage.act(delta);
 		stage.draw();
 
