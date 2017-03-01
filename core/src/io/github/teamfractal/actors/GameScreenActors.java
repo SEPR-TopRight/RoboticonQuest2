@@ -1,12 +1,12 @@
 package io.github.teamfractal.actors;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -17,6 +17,7 @@ import io.github.teamfractal.entity.Roboticon;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.AbstractAnimationScreen;
 import io.github.teamfractal.screens.GameScreen;
+import io.github.teamfractal.util.SoundEffects;
 import io.github.teamfractal.util.TileConverter;
 
 public class GameScreenActors {
@@ -32,6 +33,8 @@ public class GameScreenActors {
 	private SelectBox<String> installRoboticonSelect;
 	private Label plotStats;
 	private TextButton nextButton;
+	private Image background;
+	private float backgroundX, backgroundY;
 	private boolean dropDownActive; // TODO figure out if this is needed
 	private boolean listUpdated;
 
@@ -56,6 +59,7 @@ public class GameScreenActors {
 		playerStats = new Label("", game.skin);
 		nextButton = new TextButton("Next ->", game.skin);
 		buyLandPlotBtn = new TextButton("Buy LandPlot", game.skin);
+		background = new Image(new Texture(Gdx.files.internal("background/space-stars.jpeg")));
 		createRoboticonInstallMenu();
 
 		// Adjust properties.
@@ -71,6 +75,7 @@ public class GameScreenActors {
 		bindEvents();
 
 		// Add to the stage for rendering.
+		stage.addActor(background);
 		stage.addActor(nextButton);
 		stage.addActor(buyLandPlotBtn);
 		stage.addActor(installRoboticonTable);
@@ -129,6 +134,7 @@ public class GameScreenActors {
 
 				Player player = game.getPlayer();
 				if (player.purchaseLandPlot(selectedPlot)) {
+					SoundEffects.click();
 					TiledMapTileLayer.Cell playerTile = selectedPlot.getPlayerTile();
 					playerTile.setTile(screen.getPlayerTile(player));
 					textUpdate();
@@ -144,6 +150,7 @@ public class GameScreenActors {
 				if (nextButton.isDisabled()) {
 					return ;
 				}
+				SoundEffects.click();
 				buyLandPlotBtn.setVisible(false);
 				plotStats.setVisible(false);
 				hideInstallRoboticon();
@@ -193,6 +200,7 @@ public class GameScreenActors {
 						}
 
 						if (roboticon != null) {
+							SoundEffects.click();
 							selectedPlot.installRoboticon(roboticon);
 							TiledMapTileLayer.Cell roboticonTile = selectedPlot.getRoboticonTile();
 							roboticonTile.setTile(TileConverter.getRoboticonTile(roboticon.getCustomisation()));
@@ -213,6 +221,7 @@ public class GameScreenActors {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				event.stop();
+				SoundEffects.click();
 				dropDownActive = false;
 				hideInstallRoboticon();
 			}
@@ -228,6 +237,7 @@ public class GameScreenActors {
 	 */
 	public void tileClicked(LandPlot plot, float x, float y) {
 		Player player = game.getPlayer();
+		SoundEffects.click();
 
 		switch (game.getPhase()) {
 			// Phase 1:
@@ -308,6 +318,10 @@ public class GameScreenActors {
 
 		playerStats.setPosition(10, topBarY);
 		nextButton.setPosition(width - nextButton.getWidth() - 10, 10);
+
+		backgroundX = width/background.getWidth();
+		backgroundY = height/background.getHeight();
+		background.setScale(backgroundX, backgroundY);
 	}
 
 	/**
@@ -357,5 +371,13 @@ public class GameScreenActors {
 	 */
 	public boolean installRoboticonVisible() {
 		return installRoboticonTable.isVisible();
+	}
+
+	public void removeBackground(Stage stage) {
+		stage.getActors().removeValue(background, true);
+	}
+
+	public void addBackground(Stage stage) {
+		stage.addActor(background);
 	}
 }
