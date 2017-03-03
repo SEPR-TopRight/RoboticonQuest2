@@ -379,7 +379,45 @@ public class PlayerTest {
 			player.addLandPlot(l3);		
 		}
 		
-
+		
+		/**
+		 * Tests {@link Player#removeRoboticon(Roboticon)} ensures that the given roboticon
+		 * is actually removed from the player's inventory (as this is a simple method only a single test is needed)
+		 */
+		@Test
+		public void testRemoveRoboticonRoboticonRemoved(){
+			Roboticon r1 = new Roboticon(0);
+			Roboticon r2 = new Roboticon(1);
+			Roboticon r3 = new Roboticon(2);
+			
+			player.roboticonList.add(r1);
+			player.roboticonList.add(r2);
+			player.roboticonList.add(r3);
+			
+			player.removeRoboticon(r1);
+			
+			assertFalse(player.roboticonList.contains(r1, true));
+		}
+		
+		/**
+		 * Tests {@link Player#removeRoboticon(Roboticon)} ensures that the size of the roboticon list that stores the players
+		 * roboticons is reduced by 1 (as this is a simple method only a single test is needed)
+		 */
+		@Test
+		public void testRemoveRoboticonListSizeReduced(){
+			Roboticon r1 = new Roboticon(0);
+			Roboticon r2 = new Roboticon(1);
+			Roboticon r3 = new Roboticon(2);
+			
+			player.roboticonList.add(r1);
+			player.roboticonList.add(r2);
+			player.roboticonList.add(r3);
+			
+			player.removeRoboticon(r1);
+			
+			assertEquals(2,player.roboticonList.size);
+		}
+		
 		
 		// Tests below were removed by Josh Neil as they are unit tests and unit tests
 		// are in the PlayerUnitTest class
@@ -742,7 +780,85 @@ public class PlayerTest {
 		}
 		
 		
-		
+		//Exists in this class as well as PlayerUnitTest because this version depends on the market
+		/**
+		 * Tests {@link Player#getScore()} using  player objects with varying quantities of money, ore, energy and food
+		 * and ensures that the correct result is returned
+		 * @author jcn509
+		 *
+		 */
+		@RunWith(Parameterized.class)
+		public static class PlayerGetScoreParamaterisedTests{
+			private int expectedScore;
+			private int moneyQuantity;
+			private int oreQuantity;
+			private int foodQuantity;
+			private int energyQuantity;
+			private Player player;
+			
+			/**
+			 * Sets up the required values for each test
+			 * @param expectedScore The score that the player should have
+			 * @param moneyQuantity The amount of money that the player has
+			 * @param oreQuantity The amount of ore that the player has
+			 * @param energyQuantity The amount of energy that the player has
+			 * @param foodQuantity The amount of food that the player has
+			 */
+			public PlayerGetScoreParamaterisedTests(int expectedScore, int moneyQuantity, int oreQuantity,int energyQuantity,int foodQuantity){
+				this.expectedScore = expectedScore;
+				this.moneyQuantity = moneyQuantity;
+				this.oreQuantity = oreQuantity;
+				this.foodQuantity = foodQuantity;
+				this.energyQuantity = energyQuantity;
+			}
+			
+			/**
+			 * Defines the values to be used in each test
+			 */
+			@Parameterized.Parameters
+			public static Collection playerScoreTestValues(){
+				 int oreValue = (new RoboticonQuest()).market.getSellPrice(ResourceType.ORE);
+				 int energyValue = (new RoboticonQuest()).market.getSellPrice(ResourceType.ENERGY);
+				 int foodValue = (new RoboticonQuest()).market.getSellPrice(ResourceType.FOOD);
+				 return Arrays.asList(new Object[][] {
+			         {10 +oreValue+energyValue+foodValue,10,1,1,1},
+			         {0,0,0,0,0},
+			         {1,1,0,0,0},
+			         {2*oreValue,0,2,0,0},
+			         {3*energyValue,0,0,3,0},
+			         {5*foodValue,0,0,0,5},
+			         {(5*foodValue)+oreValue,0,1,0,5},
+			         {(5*foodValue)+oreValue +(2*energyValue),0,1,2,5},
+			         {(15*foodValue)+(4*oreValue) +(97*energyValue),0,4,97,15},
+			         {101+(15*foodValue)+(4*oreValue) +(97*energyValue),101,4,97,15},
+			      });
+			}
+			
+			/**
+			 * Runs before every test and creates the player object required with the defined amount of
+			 * money, ore, energy and food
+			 */
+			@Before
+			public void setup(){
+				RoboticonQuest game = new RoboticonQuest();
+				player = new Player(game);
+				player.setMoney(moneyQuantity);
+				player.setEnergy(energyQuantity);
+				player.setOre(oreQuantity);
+				player.setFood(foodQuantity);	
+			}
+			
+			/**
+			 * Tests {@link Player#getScore()} ensures that the correct score is returned
+			 * when the player has the defined quantity of money, ore, energy and food
+			 */
+			@Test
+			public void testScore(){
+				assertEquals(expectedScore,player.getScore());
+			}
+			
+			
+		}
 		
 		/**
 		 * Tests {@link Player#generateResources()} using  player objects with various different plots with different attributes
@@ -912,7 +1028,6 @@ public class PlayerTest {
 			 */
 			@Test
 			public void testCorrectFoodReturned(){
-				
 				assertEquals(expectedAmountOfFood,player.generateResources().get(ResourceType.FOOD));
 			}
 		}

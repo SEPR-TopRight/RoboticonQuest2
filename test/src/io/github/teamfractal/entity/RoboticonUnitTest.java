@@ -5,14 +5,16 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import io.github.teamfractal.entity.enums.ResourceType;
+import mockit.Mocked;
 // All JavaDocs added by Josh
 
 /**
- * Integration tests for {@link Roboticon}
+ * Test case for {@link Roboticon}
  * @author jcn509
  */
-public class RoboticonTest {
+public class RoboticonUnitTest {
 	private Roboticon roboticon;
+	@Mocked private LandPlot plot;
 	
 	/**
 	 * Runs before every test and creates the required roboticon object
@@ -20,18 +22,29 @@ public class RoboticonTest {
 	@Before
 	public void setup() {
 		roboticon = new Roboticon(1);
+		plot = new LandPlot(0, 0, 0);
 	}
 	
 	/**
-	 * Tests {@link LandPlot#installRoboticon(Roboticon)} and ensures that after a roboticon is
-	 * installed on a given plot the roboticon in question is marked as having been installed
+	 * Ensures that when a new roboticon object is created it is not installed on any land plot and
+	 * it is not customised
 	 */
 	@Test
-	public void installationTest(){
-		LandPlot plot = new LandPlot(0, 0, 0);
-		plot.installRoboticon(roboticon);
-		assertTrue(roboticon.isInstalled());
+	public void initialisationTest(){
+		assertEquals(roboticon.getCustomisation(), ResourceType.Unknown);
+		assertFalse(roboticon.isInstalled());
 	}
+	
+	/**
+	 * Tests {@link Roboticon#setCustomisation(ResourceType)} and ensures that the customisation is set correctly
+	 * (this is a very simple setter method and therefore only needs one test)
+	 */
+	@Test
+	public void customisationTest(){
+		roboticon.setCustomisation(ResourceType.ORE);
+		assertEquals(roboticon.getCustomisation(), ResourceType.ORE);
+	}
+	
 	
 	// Tests below this comment added by Josh
 	
@@ -41,7 +54,6 @@ public class RoboticonTest {
 	 */
 	@Test
 	public void testSetInstalledLandPlotReturnTrue(){
-		LandPlot plot = new LandPlot(0, 0, 0);
 		assertTrue(roboticon.setInstalledLandplot(plot));
 	}
 	
@@ -51,7 +63,6 @@ public class RoboticonTest {
 	 */
 	@Test
 	public void testSetInstalledLandPlotReturnFalseAlreadyInstalledOnSameLandPlot(){
-		LandPlot plot = new LandPlot(0, 0, 0);
 		roboticon.setInstalledLandplot(plot); // Already installed on plot
 		
 		assertFalse(roboticon.setInstalledLandplot(plot));
@@ -63,7 +74,6 @@ public class RoboticonTest {
 	 */
 	@Test
 	public void testSetInstalledLandPlotReturnFalseAlreadyInstalledDifferentLandPlot(){
-		LandPlot plot = new LandPlot(0, 0, 0);
 		roboticon.setInstalledLandplot(new LandPlot(0,0,0)); // Already installed on a plot
 		
 		assertFalse(roboticon.setInstalledLandplot(plot));
@@ -75,8 +85,10 @@ public class RoboticonTest {
 	 */
 	@Test
 	public void testSetInstalledLandPlotInstalled(){
-		LandPlot plot = new LandPlot(0, 0, 0);
 		roboticon.setInstalledLandplot(plot);
 		assertTrue(roboticon.isInstalled());
 	}
+
+	
+
 }

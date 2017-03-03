@@ -6,23 +6,23 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import io.github.teamfractal.entity.enums.ResourceType;
+import mockit.*;
+
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.experimental.runners.Enclosed;
 
+// Created by Josh Neil
 /**
- * Integration tests for {@link LandPlot}
+ * Test case for {@link LandPlot}
  * @author jcn509
  *
  */
-
-// Josh Neil removed all unit tests from this class now that there is a separate class for them
 @RunWith(Enclosed.class)
-public class LandPlotTest {
+public class LandPlotUnitTest {
 	
-	// Added by Josh Neil to support the testing of produceResource using various parameters
 	@RunWith(Parameterized.class)
 	public static class LandPlotParamTests{
 		
@@ -34,9 +34,8 @@ public class LandPlotTest {
 		private int expectedAmountOfFood;
 		private ResourceType roboticonCustomisation;
 		private LandPlot plot;
-		private Roboticon roboticon;
+		@Mocked private Roboticon roboticon;
 		
-		// Added by Josh Neil
 		/**
 		 * Parameterised test for {@link LandPlot#produceResource(ResourceType)}
 		 * <p>
@@ -93,8 +92,16 @@ public class LandPlotTest {
 		public void setup(){
 			plot = new LandPlot(plotOreProductionQuantity,plotEnergyProductionQuantity,plotFoodProductionQuantity);
 			roboticon = new Roboticon(5);
-			roboticon.setCustomisation(roboticonCustomisation);
+			
+			new Expectations(){{
+				roboticon.isInstalled();result=false;
+				roboticon.getCustomisation();result = roboticonCustomisation;
+				roboticon.getCustomisation();result = roboticonCustomisation; // called twice
+				roboticon.setInstalledLandplot(plot);result=true;
+			}};
 			plot.installRoboticon(roboticon);
+			
+			
 			plot.setHasRoboticon(true); // Design decision made by team fractal means that we have to set this expliclity...
 		}
 	
@@ -103,6 +110,7 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testProduceResourcesOre(){
+			
 			assertEquals(expectedAmountOfOre,plot.produceResource(ResourceType.ORE));
 		}
 		
@@ -111,6 +119,7 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testProduceResourcesEnergy(){
+			
 			assertEquals(expectedAmountOfEnergy,plot.produceResource(ResourceType.ENERGY));
 		}
 		
@@ -119,6 +128,7 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testProduceResourcesFood(){
+			
 			assertEquals(expectedAmountOfFood,plot.produceResource(ResourceType.FOOD));
 		}
 	
@@ -132,13 +142,21 @@ public class LandPlotTest {
 	 */
 	public static class LandPlotSingleTests{
 		private LandPlot plot;
-		
+		@Mocked private Roboticon roboticon;
+		@Mocked private Roboticon roboticon2;
+		@Mocked private Roboticon roboticon3;
+		@Mocked private Roboticon roboticon4;
+		@Mocked private Player player;
 		/**
 		 * Runs before every test. Creates the Land plot object that is under test
 		 */
 		@Before
 		public void setup() {
 			plot = new LandPlot(3, 0, 0);
+			roboticon = new Roboticon(0);
+			roboticon2 = new Roboticon(0);
+			roboticon3 = new Roboticon(0);
+			roboticon4 = new Roboticon(0);
 		}
 		
 		/**
@@ -148,24 +166,46 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testInstallRobiticon() throws Exception {
-			Roboticon roboticon = new Roboticon(0);
+			
 	
-			roboticon.setCustomisation(ResourceType.ORE);
+			new Expectations(){{
+				roboticon.isInstalled();result=false;
+				roboticon.getCustomisation();result=ResourceType.ORE;
+				// Called twice
+				roboticon.getCustomisation();result=ResourceType.ORE;
+				roboticon.setInstalledLandplot(plot);result=true;
+				
+				roboticon2.isInstalled();result=false;
+				roboticon2.getCustomisation();result=ResourceType.ENERGY;
+				// Called twice
+				roboticon2.getCustomisation();result=ResourceType.ENERGY;
+				roboticon2.setInstalledLandplot(plot);result=true;
+				
+				roboticon3.isInstalled();result=false;
+				roboticon3.getCustomisation();result=ResourceType.ORE;
+				// Called twice
+				roboticon3.getCustomisation();result=ResourceType.ORE;
+				roboticon3.setInstalledLandplot(plot);result=true;
+				
+				roboticon4.isInstalled();result=false;
+				roboticon4.getCustomisation();result=ResourceType.FOOD;
+				// Called twice
+				roboticon4.getCustomisation();result=ResourceType.FOOD;
+				roboticon4.setInstalledLandplot(plot);result=true;
+					
+			}};
 			assertTrue(plot.installRoboticon(roboticon));
 			assertArrayEquals(new int[] {1, 0, 0}, plot.productionModifiers);
 	
-			Roboticon roboticon2 = new Roboticon(0);
-			roboticon2.setCustomisation(ResourceType.ENERGY);
+			
 			assertTrue(plot.installRoboticon(roboticon2));
 			assertArrayEquals(new int[] {1, 1, 0}, plot.productionModifiers);
 	
-			Roboticon roboticon3= new Roboticon(0);
-			roboticon3.setCustomisation(ResourceType.ORE);
+		
 			assertTrue(plot.installRoboticon(roboticon3));
 			assertArrayEquals(new int[] {2, 1, 0}, plot.productionModifiers);
 	
-			Roboticon roboticon4= new Roboticon(0);
-			roboticon4.setCustomisation(ResourceType.FOOD);
+			
 			assertTrue(plot.installRoboticon(roboticon4));
 			assertArrayEquals(new int[] {2, 1, 1}, plot.productionModifiers);
 		}
@@ -177,12 +217,23 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void landPlotShouldNotReinstallRoboticon () {
-			Roboticon roboticon = new Roboticon(0);
 	
-			roboticon.setCustomisation(ResourceType.ORE);
+			new Expectations(){{
+				roboticon.isInstalled();result=false;
+				
+				roboticon.getCustomisation();result=ResourceType.ORE;
+				
+				// Called twice
+				roboticon.getCustomisation();result=ResourceType.ORE;
+				
+				roboticon.setInstalledLandplot(plot);result=true;
+			}};
 			assertTrue(plot.installRoboticon(roboticon));
 			assertArrayEquals(new int[] {1, 0, 0}, plot.productionModifiers);
-	
+			
+			new Expectations(){{
+				roboticon.isInstalled();result=true;
+			}};
 			assertFalse(plot.installRoboticon(roboticon));
 			assertArrayEquals(new int[] {1, 0, 0}, plot.productionModifiers);
 		}
@@ -202,15 +253,13 @@ public class LandPlotTest {
 	
 		/// Tests below this comment added by Josh
 		
-		
-		// Removed by Josh as is a unit test
 		/**
 		 * Ensures that newly created LandPlots don't have an owner
-		 *
+		 */
 		@Test
 		public void initiallyNoOwner(){
 			assertFalse(plot.hasOwner());
-		}*/
+		}
 		
 		/**
 		 * Tests {@link LandPlot#setOwner(Player)} ensures that it is possible to 
@@ -218,7 +267,7 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testSetOwnerNoOwner(){
-			Player player = new Player(null);
+			player = new Player(null);
 			assertTrue(plot.setOwner(player));
 		}
 		
@@ -227,7 +276,7 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testSetOwnerCorrectOwner(){
-			Player player = new Player(null);
+			player = new Player(null);
 			plot.setOwner(player);
 			assertEquals(player,plot.getOwner());
 		}
@@ -238,7 +287,7 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testSetOwnerAlreadyHasOwner(){
-			Player player = new Player(null);
+			player = new Player(null);
 			plot.setOwner(player);
 			assertFalse(plot.setOwner(new Player(null)));
 		}
@@ -249,7 +298,7 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testSetOwnerAlreadyHasOwnerUnchanged(){
-			Player player = new Player(null);
+			player = new Player(null);
 			plot.setOwner(player);
 			assertEquals(player,plot.getOwner()); // Owner not changed to the new one
 		}
@@ -259,29 +308,35 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testRemoveOwner(){
-			Player player = new Player(null);
+			player = new Player(null);
 			plot.setOwner(player);
 			plot.removeOwner();
 			assertFalse(plot.hasOwner()); // No longer owned!
 		}
 		
-		
-		// Removed by Josh as is a unit test
 		/**
 		 * Ensures that LandPlots do not initially have a roboticon on them
-		 *
+		 */
 		@Test
 		public void testInitiallyNoRoboticon(){
 			assertFalse(plot.hasRoboticon());
-		}*/
+		}
 		
 		/**
 		 * Tests {@link LandPlot#installRoboticon(Roboticon)} ensures that a roboticon is actually placed on the plot
 		 */
 		@Test
 		public void testInstallRoboticon(){
-			Roboticon roboticon = new Roboticon(0);
-			roboticon.setCustomisation(ResourceType.ENERGY);
+			new Expectations(){{
+				roboticon.isInstalled();result=false;
+				
+				roboticon.getCustomisation();result=ResourceType.ENERGY;
+				
+				// Called twice
+				roboticon.getCustomisation();result=ResourceType.ENERGY;
+				
+				roboticon.setInstalledLandplot(plot);result=true;
+			}};
 			assertTrue(plot.installRoboticon(roboticon));
 		}
 		
@@ -290,10 +345,18 @@ public class LandPlotTest {
 		 */
 		@Test
 		public void testInstallRoboticonAlreadyHasOneReturnFalse(){
-			Roboticon roboticon = new Roboticon(0);
-			roboticon.setCustomisation(ResourceType.ENERGY);
+			new Expectations(){{
+				roboticon.isInstalled();result=false;
+				roboticon.getCustomisation();result=ResourceType.ENERGY;
+				
+				// Called twice
+				roboticon.getCustomisation();result=ResourceType.ENERGY;
+				roboticon.setInstalledLandplot(plot);result=true;
+				
+				roboticon2.isInstalled();result=true;
+			}};
 			plot.installRoboticon(roboticon);
-			assertFalse(plot.installRoboticon(roboticon));
+			assertFalse(plot.installRoboticon(roboticon2));
 		}
 		
 		

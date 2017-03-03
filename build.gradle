@@ -84,6 +84,7 @@ project(":test") {
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "org.mockito:mockito-core:1.+"
+	testCompile 'org.jmockit:jmockit:1.30'
         testCompile 'junit:junit:4.12'
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"

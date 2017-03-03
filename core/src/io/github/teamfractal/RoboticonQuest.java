@@ -1,6 +1,7 @@
 package io.github.teamfractal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.animation.AnimationPhaseTimeout;
 import io.github.teamfractal.animation.AnimationShowPlayer;
+import io.github.teamfractal.animation.AnimationAddResources;
+import io.github.teamfractal.animation.IAnimation;
 import io.github.teamfractal.animation.IAnimationFinish;
 import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
@@ -211,6 +214,8 @@ public class RoboticonQuest extends Game {
 		return score;
 	}
 
+	// Note this method is re-used from our (Top Right Corner's) old project where we had
+	// made the modifications described below
 	/**
 	 * Phase 4: generate resources.
 	 */
@@ -220,7 +225,22 @@ public class RoboticonQuest extends Game {
 
 		// Generate resources.
 		Player p = getPlayer();
-		p.generateResources();
+		
+		// Modified by Josh Neil - now accepts the values returned by Player.generateResources()
+		// and produces an animation that displays this information on screen (see Player.generateResources
+		// for a more in depth explanation)
+		HashMap<ResourceType,Integer> generatedResources = p.generateResources();
+		int energy = generatedResources.get(ResourceType.ENERGY);
+		int food = generatedResources.get(ResourceType.FOOD);
+		int ore = generatedResources.get(ResourceType.ORE);
+		IAnimation animation = new AnimationAddResources(p, energy, food, ore);
+		animation.setAnimationFinish(new IAnimationFinish() {
+			@Override
+			public void OnAnimationFinish() {
+					nextPhase();
+			}
+		});
+		gameScreen.addAnimation(animation);
 	}
 
 	/**
