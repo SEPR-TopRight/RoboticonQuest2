@@ -236,7 +236,30 @@ public class Player {
 			throw new NotEnoughResourceException("Player.sellResourceToMarket", resource, amount, getResource(resource));
 		}
 	}
+	// Added by Josh Neil so that players can sell to other players
+		/**
+		 * Allows players to sell a given quantity of a given resource to another player for a given price
+		 * @param buyingPlayer
+		 * @param quantity
+		 * @param resource
+		 * @param pricePerUnit
+		 * @return
+		 */
+		public PurchaseStatus sellResourceToPlayer(Player buyingPlayer,int quantity, ResourceType resource, int pricePerUnit) {
+			int totalCost = quantity * pricePerUnit;
+			if(getResource(resource) < quantity){
+				return PurchaseStatus.FailPlayerNotEnoughResource;
+			}
+			else if(buyingPlayer.getMoney() < totalCost){
+				return PurchaseStatus.FailPlayerNotEnoughMoney;
+			}
 
+			setMoney(totalCost + getMoney());
+			setResource(resource, getResource(resource) - quantity);
+			buyingPlayer.setMoney(buyingPlayer.getMoney() - totalCost);
+			buyingPlayer.setResource(resource, buyingPlayer.getResource(resource) + quantity);
+			return PurchaseStatus.Success;
+		}
 	/**
 	 * Check if the player have enough money for the {@link LandPlot}.
 	 * @param plot           The landplot to purchase
