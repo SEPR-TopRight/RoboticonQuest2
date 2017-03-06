@@ -8,6 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
+/**
+ * A UI widget that works similarly to spinbox that allows users to enter
+ * a numerical value using their mouse to click buttons to increase and decrease said value
+ *
+ */
 public class AdjustableActor extends Table {
 	//<editor-fold desc="UI Components">
 	private final TextButton subButton;
@@ -119,6 +124,8 @@ public class AdjustableActor extends Table {
 		updateValueDisplay();
 	}
 
+	
+	// Added by Josh Neil so that we can not display the label and button
 	/**
 	 * The adjustable actor
 	 * For an easy way of adjust values in a step of 1 / -1.
@@ -126,8 +133,9 @@ public class AdjustableActor extends Table {
 	 * @param skin    The skin file for the UI.
 	 * @param title   The adjustable title.
 	 * @param action  The action button text.
+	 * @param labelAndButton specifies whether or not the user wishes to have the title label and action button displayed on screen
 	 */
-	public AdjustableActor(Skin skin, String title, String action) {
+	public AdjustableActor(Skin skin, String title, String action, boolean labelAndButton) {
 		subButton = new TextButton("<", skin);
 		addButton = new TextButton(">", skin);
 		actButton = new TextButton(action, skin);
@@ -150,17 +158,32 @@ public class AdjustableActor extends Table {
 		valueLabel.setAlignment(Align.center);
 		subButton.padLeft(5).padRight(5);
 		addButton.padLeft(5).padRight(5);
-
-		add(titleLabel).colspan(3).fillX().spaceBottom(10);
-		row();
+		if(labelAndButton){ // If added by Josh
+			add(titleLabel).colspan(3).fillX().spaceBottom(10);
+			row();
+		}
 
 		add(subButton).align(Align.left);
+		
 		add(valueLabel).fillX();
 		add(addButton).align(Align.right);
 		row();
-
-		add(actButton).colspan(3).fillX().spaceTop(10);
-		row();
+		if(labelAndButton){ // If added by Josh
+			add(actButton).colspan(3).fillX().spaceTop(10);
+			row();
+		}
+	}
+	
+	/**
+	 * The adjustable actor
+	 * For an easy way of adjust values in a step of 1 / -1.
+	 *
+	 * @param skin    The skin file for the UI.
+	 * @param title   The adjustable title.
+	 * @param action  The action button text.
+	 */
+	public AdjustableActor(Skin skin, String title, String action) {
+		this(skin,title,action,true); // Modified by Josh Neil
 	}
 
 	/**
@@ -175,7 +198,24 @@ public class AdjustableActor extends Table {
 	 * @param action  The action button text.
 	 */
 	public AdjustableActor(Skin skin, int value, int min, int max, String title, String action) {
-		this(skin, title, action);
+		this(skin, title, action,true);
+
+		setMax(max);
+		setMin(min);
+		setValue(value);
+	}
+	
+	// Added by Josh Neil so that we can create AdjustableActors that do not have labels
+	// or action buttons for use in the ResourceMarket screen (ResourceMarketActors class)
+	/**
+	 * Create an adjustable actor that does not have an action button or a label attached to it
+	 * @param skin    The skin file for the UI.
+	 * @param value   The default value.
+	 * @param min     The minimum value.
+	 * @param max     The maximum value.
+	 */
+	public AdjustableActor(Skin skin, int value, int min, int max) {
+		this(skin, "", "",false);
 
 		setMax(max);
 		setMin(min);
