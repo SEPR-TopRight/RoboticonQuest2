@@ -75,7 +75,6 @@ public class GameScreenActors {
 		bindEvents();
 
 		// Add to the stage for rendering.
-		stage.addActor(background);
 		stage.addActor(nextButton);
 		stage.addActor(buyLandPlotBtn);
 		stage.addActor(installRoboticonTable);
@@ -384,11 +383,5 @@ public class GameScreenActors {
 		return installRoboticonTable.isVisible();
 	}
 
-	public void removeBackground(Stage stage) {
-		stage.getActors().removeValue(background, true);
-	}
-
-	public void addBackground(Stage stage) {
-		stage.addActor(background);
-	}
+	public Image getBackground(){return background;}
 }

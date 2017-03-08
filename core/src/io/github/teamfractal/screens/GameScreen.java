@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricStaggeredTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -31,7 +32,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private TiledMapTileLayer mapLayer;
 	private TiledMapTileLayer playerOverlay; // TODO figure out if this is needed
 	
-	private Music music = Gdx.audio.newMusic(Gdx.files.internal("song.mp3"));
+	private Music music = Gdx.audio.newMusic(Gdx.files.internal("music/FloatingCities.mp3"));
 
 	private float oldX;
 	private float oldY;
@@ -44,6 +45,8 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private float maxDragX;
 	private float maxDragY;
 	private TiledMapTileSets tiles;
+
+	private SpriteBatch batch;
 
 
 	public LandPlot getSelectedPlot() {
@@ -65,6 +68,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		music.setLooping(true);
 		music.play();
 
+		batch = new SpriteBatch();
 
 		this.game = game;
 
@@ -258,16 +262,17 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 
 		camera.update();
 
-		actors.addBackground(stage);
-		stage.act(delta);
-		stage.draw();
+		batch.begin();
+		actors.getBackground().toBack();
+		actors.getBackground().draw(batch, 1);
+		batch.end();
 
 		renderer.setView(camera);
 		renderer.render();
 
-		actors.removeBackground(stage);
 		stage.act(delta);
 		stage.draw();
+
 
 		renderAnimation(delta);
 	}
