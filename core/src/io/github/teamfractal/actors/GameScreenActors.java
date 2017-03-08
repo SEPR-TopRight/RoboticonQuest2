@@ -97,7 +97,12 @@ public class GameScreenActors {
 		Table t = installRoboticonTable;
 
 		installRoboticonSelect = new SelectBox<String>(game.skin);
-		installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmountList());
+		
+		// (Top Right Corner) changed the below to use getCustomisedRoboticonAmountList instead
+		// of getRoboticonAmountList as we don't want players to be able to see how many uncustomised roboticons
+		// they have when they go to place a roboticon (as they shouldn't be able to place uncustomised 
+		// roboticons)
+		installRoboticonSelect.setItems(game.getPlayer().getCustomisedRoboticonAmountList());
 
 		installRoboticonLabel = new Label("Install Roboticon: ", game.skin);
 		installRoboticonBtn = new TextButton("Confirm", game.skin);
@@ -155,7 +160,9 @@ public class GameScreenActors {
 				hideInstallRoboticon();
 				game.nextPhase();
 				dropDownActive = true;
-				installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmountList());
+				// Changed to getCustomisedRoboticonAmountList by Josh Neil so that players
+				// do not see how many uncustomised roboticions they have when they go to placed one
+				installRoboticonSelect.setItems(game.getPlayer().getCustomisedRoboticonAmountList());
 				textUpdate();
 			}
 		});
@@ -277,7 +284,11 @@ public class GameScreenActors {
 	 * Update the dropdown list of roboticon available.
 	 */
 	private void updateRoboticonList() {
-		installRoboticonSelect.setItems(game.getPlayer().getRoboticonAmountList());
+		// (Top Right Corner) changed the below to use getCustomisedRoboticonAmountList instead
+		// of getRoboticonAmountList as we don't want players to be able to see how many uncustomised roboticons
+		// they have when they go to place a roboticon (as they shouldn't be able to place uncustomised 
+		// roboticons)
+		installRoboticonSelect.setItems(game.getPlayer().getCustomisedRoboticonAmountList());
 	}
 
 	/**

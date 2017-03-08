@@ -1,6 +1,7 @@
 package io.github.teamfractal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.teamfractal.animation.AnimationPhaseTimeout;
 import io.github.teamfractal.animation.AnimationShowPlayer;
+import io.github.teamfractal.animation.AnimationAddResources;
+import io.github.teamfractal.animation.IAnimation;
 import io.github.teamfractal.animation.IAnimationFinish;
 import io.github.teamfractal.screens.*;
 import io.github.teamfractal.entity.Market;
@@ -41,6 +44,7 @@ public class RoboticonQuest extends Game {
 	public ArrayList<Player> playerList;
 	public Market market;
 	private int landBoughtThisTurn;
+	private int numberOfPlayers = 2; // Added by Josh Neil
 	
 	public void incCount(){
 		counter+=1;
@@ -79,10 +83,11 @@ public class RoboticonQuest extends Game {
 	 * Setup the default skin for GUI components.
 	 */
 	private void setupSkin() {
+		// Josh Neil moved back to the default skin because we didn't like the pink text
 		skin = new Skin(
-			Gdx.files.internal("skin/neon-ui.json"),
-			new TextureAtlas(Gdx.files.internal("skin/neon-ui.atlas"))
-		);
+				Gdx.files.internal("skin/skin.json"),
+				new TextureAtlas(Gdx.files.internal("skin/skin.atlas"))
+			);
 	}
 
 	/**
@@ -99,16 +104,21 @@ public class RoboticonQuest extends Game {
 	public int getPhase(){
 		return this.phase;
 	}
+	
+	// Added by Josh Neil so that we can have between 2 and 4 players
+	public void setNumberOfPlayers(int numberOfPlayers){
+		this.numberOfPlayers = numberOfPlayers;
+	}
 
 	public void reset() {
 		this.currentPlayer = 0;
 		this.phase = 0;
-		
-		Player player1 = new Player(this);
-		Player player2 = new Player(this);
 		this.playerList = new ArrayList<Player>();
-		this.playerList.add(player1);
-		this.playerList.add(player2);
+		// Modified by Josh Neil to support an aribitary number of players
+		for(int player =0; player<numberOfPlayers; player++){
+			Player p = new Player(this);
+			this.playerList.add(p);
+		}
 		this.currentPlayer = 0;
 		this.market = new Market();
 		plotManager = new PlotManager();
@@ -204,6 +214,8 @@ public class RoboticonQuest extends Game {
 		return score;
 	}
 
+	// Note this method is re-used from our (Top Right Corner's) old project where we had
+	// made the modifications described below
 	/**
 	 * Phase 4: generate resources.
 	 */
@@ -213,7 +225,22 @@ public class RoboticonQuest extends Game {
 
 		// Generate resources.
 		Player p = getPlayer();
-		p.generateResources();
+		
+		// Modified by Josh Neil - now accepts the values returned by Player.generateResources()
+		// and produces an animation that displays this information on screen (see Player.generateResources
+		// for a more in depth explanation)
+		HashMap<ResourceType,Integer> generatedResources = p.generateResources();
+		int energy = generatedResources.get(ResourceType.ENERGY);
+		int food = generatedResources.get(ResourceType.FOOD);
+		int ore = generatedResources.get(ResourceType.ORE);
+		IAnimation animation = new AnimationAddResources(p, energy, food, ore);
+		animation.setAnimationFinish(new IAnimationFinish() {
+			@Override
+			public void OnAnimationFinish() {
+					nextPhase();
+			}
+		});
+		gameScreen.addAnimation(animation);
 	}
 
 	/**

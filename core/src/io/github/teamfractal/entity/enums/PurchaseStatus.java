@@ -6,5 +6,6 @@ package io.github.teamfractal.entity.enums;
 public enum PurchaseStatus {
 	Success,
 	FailMarketNotEnoughResource,
-	FailPlayerNotEnoughMoney
+	FailPlayerNotEnoughMoney,
+	FailPlayerNotEnoughResource
 }

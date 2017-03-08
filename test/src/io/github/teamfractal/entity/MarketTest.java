@@ -1,18 +1,27 @@
 package io.github.teamfractal.entity;
 
+import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.enums.ResourceType;
+import mockit.*;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 
 import java.util.Random;
 
 import static org.junit.Assert.*;
 
+// Josh Neil created this
+/**
+ * Integration tests for {@link Market} and {@link Player}
+ */
 public class MarketTest {
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
 
 	private Market market;
+	private Player player;
+	private RoboticonQuest game;
 
 	/**
 	 * Reset market to its default status.
@@ -20,101 +29,120 @@ public class MarketTest {
 	@Before
 	public void Contractor() {
 		market = new Market();
+		game = new RoboticonQuest();
+		player = new Player(game);
 	}
-
+	
 	/**
-	 * test start mo The market should start with correct amount of resources.
-	 * 16 Food & Energy, 0 Ore, 12 Robotics
+	 * Tests {@link Market#playerGamble(Player, int)} ensures that it returns GamblingResult.NOTENOUGHMONEY when
+	 * a player has no money (and the cost of the bet is at least 1)
 	 */
 	@Test
-	public void marketShouldInitWithCorrectValues() {
-		assertEquals(16, market.getFood());
-		assertEquals(16, market.getEnergy());
-		assertEquals(0, market.getOre());
-		assertEquals(12, market.getRoboticon());
+	public void testPlayerGambleNoMoney(){
+		player.setMoney(0);
+		assertEquals(GamblingResult.NOTENOUGHMONEY,market.playerGamble(player, 10));
 	}
-
+	
 	/**
-	 * test setEnergy(), setOre(), setFood(), setRoboticon() The market should
-	 * be able to set and get resources.
+	 * Tests {@link Market#playerGamble(Player, int)} ensures that it returns GamblingResult.NOTENOUGHMONEY when
+	 * a player has 1 less money than the bet
 	 */
 	@Test
-	public void marketShouldAbleToGetAndSetResources() {
-		Random rnd = new Random();
-		int valueToTest = rnd.nextInt(100);
-		market.setEnergy(valueToTest);
-		market.setOre(valueToTest);
-		market.setFood(valueToTest);
-		market.setRoboticon(valueToTest);
-		assertEquals(valueToTest, market.getEnergy());
-		assertEquals(valueToTest - ((Integer) valueToTest / 5) * 5, market.getOre());
-		assertEquals(valueToTest, market.getFood());
-		assertEquals(valueToTest, market.getRoboticon());
+	public void testPlayerGambleOneLessMoneyThanBet(){
+		player.setMoney(5);
+		assertEquals(GamblingResult.NOTENOUGHMONEY,market.playerGamble(player, 6));
 	}
-
+	
 	/**
-	 * test: getBuyPrice() The market should start with correct price for player
-	 * to buy. The price is 90% of the sell price. This could change in later
-	 * development.
+	 * Tests {@link Market#playerGamble(Player, int)} ensures that it does not return GamblingResult.NOTENOUGHMONEY when
+	 * a player has exactly the same amount of money as the bet
 	 */
 	@Test
-	public void marketShouldHaveCorrectPricesForResources() throws Exception {
-		assertEquals(9, market.getBuyPrice(ResourceType.ORE));
-		assertEquals(18, market.getBuyPrice(ResourceType.ENERGY));
-		assertEquals(27, market.getBuyPrice(ResourceType.FOOD));
-		assertEquals(36, market.getBuyPrice(ResourceType.ROBOTICON));
+	public void testPlayerGambleMoneySameAsBet(){
+		player.setMoney(5);
+		assertNotEquals(GamblingResult.NOTENOUGHMONEY,market.playerGamble(player, 5));
 	}
-
+	
 	/**
-	 * test: hasEnoughResources player class can use this method to find out
-	 * that the amount of resource player want to buy is available in the
-	 * market, if the amount of resource in the market is less than the amount
-	 * of resources player want to buy then throw exception
+	 * Tests {@link Market#playerGamble(Player, int)} ensures that an IllegalArgumentException is thrown when a 
+	 * negative bet is passed to it
 	 */
-
-	@Test
-	public void marketCanCheckResourceMoreThanAmountYouWantToBuy() {
-		assertFalse(market.hasEnoughResources(ResourceType.ORE, 1000000));
-		assertFalse(market.hasEnoughResources(ResourceType.ENERGY, 1000000));
-		assertFalse(market.hasEnoughResources(ResourceType.ROBOTICON, 1000000));
-		assertFalse(market.hasEnoughResources(ResourceType.FOOD, 1000000));
+	@Test(expected = IllegalArgumentException.class)
+	public void testPlayerGambleNegativeBet(){
+		market.playerGamble(player,-1);
 	}
-
+	
+	// This test could potentially loop forever if the result Gambling.LOST is never returned...
+	// Note: there is not a unit test version of this test as it was too complex to do with mocked objects
 	/**
-	 * test: getSellPrice()
+	 * Tests {@link Market#playerGamble(Player, int)} ensures that when it returns GamblingResult.LOST
+	 * the bet is removed from the players money (when the bet is 5)
 	 */
-
-	@Test
-	public void marketShouldReturnCorrectSellPrice() {
-		int valueToTest1 = 20;
-		market.setEnergy(valueToTest1);
-		market.setOre(valueToTest1);
-		market.setFood(valueToTest1);
-		market.setRoboticon(valueToTest1);
-
-		assertEquals(30, market.getSellPrice(ResourceType.FOOD));
-		assertEquals(10, market.getSellPrice(ResourceType.ORE));
-		assertEquals(40, market.getSellPrice(ResourceType.ROBOTICON));
-		assertEquals(20, market.getSellPrice(ResourceType.ENERGY));
+	public void testPlayerGambleLostBetRemovedFive(){
+		while(true){
+			player.setMoney(16);
+			GamblingResult result = market.playerGamble(player, 5);
+			if(result == GamblingResult.LOST){
+				break;
+			}
+		}
+		assertEquals(9,player.getMoney());
+		
 	}
 
-	@Test
-	public void marketShouldReduceResourcesWhenSells() {
-		market.setEnergy(10);
-		market.setOre(14);
-		market.setFood(10);
-		market.setRoboticon(10);
-
-		market.sellResource(ResourceType.FOOD, 5);
-		market.sellResource(ResourceType.ORE, 3);
-		market.sellResource(ResourceType.ENERGY, 5);
-		market.sellResource(ResourceType.ROBOTICON, 5);
-
-		assertEquals(5, market.getFood());
-		assertEquals(1, market.getOre() );
-		assertEquals(5, market.getEnergy());
-		assertEquals(5, market.getRoboticon());
-
+	// This test could potentially loop forever if the result Gambling.LOST is never returned...
+	// Note: there is not a unit test version of this test as it was too complex to do with mocked objects
+	/**
+	 * Tests {@link Market#playerGamble(Player, int)} ensures that when it returns GamblingResult.LOST
+	 * the bet is removed from the players money (when the bet is 12)
+	 */
+	public void testPlayerGambleLostBetRemovedTwelve(){
+		while(true){
+			player.setMoney(16);
+			GamblingResult result = market.playerGamble(player, 12);
+			if(result == GamblingResult.LOST){
+				break;
+			}
+		}
+		assertEquals(4,player.getMoney());
+		
 	}
+	
+	// This test could potentially loop forever if the result Gambling.WON is never returned...
+	// Note: there is not a unit test version of this test as it was too complex to do with mocked objects
+	/**
+	 * Tests {@link Market#playerGamble(Player, int)} ensures that when it returns GamblingResult.WON
+	 * the bet is added to the players money (when the bet is 10)
+	 */
+	public void testPlayerGambleWonBetAddedTen(){
+		while(true){
+			player.setMoney(16);
+			GamblingResult result = market.playerGamble(player, 10);
+			if(result == GamblingResult.WON){
+				break;
+			}
+		}
+		assertEquals(26,player.getMoney());
+		
+	}
+	// This test could potentially loop forever if the result Gambling.WON is never returned...
+	// Note: there is not a unit test version of this test as it was too complex to do with mocked objects
+	/**
+	 * Tests {@link Market#playerGamble(Player, int)} ensures that when it returns GamblingResult.WON
+	 * the bet is added to the players money (when the bet is 1)
+	 */
+	public void testPlayerGambleWonBetAddedOne(){
+		while(true){
+			player.setMoney(300);
+			GamblingResult result = market.playerGamble(player, 1);
+			if(result == GamblingResult.WON){
+				break;
+			}
+		}
+		assertEquals(301,player.getMoney());
+		
+	}
+	
+	
 
 }
