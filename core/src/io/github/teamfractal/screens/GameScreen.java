@@ -2,7 +2,6 @@ package io.github.teamfractal.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,8 +30,6 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	private TiledMap tmx;
 	private TiledMapTileLayer mapLayer;
 	private TiledMapTileLayer playerOverlay; // TODO figure out if this is needed
-	
-	private Music music = Gdx.audio.newMusic(Gdx.files.internal("music/FloatingCities.mp3"));
 
 	private float oldX;
 	private float oldY;
@@ -64,9 +61,6 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, oldW, oldH);
 		camera.update();
-		
-		music.setLooping(true);
-		music.play();
 
 		batch = new SpriteBatch();
 
@@ -343,5 +337,14 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	
 	public GameScreenActors getActors(){
 		return this.actors;
+	}
+
+	public void activateChancellor() {
+		game.setMusic(Gdx.files.internal("music/ShootingStars.mp3"));
+	}
+
+	public void stopChancellor() {
+		game.setMusic(Gdx.files.internal("music/FloatingCities.mp3"));
+		game.nextPhase();
 	}
 }
