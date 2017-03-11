@@ -463,4 +463,8 @@ public class Player {
 		if(ore+this.getOre()>0)
 			this.setOre(ore+this.getOre());
 	}
+
+	public void giveMoney(int money){
+		this.money = this.money + money;
+	}
 }
