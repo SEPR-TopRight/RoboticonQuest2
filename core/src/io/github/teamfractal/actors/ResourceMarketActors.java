@@ -487,4 +487,10 @@ public class ResourceMarketActors extends Table {
 		updateMaxPlayerQuantity();
 	}
 
+	public void resizeScreen(int x, int y){
+		float backgroundX = x/backgroundImage.getWidth();
+		float backgroundY = y/backgroundImage.getHeight();
+		backgroundImage.setScale(backgroundX, backgroundY);
+	}
+
 }

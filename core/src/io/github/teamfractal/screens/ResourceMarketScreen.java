@@ -54,7 +54,7 @@ public class ResourceMarketScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
-		//actors.screenResize(width, height);
+		actors.resizeScreen(width, height);
 	}
 
 	@Override

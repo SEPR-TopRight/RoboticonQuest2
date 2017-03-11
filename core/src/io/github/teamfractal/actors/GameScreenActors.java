@@ -20,6 +20,8 @@ import io.github.teamfractal.screens.GameScreen;
 import io.github.teamfractal.util.SoundEffects;
 import io.github.teamfractal.util.TileConverter;
 
+import java.util.Random;
+
 public class GameScreenActors {
 	private final Stage stage;
 	private RoboticonQuest game;
@@ -33,6 +35,7 @@ public class GameScreenActors {
 	private SelectBox<String> installRoboticonSelect;
 	private Label plotStats;
 	private TextButton nextButton;
+	private ImageButton chancellor;
 	private Image background;
 	private float backgroundX, backgroundY;
 	private boolean dropDownActive; // TODO figure out if this is needed
@@ -60,6 +63,7 @@ public class GameScreenActors {
 		nextButton = new TextButton("Next ->", game.skin);
 		buyLandPlotBtn = new TextButton("Buy LandPlot", game.skin);
 		background = new Image(new Texture(Gdx.files.internal("background/space-stars.jpeg")));
+		chancellor = new ImageButton(new Image(new Texture("chancellor/rocket.png")).getDrawable());
 		createRoboticonInstallMenu();
 
 		// Adjust properties.
@@ -70,6 +74,11 @@ public class GameScreenActors {
 		phaseInfo.setAlignment(Align.right);
 		plotStats.setAlignment(Align.topLeft);
 		installRoboticonSelect.setSelected(null);
+		chancellor.getImage().rotateBy(135);
+		chancellor.rotateBy(135);
+		chancellor.setPosition(-500, -500);
+		chancellor.getImage().setScale(0.2f);
+		chancellor.setScale(0.2f);
 
 		// Bind events
 		bindEvents();
@@ -81,6 +90,7 @@ public class GameScreenActors {
 		stage.addActor(phaseInfo);
 		stage.addActor(plotStats);
 		stage.addActor(playerStats);
+		stage.addActor(chancellor);
 
 		// Update UI positions.
 		AbstractAnimationScreen.Size size = screen.getScreenSize();
@@ -230,6 +240,16 @@ public class GameScreenActors {
 				SoundEffects.click();
 				dropDownActive = false;
 				hideInstallRoboticon();
+			}
+		});
+
+		chancellor.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				SoundEffects.click();
+				game.getPlayer().giveMoney(50);
+				((GameScreen)game.getScreen()).stopChancellor();
+				game.nextPhase();
 			}
 		});
 	}
@@ -384,4 +404,17 @@ public class GameScreenActors {
 	}
 
 	public Image getBackground(){return background;}
+
+	public void updateChancellor(){
+		chancellor.moveBy(-1.1f, 0);
+	}
+
+	public void setChancellor() {
+		Random random = new Random();
+		chancellor.setPosition(1000, random.nextInt(300)+100);
+	}
+
+	public void removeChancellor() {
+		chancellor.setPosition(-500, -500);
+	}
 }

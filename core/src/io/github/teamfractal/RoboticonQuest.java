@@ -1,25 +1,24 @@
 package io.github.teamfractal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import io.github.teamfractal.animation.AnimationPhaseTimeout;
-import io.github.teamfractal.animation.AnimationShowPlayer;
-import io.github.teamfractal.animation.AnimationAddResources;
-import io.github.teamfractal.animation.IAnimation;
-import io.github.teamfractal.animation.IAnimationFinish;
-import io.github.teamfractal.screens.*;
+import io.github.teamfractal.animation.*;
 import io.github.teamfractal.entity.Market;
 import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.entity.enums.ResourceType;
+import io.github.teamfractal.screens.*;
 import io.github.teamfractal.util.PlotManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * This is the main game boot up class.
@@ -45,6 +44,8 @@ public class RoboticonQuest extends Game {
 	public Market market;
 	private int landBoughtThisTurn;
 	private int numberOfPlayers = 2; // Added by Josh Neil
+	private Random random = new Random();
+	private Music music;
 	
 	public void incCount(){
 		counter+=1;
@@ -73,6 +74,9 @@ public class RoboticonQuest extends Game {
 		mainMenuScreen = new MainMenuScreen(this);
 		
 		setScreen(mainMenuScreen);
+		music = Gdx.audio.newMusic(Gdx.files.internal("music/FloatingCities.mp3"));
+		music.play();
+		music.setLooping(true);
 	}
 
 	public Batch getBatch() {
@@ -125,21 +129,34 @@ public class RoboticonQuest extends Game {
 	}
 
 	public void nextPhase () {
-		int newPhaseState = phase + 1;
-		phase = newPhaseState;
-		// phase = newPhaseState = 4;
+		if (phase + 1 == 5) {
+			if (random.nextInt(20)>=10){
+				phase = 5;
+			} else {
+				phase = 6;
+			}
 
-		switch (newPhaseState) {
+		} else if (phase + 1 == 8) {
+			if (random.nextInt(25)>= 20) {
+				phase = 8;
+			} else {
+				phase = 9;
+			}
+		} else {
+			phase = phase + 1;
+		}
+
+		switch (phase) {
 			// Phase 2: Purchase Roboticon
 			case 2:
 				TimedMenuScreen roboticonMarket = new TimedMenuScreen(this,false);
-				roboticonMarket.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30));
+				roboticonMarket.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, phase, 30));
 				setScreen(roboticonMarket);
 				break;
 
 			// Phase 3: Roboticon Customisation
 			case 3:
-				AnimationPhaseTimeout timeoutAnimation = new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30);
+				AnimationPhaseTimeout timeoutAnimation = new AnimationPhaseTimeout(getPlayer(), this, phase, 30);
 				gameScreen.addAnimation(timeoutAnimation);
 				timeoutAnimation.setAnimationFinish(new IAnimationFinish() {
 					@Override
@@ -156,25 +173,38 @@ public class RoboticonQuest extends Game {
 				generateResources();
 				break;
 
-			//Phase 5: Gambling
+			//Phase 5: Chancellor encounter
 			case 5:
+				gameScreen.activateChancellor();
+				AnimationPhaseTimeout timeoutChancellorPhase = new AnimationPhaseTimeout(getPlayer(), this, phase, 15);
+				gameScreen.addAnimation(timeoutChancellorPhase);
+				timeoutChancellorPhase.setAnimationFinish(new IAnimationFinish() {
+					@Override
+					public void OnAnimationFinish() {
+						gameScreen.stopChancellor();
+					}
+				} );
+				break;
+
+			//Phase 6: Gambling
+			case 6:
 				TimedMenuScreen minigame = new TimedMenuScreen(this,true);
-				minigame.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, newPhaseState, 30));
+				minigame.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, phase, 30));
 				setScreen(minigame);
 				break;
 			
-			// Phase 6: Generate resource for player.
-			case 6:
+			// Phase 7: Generate resource for player.
+			case 7:
 				setScreen(new ResourceMarketScreen(this));
 				break;
 										
-			case 7:
+			case 8:
 				//RANDOM EVENT
 				setScreen(new RoboticonRandomScreen(this));
 				break;
 			// End phase - CLean up and move to next player.
-			case 8:
-				phase = newPhaseState = 1;
+			case 9:
+				phase = 1;
 				this.turn+=1;
 				System.out.println(this.turn);
 				this.nextPlayer();
@@ -269,12 +299,15 @@ public class RoboticonQuest extends Game {
 				return "Resource Generation";
 
 			case 5:
+				return "Capture the Chancellor";
+
+			case 6:
 				return "Gambling";
 			
-			case 6:
+			case 7:
 				return "Resource Auction";
 			
-			case 7:
+			case 8:
 				return "Random Event";
 				
 			default:
@@ -297,5 +330,14 @@ public class RoboticonQuest extends Game {
 
 	public PlotManager getPlotManager() {
 		return plotManager;
+	}
+
+	public Music getMusic() {return music;}
+
+	public void setMusic(FileHandle fileName) {
+		music.stop();
+		music = Gdx.audio.newMusic(fileName);
+		music.play();
+		music.setLooping(true);
 	}
 }
