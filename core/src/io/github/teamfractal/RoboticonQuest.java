@@ -170,6 +170,7 @@ public class RoboticonQuest extends Game {
 
 			// Phase 4: Purchase Resource
 			case 4:
+				gameScreen.getActors().disableNextBtn();
 				generateResources();
 				break;
 
@@ -188,6 +189,7 @@ public class RoboticonQuest extends Game {
 
 			//Phase 6: Gambling
 			case 6:
+				gameScreen.getActors().enableNextBtn();
 				TimedMenuScreen minigame = new TimedMenuScreen(this,true);
 				minigame.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, phase, 30));
 				setScreen(minigame);
