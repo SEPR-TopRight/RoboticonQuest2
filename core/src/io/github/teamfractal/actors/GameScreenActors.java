@@ -127,6 +127,28 @@ public class GameScreenActors {
 		t.row();
 	}
 
+	/**
+	 * Separated the definiton of the click listener for the next button as it is used twice
+	 */
+	private ClickListener nextButtonClickListener = new ClickListener() {
+		@Override
+		public void clicked(InputEvent event, float x, float y) {
+			event.stop();
+			if (nextButton.isDisabled()) {
+				return ;
+			}
+			SoundEffects.click();
+			buyLandPlotBtn.setVisible(false);
+			plotStats.setVisible(false);
+			hideInstallRoboticon();
+			game.nextPhase();
+			dropDownActive = true;
+			// Changed to getCustomisedRoboticonAmountList by Josh Neil so that players
+			// do not see how many uncustomised roboticions they have when they go to placed one
+			installRoboticonSelect.setItems(game.getPlayer().getCustomisedRoboticonAmountList());
+			textUpdate();
+		}
+	};
 
 	/**
 	 * Bind all button events.
@@ -157,25 +179,7 @@ public class GameScreenActors {
 			}
 		});
 
-		nextButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				event.stop();
-				if (nextButton.isDisabled()) {
-					return ;
-				}
-				SoundEffects.click();
-				buyLandPlotBtn.setVisible(false);
-				plotStats.setVisible(false);
-				hideInstallRoboticon();
-				game.nextPhase();
-				dropDownActive = true;
-				// Changed to getCustomisedRoboticonAmountList by Josh Neil so that players
-				// do not see how many uncustomised roboticions they have when they go to placed one
-				installRoboticonSelect.setItems(game.getPlayer().getCustomisedRoboticonAmountList());
-				textUpdate();
-			}
-		});
+		nextButton.addListener(nextButtonClickListener);
 
 		installRoboticonBtn.addListener(new ClickListener() {
 
@@ -417,4 +421,15 @@ public class GameScreenActors {
 	public void removeChancellor() {
 		chancellor.setPosition(-500, -500);
 	}
+
+	public void disableNextBtn() {
+		nextButton.setDisabled(true);
+		nextButton.clearListeners();
+	}
+
+	public void enableNextBtn() {
+		nextButton.setDisabled(false);
+		nextButton.addListener(nextButtonClickListener);
+	}
+
 }

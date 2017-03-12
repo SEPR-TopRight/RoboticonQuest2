@@ -342,6 +342,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 	}
 
 	public void activateChancellor() {
+		actors.disableNextBtn();
 		game.setMusic(Gdx.files.internal("music/ShootingStarsNoIntro.mp3"));
 		actors.setChancellor();
 	}
@@ -350,5 +351,6 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		game.setMusic(Gdx.files.internal("music/FloatingCities.mp3"));
 		actors.removeChancellor();
 		game.nextPhase();
+		actors.enableNextBtn();
 	}
 }
