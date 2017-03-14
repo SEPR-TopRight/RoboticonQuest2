@@ -129,21 +129,22 @@ public class RoboticonQuest extends Game {
 	}
 
 	public void nextPhase () {
-		if (phase + 1 == 5) {
+		phase = phase + 1;
+		if (phase == 5) {
 			if (random.nextInt(20)>=10){
 				phase = 5;
 			} else {
 				phase = 6;
-			}
-
-		} else if (phase + 1 == 8) {
+			}}
+		if ((phase == 6) && (this.currentPlayer != this.numberOfPlayers - 1)){
+			phase = 8;
+		}
+		if (phase == 8) {
 			if (random.nextInt(25)>= 20) {
 				phase = 8;
 			} else {
-				phase = 9;
+				phase = 9; 
 			}
-		} else {
-			phase = phase + 1;
 		}
 
 		switch (phase) {
@@ -172,6 +173,7 @@ public class RoboticonQuest extends Game {
 			case 4:
 				gameScreen.getActors().disableNextBtn();
 				generateResources();
+				
 				break;
 
 			//Phase 5: Chancellor encounter
@@ -221,6 +223,7 @@ public class RoboticonQuest extends Game {
 
 			// Phase 1: Enable of purchase LandPlot
 			case 1:
+				gameScreen.getActors().enableNextBtn();
 				setScreen(gameScreen);
 				landBoughtThisTurn = 0;
 				gameScreen.addAnimation(new AnimationShowPlayer(getPlayerInt() + 1));
