@@ -366,17 +366,19 @@ public class ResourceMarketActors extends Table {
 	 * to add them all the the screen in the correct places
 	 */
 	private void addAllWidgetsToScreen(){
+		Table gamblingWidget = new RoboticonMinigameActors(game,screen);
+		
 		addPlayerStatsLabels(); // Added by Josh
 		row();
-		add(marketStats).left().padBottom(20);
+		add(marketStats).left().padBottom(10);
 		row();
-		add(createMarketCostDisplayWidget(game.market)).left().padBottom(45);
+		add(createMarketCostDisplayWidget(game.market)).left().padBottom(20);
 		row();
-		add(playerToPlayerTransactionWidget).left().padBottom(30);
+		add(playerToPlayerTransactionWidget).left().padBottom(15);
 		row();
-		add(marketTransactionWidget).left().padBottom(45);
+		add(marketTransactionWidget).left().padBottom(20);
 		row();
-		add(gamblingWidget).left();
+		add(gamblingWidget);
 	}
 
 	/**
