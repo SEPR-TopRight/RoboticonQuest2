@@ -19,7 +19,7 @@ import io.github.teamfractal.util.PlotManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
+// For a compiled executable version of the game please see: https://sepr-topright.github.io/SEPR/documentation/assessment4/game.zip
 /**
  * This is the main game boot up class.
  * It will set up all the necessary classes.
