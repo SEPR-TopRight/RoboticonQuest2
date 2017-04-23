@@ -368,6 +368,13 @@ public class ResourceMarketActors extends Table {
 	private void addAllWidgetsToScreen(){
 		Table gamblingWidget = new RoboticonMinigameActors(game,screen);
 		
+		gamblingWidget.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				widgetUpdate();
+			}
+		});
+		
 		addPlayerStatsLabels(); // Added by Josh
 		row();
 		add(marketStats).left().padBottom(10);

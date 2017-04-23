@@ -445,6 +445,12 @@ public class Player {
 		returnValues.put(ResourceType.ORE, ore);
 		return returnValues;
 	}
+	
+	/**
+	 * If win is true then amount is added to the player's money, otherwise it is subtracted
+	 * @param win
+	 * @param amount
+	 */
 	public void gambleResult(boolean win, int amount){
 		if(win){
 			this.setMoney(amount+this.getMoney());	
@@ -453,6 +459,15 @@ public class Player {
 			this.setMoney(this.getMoney()-amount);
 		}
 	}
+	
+	/**
+	 * Called when a random event occurs to add/remove the specified quantities of money, food, energy and ore to/from the player's inventory
+	 * (parameters must be negative when money/resources are to be removed)
+	 * @param mon The amount of money to be added to the players inventory
+	 * @param foo The amount of food to be added to the players inventory
+	 * @param ore The amount of ore to be added to the players inventory
+	 * @param ene The amount of energy to be added to the players inventory
+	 */
 	public void event(int mon,int foo,int ore, int ene){
 		if(mon+this.getMoney()>0)
 			this.setMoney(mon+this.getMoney());

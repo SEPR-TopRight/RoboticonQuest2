@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.entity.Player;
 import io.github.teamfractal.screens.ResourceMarketScreen;
 import io.github.teamfractal.screens.TimedMenuScreen;
 import io.github.teamfractal.util.RPSAI;
@@ -38,6 +39,9 @@ public class RoboticonMinigameActors extends Table {
 	private Image rpspl = new Image();
 	private Image rpscom = new Image();
 	private RPSAI rpsai = new RPSAI();
+	
+	// Added by Josh Neil (Top Right Corner) so that we can select which player is to gamble
+	private SelectBox<String> playerDropDown;
 
 	Random rand = new Random();
 	private final int BET_CHANGE_STEP = 10;
@@ -51,9 +55,13 @@ public class RoboticonMinigameActors extends Table {
 		resultTexture = TEXTURE_UNKNOWN;
 		playerTexture = TEXTURE_UNKNOWN;
 		AITexture = TEXTURE_UNKNOWN;
+		
+		// Added by Josh Neil (Top Right Corner) so that we can select which player is to gamble
+		createPlayerDropDown();
+		
 		widgetUpdate();
 
-		final Label lblBet = new Label("Bet:", game.skin);
+		final Label lblBet = new Label("bets", game.skin);
 
 		final Label lblbetAmount = new Label(betAmount.toString(), game.skin);
 
@@ -116,36 +124,54 @@ public class RoboticonMinigameActors extends Table {
 			}
 		});
 
+		// Josh Neil combined the first two rows of the table
 		// bet inc & dec buttons,
+		add(playerDropDown); // Added by Josh Neil (Top Right Corner)
 		add(lblBet);
-		
-		add();
-		row();
 		
 		add(subRoboticonButton);
 		add(lblbetAmount);
 		add(addRoboticonButton);
+		add(new Label("credits",game.skin));
 		row();
 
-		// button to start the bet (moved to different row to preserve position
-		// of other buttons)
-		add(rock);
-		add(paper);
-		add(scissors);
+		add(rock).colspan(2);
+		add(paper).colspan(2);
+		add(scissors).colspan(2);
 		row();
 
 		// image of the card
-		add(rpspl).pad(30);
-		add(card).pad(30);
-		add(rpscom).pad(30);
+		add(rpspl).padLeft(30).padRight(30).padBottom(30).colspan(2);
+		add(card).padLeft(30).padRight(30).padBottom(30).colspan(2);
+		add(rpscom).padLeft(30).padRight(30).padBottom(30).colspan(2);
 
 	}
 	
+	// Added by Josh Neil (Top Right Corner)
+	
+	/**
+	 * Creates the drop down menu that is used to select the player that is gambling
+	 */
+	private void createPlayerDropDown(){
+		playerDropDown = new SelectBox<String>(game.skin);
+		String[] players = new String[game.playerList.size()];
+		for(int player=0;player<game.playerList.size();player++){
+			players[player] = "Player "+Integer.toString(player+1);
+		}
+		playerDropDown.setItems(players);
+	}
+	
 	private void handleRPSResult() {
-		if (betAmount <= game.getPlayer().getMoney()) {
+		// Added by Josh Neil (Top Right Corner) so that the selected player gambles
+		// also replaced all calls to game.getPlayer() with player
+		int playerIndex = playerDropDown.getSelectedIndex();
+		Player player = game.playerList.get(playerIndex);
+		if (betAmount <= player.getMoney()) {
 			moves humanMove   = rpsai.getHumanMove();
 			moves AIMove      = rpsai.getAIMove();
 			results RPSResult = rpsai.getResult();
+			
+			
 
 			// ?: is more concise than switch
 
@@ -167,9 +193,9 @@ public class RoboticonMinigameActors extends Table {
 						  : TEXTURE_UNKNOWN;
 
 			if (RPSResult == results.WIN) {
-				game.getPlayer().gambleResult(true, betAmount);
+				player.gambleResult(true, betAmount);
 			} else if (RPSResult == results.LOSE) {
-				game.getPlayer().gambleResult(false, betAmount);
+				player.gambleResult(false, betAmount);
 			}
 		} else {
 			playerTexture = TEXTURE_UNKNOWN;

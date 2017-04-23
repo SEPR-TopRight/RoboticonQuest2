@@ -13,7 +13,6 @@ public class LandPlot {
 	private Player owner;
 	int x, y;
 
-
 	//<editor-fold desc="Class getters">
 	public TiledMapTileLayer.Cell getMapTile() {
 		return mapTile;
