@@ -325,7 +325,7 @@ public class Player {
 	 */
 	public void removeLandPlot(LandPlot landPlot) {
 		if (landPlot != null && landList.contains(landPlot) && landPlot.getOwner() == this) {
-			landList.add(landPlot);
+			landList.remove(landPlot);
 		}
 	}
 

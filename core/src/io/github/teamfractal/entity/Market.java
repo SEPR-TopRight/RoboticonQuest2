@@ -77,10 +77,7 @@ public class Market {
 			throw new IllegalArgumentException("Error: Ore can't be negative.");
 		}
 
-		// Roboticons cost 5 ore
-		// As many Roboticons as can be made are, and the overflow remains
-		this.roboticon += amount / 5; // Integer division rounds down
-		this.ore = amount % 5;
+		ore = amount; // Changed by Josh Neil (Top Right Corner) - previously did something weird were the number of roboticons was set
 
 	}
 

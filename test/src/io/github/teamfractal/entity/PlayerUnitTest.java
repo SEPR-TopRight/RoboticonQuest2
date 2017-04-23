@@ -1047,12 +1047,16 @@ public class PlayerUnitTest {
 			
 		}
 		
+		
+		// The below test was removed by Josh Neil (Top Right Corner) as in this code base
+		// the score is calculated in RoboticonQuest
+		/*
 		/**
 		 * Tests {@link Player#getScore()} using  player objects with varying quantities of money, ore, energy and food
 		 * and ensures that the correct result is returned
 		 * @author jcn509
 		 *
-		 */
+		 *
 		@RunWith(Parameterized.class)
 		public static class PlayerGetScoreParamaterisedTests{
 			private int expectedScore;
@@ -1071,7 +1075,7 @@ public class PlayerUnitTest {
 			 * @param oreQuantity The amount of ore that the player has
 			 * @param energyQuantity The amount of energy that the player has
 			 * @param foodQuantity The amount of food that the player has
-			 */
+			 *
 			public PlayerGetScoreParamaterisedTests(int expectedScore, int moneyQuantity, int oreQuantity,int energyQuantity,int foodQuantity){
 				this.expectedScore = expectedScore;
 				this.moneyQuantity = moneyQuantity;
@@ -1082,7 +1086,7 @@ public class PlayerUnitTest {
 			
 			/**
 			 * Defines the values to be used in each test
-			 */
+			 *
 			@Parameterized.Parameters
 			public static Collection playerScoreTestValues(){
 				 int oreValue = 10;
@@ -1105,7 +1109,7 @@ public class PlayerUnitTest {
 			/**
 			 * Runs before every test and creates the player object required with the defined amount of
 			 * money, ore, energy and food
-			 */
+			 *
 			@Before
 			public void setup(){
 				game = new RoboticonQuest();
@@ -1125,9 +1129,7 @@ public class PlayerUnitTest {
 			
 			
 			
-			// The below test was removed by Josh Neil (Top Right Corner) as in this code base
-			// the score is calculated in RoboticonQuest
-			/*
+			
 			/**
 			 * Tests {@link Player#getScore()} ensures that the correct score is returned
 			 * when the player has the defined quantity of money, ore, energy and food
@@ -1135,10 +1137,10 @@ public class PlayerUnitTest {
 			@Test
 			public void testScore(){
 				assertEquals(expectedScore,player.getScore());
-			}*/
+			}*
 			
 			
-		}
+		}*/
 		
 		
 		// Note: an integration test version of this test does not exist due to complications with LibGDX and the RoboticonQuest class

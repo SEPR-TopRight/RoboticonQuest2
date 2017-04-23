@@ -100,6 +100,9 @@ public class PlayerTest {
 		@Test
 		public void testPlayerSellResource() throws Exception {
 			Market market = new Market();
+			int energyInMarket = market.getEnergy();
+			int oreInMarket = market.getOre();
+			int foodInMarket = market.getFood();
 	
 			player.setMoney(1000);
 			player.setResource(ResourceType.ORE, 15);
@@ -112,7 +115,7 @@ public class PlayerTest {
 			player.sellResourceToMarket(5, market, ResourceType.ORE);
 			assertEquals(1000 + 5 * orePrice, player.getMoney());
 			assertEquals(10, player.getOre());
-			assertEquals(5, market.getOre());
+			assertEquals(5,market.getOre());
 	
 			int energyPrice = market.getBuyPrice(ResourceType.ENERGY);
 			player.setMoney(1000);
