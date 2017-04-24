@@ -151,21 +151,21 @@ public class RoboticonRandomActors extends Table {
 	private void execEv(int Ind) {
 		// TODO: simplify (try DivMod)
 		switch(Ind){
-		case 1:	game.getPlayer().event(50,0,0,0);
+		case 1:	game.getPlayer().event(5,0,0,0);
 				break;
-		case 2:	game.getPlayer().event(-50,0,0,0);
+		case 2:	game.getPlayer().event(-5,0,0,0);
 				break;
-		case 3:	game.getPlayer().event(0,50,0,0);
+		case 3:	game.getPlayer().event(0,5,0,0);
 				break;
-		case 4:	game.getPlayer().event(0,-50,0,0);
+		case 4:	game.getPlayer().event(0,-5,0,0);
 				break;
-		case 5:	game.getPlayer().event(0,0,50,0);
+		case 5:	game.getPlayer().event(0,0,5,0);
 				break;
-		case 6:	game.getPlayer().event(0,0,-50,0);
+		case 6:	game.getPlayer().event(0,0,-5,0);
 				break;
-		case 7:	game.getPlayer().event(0,0,0,50);
+		case 7:	game.getPlayer().event(0,0,0,5);
 				break;
-		case 8:	game.getPlayer().event(0,0,0,-50);
+		case 8:	game.getPlayer().event(0,0,0,-5);
 				break;
 		default:
 				break;
