@@ -75,7 +75,7 @@ public class GameScreenActors {
 		plotStats.setAlignment(Align.topLeft);
 		installRoboticonSelect.setSelected(null);
 		chancellor.getImage().rotateBy(135);
-		chancellor.rotateBy(135);
+		chancellor.rotateBy(180);
 		chancellor.setPosition(-500, -500);
 		chancellor.getImage().setScale(0.2f);
 		chancellor.setScale(0.2f);
