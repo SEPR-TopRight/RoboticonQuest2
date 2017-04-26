@@ -132,6 +132,7 @@ public class GameOverActors extends Table {
 		// update player stats, phase text, and the market stats.
 		int[] score=game.scoreCalc(game.playerList);
 		int eventInd = score[0];
+		String statText;
 		game.getPlayerInt();
 		game.getPhase();
 		game.getPhaseString();
@@ -139,7 +140,13 @@ public class GameOverActors extends Table {
 		bg.setDrawable(new TextureRegionDrawable(new TextureRegion(END_TEXTURES[eventInd])));
 		// Draws player stats on screen
 		if (this.playerStats != null) this.playerStats.remove();
-		String statText = "    SCORE:                      PLAYER 1-"+score[1]+"                       PLAYER 2-"+score[2];
+		if (game.getNumberOfPlayers()==2) {
+			statText = "    SCORE:                      PLAYER 1-" + score[1] + "                       PLAYER 2-" + score[2];
+		} else if (game.getNumberOfPlayers()==3) {
+			statText = "    SCORE:          PLAYER 1-" + score[1] + "           PLAYER 2-" + score[2]+ "PLAYER 3-" + score[3];
+		} else {
+			statText = "    SCORE: PLAYER 1-" + score[1] + " PLAYER 2-" + score[2] + " PLAYER 3-" + score[3] + " PLAYER 4-" + score[4];
+		}
 		this.playerStats = new Label(statText, game.skin);
 		playerStats.setWidth(250);
 		playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
