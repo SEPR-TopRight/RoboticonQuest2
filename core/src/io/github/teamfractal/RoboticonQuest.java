@@ -29,7 +29,7 @@ public class RoboticonQuest extends Game {
 	public static RoboticonQuest getInstance() {
 		return instance;
 	}
-	private int tilemax=84;
+	private int tilemax=4;
 	private int counter=0;
 	private int turn=0;
 	private int endturn=20;
@@ -223,11 +223,14 @@ public class RoboticonQuest extends Game {
 
 	public int[] scoreCalc(ArrayList<Player> pl) {
 		// score is tot money after selling all resources
-		int[] score=new int[3];
+		int[] score=new int[5];
 		score[1]=pl.get(0).getMoney()+pl.get(0).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(0).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(0).getFood()*this.market.getSellPrice(ResourceType.FOOD);
 		score[2]=pl.get(1).getMoney()+pl.get(1).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(1).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(1).getFood()*this.market.getSellPrice(ResourceType.FOOD);
-		if(score[1]>score[2])
+		if (getNumberOfPlayers() == 3) {score[3]=pl.get(2).getMoney()+pl.get(2).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(2).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(2).getFood()*this.market.getSellPrice(ResourceType.FOOD);}
+		if (getNumberOfPlayers() == 4) {score[4]=pl.get(3).getMoney()+pl.get(3).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(3).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(3).getFood()*this.market.getSellPrice(ResourceType.FOOD);}
+		if(score[1]>score[2]) {
 			score[0]=1;
+		}
 		else if(score[2]>score[1])
 			score[0]=2;
 		else
@@ -331,4 +334,6 @@ public class RoboticonQuest extends Game {
 		music.play();
 		music.setLooping(true);
 	}
+
+	public int getNumberOfPlayers() {return numberOfPlayers;}
 }
