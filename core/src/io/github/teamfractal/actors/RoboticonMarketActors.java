@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -11,6 +12,8 @@ import io.github.teamfractal.RoboticonQuest;
 import io.github.teamfractal.entity.Roboticon;
 import io.github.teamfractal.entity.enums.ResourceType;
 import io.github.teamfractal.screens.TimedMenuScreen;
+import io.github.teamfractal.util.MessagePopUp;
+import io.github.teamfractal.util.SoundEffects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +51,11 @@ public class RoboticonMarketActors extends Table {
 	public RoboticonMarketActors(final RoboticonQuest game, TimedMenuScreen screen) {
 		this.game = game;
 		this.screen = screen;
+		 
+		// Added by Josh Neil (Top Right Corner) needed for the pop up message that is opened
+		// if the player tries to make that market produce a roboticon when it doesn't have
+		// enough ore
+		final Stage stage = screen.getStage();
 
 		this.roboticonID = new Label("", game.skin);
 		this.marketStats = new Label("", game.skin);
@@ -166,6 +174,23 @@ public class RoboticonMarketActors extends Table {
 				game.nextPhase();
 			}
 		});
+		
+		// Added by Josh Neil (Top Right Corner) so players can make the market produce a roboticon,
+		// taken from our assessment 3 project
+		final TextButton produceRoboticonButton = new TextButton("Produce roboticon", game.skin);
+		produceRoboticonButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				SoundEffects.click();
+				if(!game.market.attemptToProduceRoboticon()){
+					SoundEffects.bad();
+					stage.addActor(new MessagePopUp("Not enough ore!","The market does not have enough ore to produce a roboticon!"));
+				}
+				else{
+					widgetUpdate(); // Display the new roboticon quantity on screen
+				}
+			}
+		});
 
 		addActor(background);
 
@@ -231,9 +256,9 @@ public class RoboticonMarketActors extends Table {
 		add(customisationDropDown).padLeft(-300).padTop(-160);
 
 		row();
-
-		// Buy Customisation Button
-		add();
+		
+		// Added by Josh Neil so that players can make the market produce a roboticon
+		add(produceRoboticonButton).padTop(-80);
 		add();
 		add();
 		add();
@@ -241,15 +266,15 @@ public class RoboticonMarketActors extends Table {
 		add();
 		add(buyCustomisationButton).padLeft(-300).padTop(-80);
 
+		
 		row();
-
 		add();
 		add();
 		add();
 		add();
 
 		add();
-		add(nextButton).padLeft(0).padTop(-20);
+		add(nextButton).padRight(10).padBottom(10).right();
 
 	}
 
@@ -304,10 +329,15 @@ public class RoboticonMarketActors extends Table {
 
 		// Draws turn and phase info on screen
 		if (this.topText != null) this.topText.remove();
-		String phaseText = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
+		
+		// Josh Neil (Top Right Corner) modified the phase text so that it actually displays the phase info
+		String phaseText = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase() + " - " + game.getPhaseString();
 		this.topText = new Label(phaseText, game.skin);
 		topText.setWidth(120);
-		topText.setPosition(screen.getStage().getWidth() / 2 - 40, screen.getStage().getViewport().getWorldHeight() - 20);
+		
+		// Modified by Josh Neil (Top Right corner) so that the text appears in the top right corner of the screen
+		topText.setPosition(screen.getStage().getWidth() -275, screen.getStage().getViewport().getWorldHeight() - (10+topText.getHeight()));
+		
 		screen.getStage().addActor(topText);
 
 		// Draws player stats on screen
@@ -316,7 +346,9 @@ public class RoboticonMarketActors extends Table {
 				+ game.getPlayer().getFood() + " Money: " + game.getPlayer().getMoney();
 		this.playerStats = new Label(statText, game.skin);
 		playerStats.setWidth(250);
-		playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
+		
+		// Modified by Josh Neil (Top Right Corner) so that the player stats appear in the same place as they do in other screens
+		playerStats.setPosition(10, screen.getStage().getViewport().getWorldHeight() - (10+playerStats.getHeight()));
 		screen.getStage().addActor(playerStats);
 
 		if (roboticons.size() == 0) {

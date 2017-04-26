@@ -44,8 +44,8 @@ public class PlayerUnitTest {
 		@Mocked private LandPlot plot3;
 	
 		/**
-		 * Runs before every test and creates the Player object that is udner test as well as the RoboticonQuest object
-		 * that is requried by some tests
+		 * Runs before every test and creates the Player object that is under test as well as the RoboticonQuest object
+		 * that is required by some tests
 		 */
 		@Before
 		public void setUp() {
@@ -59,6 +59,28 @@ public class PlayerUnitTest {
 			plot = new LandPlot(0,1,1);
 			plot2 = new LandPlot(0,1,1);
 			plot3 = new LandPlot(0,1,1);
+		}
+		
+		// Added by Josh Neil (Top Right Corner) for assessment 4
+		/**
+		 * Tests {@link Player#giveMoney(int)} passing it 100 and ensuring that 100 money is added to the player's inventory
+		 */
+		@Test
+		public void testGiveMoney100(){
+			int moneyBefore = player.getMoney();
+			player.giveMoney(100);
+			assertEquals(moneyBefore+100,player.getMoney());
+		}
+		
+		// Added by Josh Neil (Top Right Corner) for assessment 4
+		/**
+		 * Tests {@link Player#giveMoney(int)} passing it 1 and ensuring that 1 money is added to the player's inventory
+		 */
+		@Test
+		public void testGiveMoney1(){
+			int moneyBefore = player.getMoney();
+			player.giveMoney(1);
+			assertEquals(moneyBefore+1,player.getMoney());
 		}
 	
 		/**
@@ -376,10 +398,13 @@ public class PlayerUnitTest {
 		}
 		
 		
+		// Below tests removed by Josh Neil (Top Right Corner) as the removeRoboticon method is not present
+		// in Jormandr's player class
+		/*
 		/**
 		 * Tests {@link Player#removeRoboticon(Roboticon)} ensures that the given roboticon
 		 * is actually removed from the player's inventory (as this is a simple method only a single test is needed)
-		 */
+		 *
 		@Test
 		public void testRemoveRoboticonRoboticonRemoved(){
 		
@@ -395,7 +420,7 @@ public class PlayerUnitTest {
 		/**
 		 * Tests {@link Player#removeRoboticon(Roboticon)} ensures that the size of the roboticon list that stores the players
 		 * roboticons is reduced by 1 (as this is a simple method only a single test is needed)
-		 */
+		 *
 		@Test
 		public void testRemoveRoboticonListSizeReduced(){
 			
@@ -407,7 +432,7 @@ public class PlayerUnitTest {
 			
 			assertEquals(2,player.roboticonList.size);
 		}
-		
+		*/
 		
 		
 		/**
@@ -1022,12 +1047,16 @@ public class PlayerUnitTest {
 			
 		}
 		
+		
+		// The below test was removed by Josh Neil (Top Right Corner) as in this code base
+		// the score is calculated in RoboticonQuest
+		/*
 		/**
 		 * Tests {@link Player#getScore()} using  player objects with varying quantities of money, ore, energy and food
 		 * and ensures that the correct result is returned
 		 * @author jcn509
 		 *
-		 */
+		 *
 		@RunWith(Parameterized.class)
 		public static class PlayerGetScoreParamaterisedTests{
 			private int expectedScore;
@@ -1046,7 +1075,7 @@ public class PlayerUnitTest {
 			 * @param oreQuantity The amount of ore that the player has
 			 * @param energyQuantity The amount of energy that the player has
 			 * @param foodQuantity The amount of food that the player has
-			 */
+			 *
 			public PlayerGetScoreParamaterisedTests(int expectedScore, int moneyQuantity, int oreQuantity,int energyQuantity,int foodQuantity){
 				this.expectedScore = expectedScore;
 				this.moneyQuantity = moneyQuantity;
@@ -1057,7 +1086,7 @@ public class PlayerUnitTest {
 			
 			/**
 			 * Defines the values to be used in each test
-			 */
+			 *
 			@Parameterized.Parameters
 			public static Collection playerScoreTestValues(){
 				 int oreValue = 10;
@@ -1080,7 +1109,7 @@ public class PlayerUnitTest {
 			/**
 			 * Runs before every test and creates the player object required with the defined amount of
 			 * money, ore, energy and food
-			 */
+			 *
 			@Before
 			public void setup(){
 				game = new RoboticonQuest();
@@ -1098,17 +1127,20 @@ public class PlayerUnitTest {
 				}};
 			}
 			
+			
+			
+			
 			/**
 			 * Tests {@link Player#getScore()} ensures that the correct score is returned
 			 * when the player has the defined quantity of money, ore, energy and food
-			 */
+			 *
 			@Test
 			public void testScore(){
 				assertEquals(expectedScore,player.getScore());
-			}
+			}*
 			
 			
-		}
+		}*/
 		
 		
 		// Note: an integration test version of this test does not exist due to complications with LibGDX and the RoboticonQuest class
@@ -1305,6 +1337,183 @@ public class PlayerUnitTest {
 				assertEquals(expectedAmountOfFood,player.generateResources().get(ResourceType.FOOD));
 			}
 			
+			
+			
+		}
+		
+		
+		// Top Right Corner added the bellow tests to tests Jormandr's gambleResult and event methods in the Player class
+		/**
+		 * Tests {@link Player#gambleResult(boolean, int) } using various different amounts of money and ensures that
+		 * the correct quantity is added to the player's quantity
+		 * @author jcn509
+		 */
+		@RunWith(Parameterized.class)
+		public static class PlayerGambleResultParamaterisedTests{
+			private int moneyBefore;
+			private int amountWonOrLost;
+			private int expectedMoneyAfter;
+			private boolean won;
+			
+			private Player player;
+			@Mocked RoboticonQuest game;
+			
+			public PlayerGambleResultParamaterisedTests(int moneyBefore,
+			int amountWonOrLost,
+			int expectedMoneyAfter,
+			boolean won){
+				this.moneyBefore = moneyBefore;
+				this.amountWonOrLost = amountWonOrLost;
+				this.expectedMoneyAfter = expectedMoneyAfter;
+				this.won = won;
+			}
+			
+			/**
+			 * Defines the values to be used in each test
+			 */
+			@Parameterized.Parameters
+			public static Collection playerGambleResultTestValues(){
+				 
+				 return Arrays.asList(new Object[][] {
+					 {10,10,0,false},
+					 {10,10,20,true},
+					 {15,1,14,false},
+					 {15,1,16,true},
+					 {0,0,0,false},
+					 {0,0,0,true},
+					 {34,0,34,false},
+					 {34,0,34,true},
+			      });
+			}
+			
+			/**
+			 * Runs before every test and creates the player object and sets the amount of money in its inventory to the required quantity
+			 */
+			@Before
+			public void setup(){
+				game = new RoboticonQuest();
+				player = new Player(game);
+				player.setMoney(moneyBefore);
+			}
+			
+			/**
+			 * Ensures that the correct amount of money is left in the player's inventory
+			 */
+			@Test
+			public void testGambleResult(){
+				player.gambleResult(won, amountWonOrLost);
+				assertEquals(expectedMoneyAfter,player.getMoney());
+			}
+			
+			
+		}
+		
+		/**
+		 * Tests {@link Player#event(int, int, int, int) } using various different values for the parameters and quantities in the player's
+		 * inventory and ensures that the correct quantities are added/removed from the player's inventory
+		 * @author jcn509
+		 */
+		@RunWith(Parameterized.class)
+		public static class PlayerEventParamaterisedTests{
+			private int moneyBefore;
+			private int oreBefore;
+			private int energyBefore;
+			private int foodBefore;
+			private int moneyParameter;
+			private int oreParameter;
+			private int energyParameter;
+			private int foodParameter;
+			
+			private Player player;
+			@Mocked RoboticonQuest game;
+			
+			public PlayerEventParamaterisedTests( int moneyBefore,
+			 int oreBefore,
+			 int energyBefore,
+			 int foodBefore,
+			 int moneyParameter,
+			 int oreParameter,
+			 int energyParameter,
+			 int foodParameter){
+				 this.moneyBefore = moneyBefore;
+				 this.oreBefore = oreBefore;
+				 this.energyBefore = energyBefore;
+				 this.foodBefore = foodBefore;
+				 this.moneyParameter = moneyParameter;
+				 this.oreParameter = oreParameter;
+				 this.energyParameter = energyParameter;
+				 this.foodParameter = foodParameter;
+			}
+			
+			/**
+			 * Defines the values to be used in each test
+			 */
+			@Parameterized.Parameters
+			public static Collection playerEventTestValues(){
+				 
+				 return Arrays.asList(new Object[][] {
+					 {10,10,10,10,10,10,10,10},
+					 {15,34,10,23,123,123,12,11},
+					 {0,0,0,0,1,1,1,1},
+					 {1,1,1,1,0,0,0,0},
+					 {0,0,0,0,1,1,1,1},
+					 {1,1,1,1,1,1,1,1},
+			      });
+			}
+			
+			/**
+			 * Runs before every test and creates the player object and sets the amount of money and each resource
+			 * in its inventory to the correct values
+			 */
+			@Before
+			public void setup(){
+				game = new RoboticonQuest();
+				player = new Player(game);
+				player.setMoney(moneyBefore);
+				player.setOre(oreBefore);
+				player.setEnergy(energyBefore);
+				player.setFood(foodBefore);
+			}
+			
+			/**
+			 * Ensures that the correct amount of money is left in the player's inventory
+			 */
+			@Test
+			public void testCorrectMoney(){
+				int expectedValue = moneyBefore + moneyParameter >0 ? moneyBefore + moneyParameter : moneyBefore;
+				player.event(moneyParameter, foodParameter, oreParameter, energyParameter);
+				assertEquals(expectedValue,player.getMoney());
+			}
+			
+			/**
+			 * Ensures that the correct amount of energy is left in the player's inventory
+			 */
+			@Test
+			public void testCorrectEnergy(){
+				int expectedValue = energyBefore + energyParameter >0 ? energyBefore + energyParameter : energyBefore;
+				player.event(moneyParameter, foodParameter, oreParameter, energyParameter);
+				assertEquals(expectedValue,player.getEnergy());
+			}
+			
+			/**
+			 * Ensures that the correct amount of ore is left in the player's inventory
+			 */
+			@Test
+			public void testCorrectOre(){
+				int expectedValue = oreBefore + oreParameter >0 ? oreBefore + oreParameter : oreBefore;
+				player.event(moneyParameter, foodParameter, oreParameter, energyParameter);
+				assertEquals(expectedValue,player.getOre());
+			}
+			
+			/**
+			 * Ensures that the correct amount of food is left in the player's inventory
+			 */
+			@Test
+			public void testCorrectFood(){
+				int expectedValue = foodBefore + foodParameter >0 ? foodBefore + foodParameter : foodBefore;
+				player.event(moneyParameter, foodParameter, oreParameter, energyParameter);
+				assertEquals(expectedValue,player.getFood());
+			}
 			
 			
 		}

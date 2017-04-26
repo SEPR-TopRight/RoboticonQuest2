@@ -17,18 +17,13 @@ public class TimedMenuScreen extends AbstractAnimationScreen implements Screen {
 	final Stage stage;
 	final Table table;
 	private Table actors;
-	private boolean mode=true;
 	
-	public TimedMenuScreen(final RoboticonQuest game,boolean mod) {
+	public TimedMenuScreen(final RoboticonQuest game) {
 		this.game = game;
 		this.stage = new Stage(new ScreenViewport());
 		this.table = new Table();
-		this.mode=mod;
 		table.setFillParent(true);
-		if(mode)
-			actors = new RoboticonMinigameActors(game, this);
-		else
-			actors = new RoboticonMarketActors(game, this);
+		actors = new RoboticonMarketActors(game, this);
 		table.top().left().add(actors);
 		
 		stage.addActor(table);
@@ -53,13 +48,8 @@ public class TimedMenuScreen extends AbstractAnimationScreen implements Screen {
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
 		game.getBatch().setProjectionMatrix(stage.getCamera().combined);
-		if (mode) {
-			((RoboticonMinigameActors) actors).widgetUpdate();
-			((RoboticonMinigameActors) actors).resizeScreen(width, height);
-		} else {
-			((RoboticonMarketActors) actors).widgetUpdate();
-			((RoboticonMarketActors) actors).resizeScreen(width, height);
-		}
+		((RoboticonMarketActors) actors).widgetUpdate();
+		((RoboticonMarketActors) actors).resizeScreen(width, height);
 	}
 
 	@Override

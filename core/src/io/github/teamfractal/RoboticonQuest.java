@@ -19,7 +19,7 @@ import io.github.teamfractal.util.PlotManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
+// For a compiled executable version of the game please see: https://sepr-topright.github.io/SEPR/documentation/assessment4/game.zip
 /**
  * This is the main game boot up class.
  * It will set up all the necessary classes.
@@ -129,27 +129,21 @@ public class RoboticonQuest extends Game {
 	}
 
 	public void nextPhase () {
-		if (phase + 1 == 5) {
-			if (random.nextInt(20)>=10){
-				phase = 5;
-			} else {
-				phase = 6;
-			}
-
-		} else if (phase + 1 == 8) {
-			if (random.nextInt(25)>= 20) {
-				phase = 8;
-			} else {
-				phase = 9;
-			}
-		} else {
-			phase = phase + 1;
+		phase = phase + 1;
+		if (phase == 5 && (random.nextInt(20)<=10)) {
+			phase = 6;
+		}
+		if ((phase == 6) && (this.currentPlayer != this.numberOfPlayers - 1)){
+			phase = 7;
+		}
+		if (phase == 7 && (random.nextInt(25)< 20)) {
+			phase = 8;
 		}
 
 		switch (phase) {
 			// Phase 2: Purchase Roboticon
 			case 2:
-				TimedMenuScreen roboticonMarket = new TimedMenuScreen(this,false);
+				TimedMenuScreen roboticonMarket = new TimedMenuScreen(this);
 				roboticonMarket.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, phase, 30));
 				setScreen(roboticonMarket);
 				break;
@@ -172,6 +166,7 @@ public class RoboticonQuest extends Game {
 			case 4:
 				gameScreen.getActors().disableNextBtn();
 				generateResources();
+				
 				break;
 
 			//Phase 5: Chancellor encounter
@@ -187,25 +182,18 @@ public class RoboticonQuest extends Game {
 				} );
 				break;
 
-			//Phase 6: Gambling
-			case 6:
-				gameScreen.getActors().enableNextBtn();
-				TimedMenuScreen minigame = new TimedMenuScreen(this,true);
-				minigame.addAnimation(new AnimationPhaseTimeout(getPlayer(), this, phase, 30));
-				setScreen(minigame);
-				break;
 			
 			// Phase 7: Generate resource for player.
-			case 7:
+			case 6:
 				setScreen(new ResourceMarketScreen(this));
 				break;
 										
-			case 8:
+			case 7:
 				//RANDOM EVENT
 				setScreen(new RoboticonRandomScreen(this));
 				break;
 			// End phase - CLean up and move to next player.
-			case 9:
+			case 8:
 				phase = 1;
 				this.turn+=1;
 				System.out.println(this.turn);
@@ -221,6 +209,7 @@ public class RoboticonQuest extends Game {
 
 			// Phase 1: Enable of purchase LandPlot
 			case 1:
+				gameScreen.getActors().enableNextBtn();
 				setScreen(gameScreen);
 				landBoughtThisTurn = 0;
 				gameScreen.addAnimation(new AnimationShowPlayer(getPlayerInt() + 1));
@@ -269,7 +258,7 @@ public class RoboticonQuest extends Game {
 		animation.setAnimationFinish(new IAnimationFinish() {
 			@Override
 			public void OnAnimationFinish() {
-					nextPhase();
+				nextPhase();
 			}
 		});
 		gameScreen.addAnimation(animation);

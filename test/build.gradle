@@ -4,6 +4,8 @@ sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 dependencies {
+  compile 'org.jmockit:jmockit:1.30'
+  testCompile 'org.jmockit:jmockit:1.30'
   compile 'junit:junit:4.12'
   testCompile 'junit:junit:4.12'
 }

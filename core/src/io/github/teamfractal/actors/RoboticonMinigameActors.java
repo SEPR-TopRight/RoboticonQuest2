@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.teamfractal.RoboticonQuest;
+import io.github.teamfractal.entity.Player;
+import io.github.teamfractal.screens.ResourceMarketScreen;
 import io.github.teamfractal.screens.TimedMenuScreen;
 import io.github.teamfractal.util.RPSAI;
 import static io.github.teamfractal.util.RPSAI.moves;
@@ -18,7 +20,7 @@ import java.util.Random;
 //@author jormandr
 public class RoboticonMinigameActors extends Table {
 	private RoboticonQuest game;
-	private TimedMenuScreen screen;
+	private ResourceMarketScreen screen;
 	private Integer betAmount = 10;
 	private Texture resultTexture;
 	private Texture playerTexture;
@@ -37,28 +39,32 @@ public class RoboticonMinigameActors extends Table {
 	private Image rpspl = new Image();
 	private Image rpscom = new Image();
 	private RPSAI rpsai = new RPSAI();
-	private Image background;
-	private float backgroundX, backgroundY;
+	
+	// Added by Josh Neil (Top Right Corner) so that we can select which player is to gamble
+	private SelectBox<String> playerDropDown;
 
 	Random rand = new Random();
 	private final int BET_CHANGE_STEP = 10;
 
-	public RoboticonMinigameActors(final RoboticonQuest game, TimedMenuScreen roboticonMinigameScreen) {
+	public RoboticonMinigameActors(final RoboticonQuest game, ResourceMarketScreen screen) {
 		this.game = game;
-		this.screen = roboticonMinigameScreen;
+		this.screen = screen;
 
 		new Label("", game.skin);
 		new Label("", game.skin);
 		resultTexture = TEXTURE_UNKNOWN;
 		playerTexture = TEXTURE_UNKNOWN;
 		AITexture = TEXTURE_UNKNOWN;
+		
+		// Added by Josh Neil (Top Right Corner) so that we can select which player is to gamble
+		createPlayerDropDown();
+		
 		widgetUpdate();
 
-		final Label lblBet = new Label("Bet:", game.skin);
+		final Label lblBet = new Label("bets", game.skin);
 
 		final Label lblbetAmount = new Label(betAmount.toString(), game.skin);
 
-		background = new Image(new Texture(Gdx.files.internal("background/iceland.jpg")));
 
 		// Button to increase bet amount
 		final TextButton addRoboticonButton = new TextButton("+", game.skin);
@@ -118,70 +124,54 @@ public class RoboticonMinigameActors extends Table {
 			}
 		});
 
-		addActor(background);
-		// Top Row Text
-		add();
-		add();
-		add();
-		add();
-
-		row();
-
+		// Josh Neil combined the first two rows of the table
 		// bet inc & dec buttons,
-		add(lblBet).padTop(100).padLeft(10);
-		add(subRoboticonButton).padTop(100).padLeft(100);
-		add(lblbetAmount).padTop(100).padLeft(-50);
-		add(addRoboticonButton).padTop(100).padLeft(-100);
-
+		add(playerDropDown); // Added by Josh Neil (Top Right Corner)
+		add(lblBet);
+		
+		add(subRoboticonButton);
+		add(lblbetAmount);
+		add(addRoboticonButton);
+		add(new Label("credits",game.skin));
 		row();
 
-		// button to start the bet (moved to different row to preserve position
-		// of other buttons)
-		add();
-		add(rock).padLeft(0).padBottom(160);
-		add(paper).padLeft(50).padBottom(160);
-		add(scissors).padLeft(150).padBottom(160);
-		add();
-
-		add();
+		add(rock).colspan(2);
+		add(paper).colspan(2);
+		add(scissors).colspan(2);
 		row();
 
-		add();
-		add();
-		add();
-		add();
-
-		add();
-		add();
-
-		row();
 		// image of the card
-		add();
-		add();
-		add(rpspl).padLeft(-150).padRight(100).padBottom(60).padTop(-150);
-		add(card).padLeft(-100).padRight(150).padBottom(60).padTop(-150);
-		add(rpscom).padLeft(-150).padRight(-50).padBottom(60).padTop(-150);
-		add();
-
-		row();
-
-		row();
-
-		add();
-		add();
-		add();
-		add();
-
-		add();
-		add(nextButton).padTop(40);
+		add(rpspl).padLeft(30).padRight(30).padBottom(30).colspan(2);
+		add(card).padLeft(30).padRight(30).padBottom(30).colspan(2);
+		add(rpscom).padLeft(30).padRight(30).padBottom(30).colspan(2);
 
 	}
 	
+	// Added by Josh Neil (Top Right Corner)
+	
+	/**
+	 * Creates the drop down menu that is used to select the player that is gambling
+	 */
+	private void createPlayerDropDown(){
+		playerDropDown = new SelectBox<String>(game.skin);
+		String[] players = new String[game.playerList.size()];
+		for(int player=0;player<game.playerList.size();player++){
+			players[player] = "Player "+Integer.toString(player+1);
+		}
+		playerDropDown.setItems(players);
+	}
+	
 	private void handleRPSResult() {
-		if (betAmount <= game.getPlayer().getMoney()) {
+		// Added by Josh Neil (Top Right Corner) so that the selected player gambles
+		// also replaced all calls to game.getPlayer() with player
+		int playerIndex = playerDropDown.getSelectedIndex();
+		Player player = game.playerList.get(playerIndex);
+		if (betAmount <= player.getMoney()) {
 			moves humanMove   = rpsai.getHumanMove();
 			moves AIMove      = rpsai.getAIMove();
 			results RPSResult = rpsai.getResult();
+			
+			
 
 			// ?: is more concise than switch
 
@@ -203,9 +193,9 @@ public class RoboticonMinigameActors extends Table {
 						  : TEXTURE_UNKNOWN;
 
 			if (RPSResult == results.WIN) {
-				game.getPlayer().gambleResult(true, betAmount);
+				player.gambleResult(true, betAmount);
 			} else if (RPSResult == results.LOSE) {
-				game.getPlayer().gambleResult(false, betAmount);
+				player.gambleResult(false, betAmount);
 			}
 		} else {
 			playerTexture = TEXTURE_UNKNOWN;
@@ -218,33 +208,9 @@ public class RoboticonMinigameActors extends Table {
 	
 
 	public void widgetUpdate() {
-
-		// Draws turn and phase info on screen
-		if (this.topText != null)
-			this.topText.remove();
-		String phaseText = "Player " + (game.getPlayerInt() + 1) + "; Phase " + game.getPhase();
-		this.topText = new Label(phaseText, game.skin);
-		topText.setWidth(120);
-		topText.setPosition(screen.getStage().getWidth() / 2 - 40,
-				screen.getStage().getViewport().getWorldHeight() - 20);
-		screen.getStage().addActor(topText);
 		card.setDrawable(new TextureRegionDrawable(new TextureRegion(resultTexture)));
 		rpspl.setDrawable(new TextureRegionDrawable(new TextureRegion(playerTexture)));
 		rpscom.setDrawable(new TextureRegionDrawable(new TextureRegion(AITexture)));
-		// Draws player stats on screen
-		if (this.playerStats != null)
-			this.playerStats.remove();
-		String statText = "Money: " + game.getPlayer().getMoney();
-		this.playerStats = new Label(statText, game.skin);
-		playerStats.setWidth(250);
-		playerStats.setPosition(0, screen.getStage().getViewport().getWorldHeight() - 20);
-		screen.getStage().addActor(playerStats);
 
-	}
-
-	public void resizeScreen(float width, float height) {
-		backgroundX = width/background.getWidth();
-		backgroundY = height/background.getHeight();
-		background.setScale(backgroundX, backgroundY);
 	}
 }
