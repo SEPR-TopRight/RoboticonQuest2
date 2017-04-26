@@ -143,7 +143,7 @@ public class GameOverActors extends Table {
 		if (game.getNumberOfPlayers()==2) {
 			statText = "    SCORE:                      PLAYER 1-" + score[1] + "                       PLAYER 2-" + score[2];
 		} else if (game.getNumberOfPlayers()==3) {
-			statText = "    SCORE:          PLAYER 1-" + score[1] + "           PLAYER 2-" + score[2]+ "PLAYER 3-" + score[3];
+			statText = "    SCORE:          PLAYER 1-" + score[1] + "           PLAYER 2-" + score[2]+ "            PLAYER 3-" + score[3];
 		} else {
 			statText = "    SCORE: PLAYER 1-" + score[1] + " PLAYER 2-" + score[2] + " PLAYER 3-" + score[3] + " PLAYER 4-" + score[4];
 		}

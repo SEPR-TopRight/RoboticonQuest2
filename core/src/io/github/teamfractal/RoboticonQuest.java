@@ -75,7 +75,7 @@ public class RoboticonQuest extends Game {
 		
 		setScreen(mainMenuScreen);
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/FloatingCities.mp3"));
-		//music.play();
+		music.play();
 		music.setLooping(true);
 	}
 
