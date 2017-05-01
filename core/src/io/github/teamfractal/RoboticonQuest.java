@@ -29,7 +29,7 @@ public class RoboticonQuest extends Game {
 	public static RoboticonQuest getInstance() {
 		return instance;
 	}
-	private int tilemax=4;
+	private int tilemax=84;
 	private int counter=0;
 	private int turn=0;
 	private int endturn=20;
