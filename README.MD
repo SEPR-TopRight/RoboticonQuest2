@@ -6,7 +6,7 @@ To build the project, run
 
     gradlew dist
     
-View our website at: https://sepr-topright.github.io/SEPR/
+View our website at: https://sepr-topright.github.io/SEPR/                                                                          
 Find our game executable at: https://sepr-topright.github.io/SEPR/documentation/assessment4/game.zip
 
 Find our sweet trailer for our game right here -----> https://youtu.be/9k_R24oYSzw
