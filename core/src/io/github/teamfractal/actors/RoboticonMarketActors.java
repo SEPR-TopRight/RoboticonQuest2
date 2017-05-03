@@ -29,8 +29,8 @@ public class RoboticonMarketActors extends Table {
 	private Label marketStats;
 	private Label roboticonID;
 	private Image roboticonImage = new Image();
-	private Image background;
-	private float backgroundX, backgroundY;
+	private Image background; //Added by Christian Beddows - Top Right Corner
+	private float backgroundX, backgroundY; //Added by Christian Beddows - Top Right Corner
 
 	private static final Texture TEXTURE_UNCUSTOMISED;
 	private static final Texture TEXTURE_ENERGY;
@@ -60,7 +60,7 @@ public class RoboticonMarketActors extends Table {
 		this.roboticonID = new Label("", game.skin);
 		this.marketStats = new Label("", game.skin);
 
-		background = new Image(new Texture(Gdx.files.internal("background/robotfactory.jpg")));
+		background = new Image(new Texture(Gdx.files.internal("background/robotfactory.jpg"))); //Added by Christian Beddows - Top Right Corner
 
 		widgetUpdate();
 
@@ -192,7 +192,7 @@ public class RoboticonMarketActors extends Table {
 			}
 		});
 
-		addActor(background);
+		addActor(background); //Added by Christian Beddows - Top Right Corner
 
 		// Top Row Text
 		add(lblBuyRoboticon).padTop(40).padLeft(80);
@@ -364,6 +364,7 @@ public class RoboticonMarketActors extends Table {
 	}
 
 	public void resizeScreen(float width, float height) {
+		//Added by Christian Beddows - Top Right Corner
 		backgroundX = width/background.getWidth();
 		backgroundY = height/background.getHeight();
 		background.setScale(backgroundX, backgroundY);

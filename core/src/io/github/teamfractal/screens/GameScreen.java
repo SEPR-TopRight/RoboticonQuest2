@@ -258,7 +258,7 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 
 		if (game.getPhase()==5) {actors.updateChancellor();}
 
-		batch.begin();
+		batch.begin(); //Added by Christian Beddows - Top Right Corner - so that the background is not drawn over the tilemap
 		actors.getBackground().toBack();
 		actors.getBackground().draw(batch, 1);
 		batch.end();
@@ -341,12 +341,14 @@ public class GameScreen extends AbstractAnimationScreen implements Screen  {
 		return this.actors;
 	}
 
+	//Added by Christian Beddows - Top Right Corner
 	public void activateChancellor() {
 		actors.disableNextBtn();
 		game.setMusic(Gdx.files.internal("music/ShootingStarsNoIntro.mp3"));
 		actors.setChancellor();
 	}
 
+	//Added by Christian Beddows - Top Right Corner
 	public void stopChancellor() {
 		game.setMusic(Gdx.files.internal("music/FloatingCities.mp3"));
 		actors.removeChancellor();

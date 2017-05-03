@@ -23,11 +23,11 @@ public class HomeMainMenu extends Table {
 	private Stage stage;
 	private TextButton btnNewGame;
 	private TextButton btnExit;
-	private Image background;
-	private float backgroundX, backgroundY;
+	private Image background; //Added by Christian Beddows - Top Right Corner -
+	private float backgroundX, backgroundY; //Added by Christian Beddows - Top Right Corner -
 	
 
-	// Added by Josh Neil to allow the user to select the number of players that are playing the game
+	// Added by Josh Neil - Top Right Corner - to allow the user to select the number of players that are playing the game
 	private SelectBox<String> numberOfPlayersDropDown;
 
 	private static Texture titleTexture = new Texture(Gdx.files.internal("roboticon_images/Roboticon_Quest_Title"));
@@ -52,6 +52,7 @@ public class HomeMainMenu extends Table {
 		
 		btnNewGame = new TextButton("New game!", game.skin);
 		btnExit = new TextButton("Exit", game.skin);
+		//Added by Christian Beddows - Top Right Corner -
 		background = new Image(new Texture(Gdx.files.internal("background/corridor.jpg")));
 		background.setPosition(0,0);
 		stage.addActor(background);
@@ -80,7 +81,7 @@ public class HomeMainMenu extends Table {
 
 	}
 	
-	// Added by Josh Neil to create the drop down required so that users may select the number of players that they want to play the game
+	// Added by Josh Neil - Top Right Corner - to create the drop down required so that users may select the number of players that they want to play the game
 		private void createNumberOfPlayersDropDown(){
 			
 			numberOfPlayersDropDown = new SelectBox<String>(game.skin);
@@ -115,6 +116,8 @@ public class HomeMainMenu extends Table {
 
 	public void resizeScreen(float width, float height) {
 		stage.getViewport().update((int)width, (int)height, true);
+
+		//Added by Christian Beddows - Top Right Corner -
 		backgroundX = width/background.getWidth();
 		backgroundY = height/background.getHeight();
 		background.setScale(backgroundX, backgroundY);

@@ -47,7 +47,7 @@ public class ResourceMarketActors extends Table {
 	private Label[] playerStatsLabels;
 	private final Stage stage;
 
-	private Table marketTransactionWidget, playerToPlayerTransactionWidget, gamblingWidget;
+	private Table marketTransactionWidget, playerToPlayerTransactionWidget, gamblingWidget; //Added by Josh Neil - Top Right Corner
 
 	private TextButton playerToPlayerTransactionButton, marketTransactionButton, gambleButton;
 
@@ -92,7 +92,7 @@ public class ResourceMarketActors extends Table {
 		stage.addActor(phaseInfo);
 		stage.addActor(nextButton);
 		
-		// Added by Josh
+		// Added by Josh Neil
 		marketTransactionWidget = createMarketTransactionWidget();
 		playerToPlayerTransactionWidget = createPlayerToPlayerTransactionWidget();
 		
@@ -366,6 +366,7 @@ public class ResourceMarketActors extends Table {
 	 * to add them all the the screen in the correct places
 	 */
 	private void addAllWidgetsToScreen(){
+		//Top Right Corner - removed old gambling code and added this for assessment 4
 		Table gamblingWidget = new RoboticonMinigameActors(game,screen);
 		
 		gamblingWidget.addListener(new ClickListener() {
