@@ -23,7 +23,7 @@ public class GameOverActors extends Table {
 	private GameOverScreen screen;
 	private TextButton nextButton;
 	private TextButton btnNewGame;
-	private static final Texture END_TEXTURES[] = new Texture[4];
+	private static final Texture END_TEXTURES[] = new Texture[6];
 	private Image bg = new Image();
 	static {
 		END_TEXTURES[0] = new Texture(Gdx.files.internal("events/landscape.png"));
