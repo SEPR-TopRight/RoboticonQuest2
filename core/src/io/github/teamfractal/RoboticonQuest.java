@@ -238,6 +238,19 @@ public class RoboticonQuest extends Game {
 				highestScoreingPlayer=scoreIndex;
 			}
 		}
+		
+		// Added by Josh Neil (Top Right Corner) - check if all players have drawn
+		Boolean allScoresSame = true;
+		for(int scoreIndex=2;scoreIndex<score.length;scoreIndex++){
+			if (score[scoreIndex]!=score[1]){ // If a given player has not score the same as player 1
+				allScoresSame=false;
+			}
+		}
+	
+		if(allScoresSame){
+			highestScoreingPlayer=5; // indicates draw
+		}
+		
 		score[0]=highestScoreingPlayer;
 		
 		return score;
