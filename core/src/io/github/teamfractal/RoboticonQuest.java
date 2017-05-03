@@ -127,8 +127,9 @@ public class RoboticonQuest extends Game {
 		this.market = new Market();
 		plotManager = new PlotManager();
 	}
-
+	
 	public void nextPhase () {
+		// Changed order of phases to allow shared market screen and Gamblihng - Ben
 		phase = phase + 1;
 		if (phase == 5 && (random.nextInt(20)<=10)) {
 			phase = 6;
