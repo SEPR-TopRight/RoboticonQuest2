@@ -222,19 +222,24 @@ public class RoboticonQuest extends Game {
 
 
 	public int[] scoreCalc(ArrayList<Player> pl) {
-		// score is tot money after selling all resources
+		// score is total money after selling all resources
 		int[] score=new int[5];
 		score[1]=pl.get(0).getMoney()+pl.get(0).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(0).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(0).getFood()*this.market.getSellPrice(ResourceType.FOOD);
 		score[2]=pl.get(1).getMoney()+pl.get(1).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(1).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(1).getFood()*this.market.getSellPrice(ResourceType.FOOD);
 		if (getNumberOfPlayers() == 3) {score[3]=pl.get(2).getMoney()+pl.get(2).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(2).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(2).getFood()*this.market.getSellPrice(ResourceType.FOOD);}
 		if (getNumberOfPlayers() == 4) {score[4]=pl.get(3).getMoney()+pl.get(3).getEnergy()*this.market.getSellPrice(ResourceType.ENERGY)+pl.get(3).getOre()*this.market.getSellPrice(ResourceType.ORE)+pl.get(3).getFood()*this.market.getSellPrice(ResourceType.FOOD);}
-		if(score[1]>score[2]) {
-			score[0]=1;
+		
+		// Added by Josh Neil (Top Right Corner) - calculate the highest scoring player
+		int highestScore = 0;
+		int highestScoreingPlayer =1;
+		for(int scoreIndex=1;scoreIndex<score.length;scoreIndex++){
+			if (score[scoreIndex]>highestScore){
+				highestScore=score[scoreIndex];
+				highestScoreingPlayer=scoreIndex;
+			}
 		}
-		else if(score[2]>score[1])
-			score[0]=2;
-		else
-			score[0]=3;
+		score[0]=highestScoreingPlayer;
+		
 		return score;
 	}
 

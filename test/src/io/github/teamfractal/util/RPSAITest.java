@@ -23,7 +23,7 @@ public class RPSAITest {
 	/**
 	 * Tests the gambling logic used in {@link RPSAI} and ensures
 	 * that for given player and AI moves the correct result is produced
-	 */
+	 */	
 	@Test
 	public void MainTest() {
 		rpsai = new RPSAI();
