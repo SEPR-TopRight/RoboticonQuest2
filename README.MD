@@ -27,17 +27,17 @@ Factory image is from https://commons.wikimedia.org/wiki/File:Manufacturing_equi
 
 Audio effects are all from freesound.org and are licensed under the creative commons license. 
 
-Wrong item sound: https://www.freesound.org/people/TheDweebMan/sounds/277220/ 
-notificationbad: https://www.freesound.org/people/cameronmusic/sounds/138414/ 
-Anxiety: https://www.freesound.org/people/abbbrvalg/sounds/149891/ 
-Evil: https://www.freesound.org/people/Robinhood76/sounds/197419/
-Chime: https://www.freesound.org/people/DANMITCH3LL/sounds/232009/ 
-Click: https://freesound.org/people/brookmorgan/sounds/189567/ 
-Alarm: https://freesound.org/people/fins/sounds/171493/ 
-Pulse: https://freesound.org/people/CGEffex/sounds/86986/
-Beep: https://freesound.org/people/tcpp/sounds/151309/ 
-Error: https://freesound.org/people/Autistic%20Lucario/sounds/142608/ 
-Correct: https://freesound.org/people/Bertrof/sounds/131660/
+Wrong item sound: https://www.freesound.org/people/TheDweebMan/sounds/277220/       
+notificationbad: https://www.freesound.org/people/cameronmusic/sounds/138414/       
+Anxiety: https://www.freesound.org/people/abbbrvalg/sounds/149891/      
+Evil: https://www.freesound.org/people/Robinhood76/sounds/197419/       
+Chime: https://www.freesound.org/people/DANMITCH3LL/sounds/232009/      
+Click: https://freesound.org/people/brookmorgan/sounds/189567/      
+Alarm: https://freesound.org/people/fins/sounds/171493/         
+Pulse: https://freesound.org/people/CGEffex/sounds/86986/       
+Beep: https://freesound.org/people/tcpp/sounds/151309/      
+Error: https://freesound.org/people/Autistic%20Lucario/sounds/142608/       
+Correct: https://freesound.org/people/Bertrof/sounds/131660/        
 
 Our game comes under fair use law, as it is a research project.
 Chancellor music: Shooting stars - Bag Raiders 
