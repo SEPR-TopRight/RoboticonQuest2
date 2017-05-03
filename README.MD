@@ -8,6 +8,8 @@ To build the project, run
 
 And you can find the final jar under `desktop/build/libs`.
 
+Find our sweet trailer for our game right here -----> https://youtu.be/9k_R24oYSzw
+
 Credits:
 - Game Engine: libGDX
 - Tile sprite adapted from
