@@ -13,8 +13,8 @@ Find our sweet trailer for our game right here -----> https://youtu.be/9k_R24oYS
 Credits:
 - Game Engine: libGDX
 - Tile sprite adapted from
-  Isometric Landscape<http://opengameart.org/content/isometric-landscape>
-  by Kenney<http://Kenney.nl>
+  Isometric Landscape <http://opengameart.org/content/isometric-landscape>
+  by Kenney <http://Kenney.nl>
 
 Space background image was acquired from https://www.pexels.com/photo/photo-of-galaxy-207529/ and has free usage rights,
 for personal or comemrcial use, with modification without required permission.
