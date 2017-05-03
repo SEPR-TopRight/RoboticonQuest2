@@ -29,7 +29,9 @@ public class GameOverActors extends Table {
 		END_TEXTURES[0] = new Texture(Gdx.files.internal("events/landscape.png"));
 		END_TEXTURES[1] = new Texture(Gdx.files.internal("events/win1.png"));
 		END_TEXTURES[2] = new Texture(Gdx.files.internal("events/win2.png"));
-		END_TEXTURES[3] = new Texture(Gdx.files.internal("events/wint.png"));
+		END_TEXTURES[3] = new Texture(Gdx.files.internal("events/win3.png"));
+		END_TEXTURES[4] = new Texture(Gdx.files.internal("events/win4.png"));
+		END_TEXTURES[5] = new Texture(Gdx.files.internal("events/wint.png"));
 		
 	}
 

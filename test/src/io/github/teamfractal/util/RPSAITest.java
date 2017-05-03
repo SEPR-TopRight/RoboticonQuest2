@@ -7,6 +7,10 @@ import io.github.teamfractal.util.RPSAI;
 import static io.github.teamfractal.util.RPSAI.moves;
 import static io.github.teamfractal.util.RPSAI.results;
 
+// JavaDocs added by Josh Neil (Top Right Corner)
+/**
+ * Test case for {@link RPSAI}
+ */
 public class RPSAITest {
 
 	private final int ITERATIONS = 1000;
@@ -16,6 +20,10 @@ public class RPSAITest {
 	private results result;
 	private int resultsTally[] = { 0, 0, 0 };
 
+	/**
+	 * Tests the gambling logic used in {@link RPSAI} and ensures
+	 * that for given player and AI moves the correct result is produced
+	 */	
 	@Test
 	public void MainTest() {
 		rpsai = new RPSAI();
