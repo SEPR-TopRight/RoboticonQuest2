@@ -71,3 +71,4 @@ Thumbs.db
 
 ## Some Eclipse cache
 .recommenders
+*.ucls
