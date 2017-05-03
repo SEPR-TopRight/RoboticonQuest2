@@ -2,6 +2,9 @@ package io.github.teamfractal.util;
 
 import java.util.Random;
 
+/**
+ * Handles the logic for the gambling rock paper scissors mini game
+ */
 public class RPSAI {
 
 	public static enum moves {
