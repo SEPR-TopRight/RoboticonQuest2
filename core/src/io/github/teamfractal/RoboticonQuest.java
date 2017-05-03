@@ -43,7 +43,7 @@ public class RoboticonQuest extends Game {
 	public ArrayList<Player> playerList;
 	public Market market;
 	private int landBoughtThisTurn;
-	private int numberOfPlayers = 2; // Added by Josh Neil
+	private int numberOfPlayers = 2; // Added by Josh Neil - Top Right Corner
 	private Random random = new Random();
 	private Music music;
 	
@@ -87,7 +87,7 @@ public class RoboticonQuest extends Game {
 	 * Setup the default skin for GUI components.
 	 */
 	private void setupSkin() {
-		// Josh Neil moved back to the default skin because we didn't like the pink text
+		// Josh Neil - Top Right Corner - moved back to the default skin because we didn't like the pink text
 		skin = new Skin(
 				Gdx.files.internal("skin/skin.json"),
 				new TextureAtlas(Gdx.files.internal("skin/skin.atlas"))
@@ -109,7 +109,7 @@ public class RoboticonQuest extends Game {
 		return this.phase;
 	}
 	
-	// Added by Josh Neil so that we can have between 2 and 4 players
+	// Added by Josh Neil - Top Right Corner - so that we can have between 2 and 4 players
 	public void setNumberOfPlayers(int numberOfPlayers){
 		this.numberOfPlayers = numberOfPlayers;
 	}
@@ -170,6 +170,7 @@ public class RoboticonQuest extends Game {
 				break;
 
 			//Phase 5: Chancellor encounter
+			//Added by Christian Beddows - Top Right Corner - to add in the capture the chancellor phase
 			case 5:
 				gameScreen.activateChancellor();
 				AnimationPhaseTimeout timeoutChancellorPhase = new AnimationPhaseTimeout(getPlayer(), this, phase, 15);
@@ -250,7 +251,7 @@ public class RoboticonQuest extends Game {
 		// Generate resources.
 		Player p = getPlayer();
 		
-		// Modified by Josh Neil - now accepts the values returned by Player.generateResources()
+		// Modified by Josh Neil - Top Right Corner - now accepts the values returned by Player.generateResources()
 		// and produces an animation that displays this information on screen (see Player.generateResources
 		// for a more in depth explanation)
 		HashMap<ResourceType,Integer> generatedResources = p.generateResources();
@@ -293,7 +294,7 @@ public class RoboticonQuest extends Game {
 				return "Resource Generation";
 
 			case 5:
-				return "Capture the Chancellor";
+				return "Capture the Chancellor"; //Added by Christian Beddows - Top Right Corner
 
 			case 6:
 				return "Gambling";
@@ -328,6 +329,7 @@ public class RoboticonQuest extends Game {
 
 	public Music getMusic() {return music;}
 
+	//Added by Christian Beddows - Top Right Corner - to change the music for the chancellor mode
 	public void setMusic(FileHandle fileName) {
 		music.stop();
 		music = Gdx.audio.newMusic(fileName);

@@ -35,9 +35,9 @@ public class GameScreenActors {
 	private SelectBox<String> installRoboticonSelect;
 	private Label plotStats;
 	private TextButton nextButton;
-	private ImageButton chancellor;
-	private Image background;
-	private float backgroundX, backgroundY;
+	private ImageButton chancellor; //Added by Christian Beddows - Top Right Corner
+	private Image background; //Added by Christian Beddows - Top Right Corner
+	private float backgroundX, backgroundY; //Added by Christian Beddows - Top Right Corner
 	private boolean dropDownActive; // TODO figure out if this is needed
 	private boolean listUpdated;
 
@@ -74,6 +74,7 @@ public class GameScreenActors {
 		phaseInfo.setAlignment(Align.right);
 		plotStats.setAlignment(Align.topLeft);
 		installRoboticonSelect.setSelected(null);
+		//Added by Christian Beddows - Top Right Corner - to set the chancellor correctly
 		chancellor.getImage().rotateBy(135);
 		chancellor.rotateBy(135);
 		chancellor.setPosition(-500, -500);
@@ -90,7 +91,7 @@ public class GameScreenActors {
 		stage.addActor(phaseInfo);
 		stage.addActor(plotStats);
 		stage.addActor(playerStats);
-		stage.addActor(chancellor);
+		stage.addActor(chancellor); //Added by Christian Beddows - Top Right Corner
 
 		// Update UI positions.
 		AbstractAnimationScreen.Size size = screen.getScreenSize();
@@ -247,6 +248,7 @@ public class GameScreenActors {
 			}
 		});
 
+		//Added by Christian Beddows - Top Right Corner - so that the chancellor can be clicked
 		chancellor.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -353,6 +355,7 @@ public class GameScreenActors {
 		playerStats.setPosition(10, topBarY);
 		nextButton.setPosition(width - nextButton.getWidth() - 10, 10);
 
+		//Added by Christian Beddows - Top Right Corner - to resize the backgrounds to the screen
 		backgroundX = width/background.getWidth();
 		backgroundY = height/background.getHeight();
 		background.setScale(backgroundX, backgroundY);
@@ -407,26 +410,32 @@ public class GameScreenActors {
 		return installRoboticonTable.isVisible();
 	}
 
+	//Added by Christian Beddows - Top Right Corner
 	public Image getBackground(){return background;}
 
+	//Added by Christian Beddows - Top Right Corner - moves the chancellor
 	public void updateChancellor(){
 		chancellor.moveBy(-1.1f, 0);
 	}
 
+	//Added by Christian Beddows - Top Right Corner - sets the chancellor for the start of phase 5
 	public void setChancellor() {
 		Random random = new Random();
 		chancellor.setPosition(1000, random.nextInt(300)+100);
 	}
 
+	//Added by Christian Beddows - Top Right Corner
 	public void removeChancellor() {
 		chancellor.setPosition(-500, -500);
 	}
 
+	//Added by Christian Beddows - Top Right Corner - so that phases 4 and 5 cannot be skipped accidentally
 	public void disableNextBtn() {
 		nextButton.setDisabled(true);
 		nextButton.clearListeners();
 	}
 
+	//Added by Christian Beddows - Top Right Corner
 	public void enableNextBtn() {
 		nextButton.setDisabled(false);
 		nextButton.addListener(nextButtonClickListener);

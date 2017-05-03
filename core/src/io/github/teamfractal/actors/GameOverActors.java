@@ -140,6 +140,8 @@ public class GameOverActors extends Table {
 		bg.setDrawable(new TextureRegionDrawable(new TextureRegion(END_TEXTURES[eventInd])));
 		// Draws player stats on screen
 		if (this.playerStats != null) this.playerStats.remove();
+
+		//Christian Beddows - Top Right Corner - added some new lines for when 3 or 4 scores need to be displauyed
 		if (game.getNumberOfPlayers()==2) {
 			statText = "    SCORE:                      PLAYER 1-" + score[1] + "                       PLAYER 2-" + score[2];
 		} else if (game.getNumberOfPlayers()==3) {
