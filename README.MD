@@ -5,8 +5,9 @@ This repository was duplicated from https://github.com/Jormandr/Roboticon-Quest 
 To build the project, run
 
     gradlew dist
-
-And you can find the final jar under `desktop/build/libs`.
+    
+View our website at: https://sepr-topright.github.io/SEPR/
+Find our game executable at: https://sepr-topright.github.io/SEPR/documentation/assessment4/game.zip
 
 Find our sweet trailer for our game right here -----> https://youtu.be/9k_R24oYSzw
 
