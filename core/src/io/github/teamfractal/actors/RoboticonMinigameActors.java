@@ -124,7 +124,7 @@ public class RoboticonMinigameActors extends Table {
 			}
 		});
 
-		// Josh Neil combined the first two rows of the table
+		// Josh Neil (Top Right Corner) combined the first two rows of the table
 		// bet inc & dec buttons,
 		add(playerDropDown); // Added by Josh Neil (Top Right Corner)
 		add(lblBet);

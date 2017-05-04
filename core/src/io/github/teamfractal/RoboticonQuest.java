@@ -129,7 +129,9 @@ public class RoboticonQuest extends Game {
 	}
 	
 	public void nextPhase () {
-		// Changed order of phases to allow shared market screen and Gamblihng - Ben
+		// Changed order of phases to allow shared market screen and gambling - Ben (Top Right Corner)
+		// No longer have a separate gambling phase and the shared market phase occurs after all players have had their turn
+		// rather than after each players turn
 		phase = phase + 1;
 		if (phase == 5 && (random.nextInt(20)<=10)) {
 			phase = 6;
